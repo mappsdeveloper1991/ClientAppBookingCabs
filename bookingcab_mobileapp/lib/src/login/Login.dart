@@ -1,5 +1,7 @@
 import 'dart:developer';
 
+import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
+import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
 import 'package:flutter/material.dart';
 import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppUIComponent.dart';
@@ -18,7 +20,6 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -60,9 +61,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
-
-
   Widget _buildLogo() {
     return Row(
       crossAxisAlignment: CrossAxisAlignment.center,
@@ -79,7 +77,6 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
 
   Widget _buildContainer() {
     return Row(
@@ -142,7 +139,6 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
-
   Widget _buildEmailRow() {
     return Padding(
       padding: EdgeInsets.all(10),
@@ -154,12 +150,11 @@ class _LoginPageState extends State<LoginPage> {
           });
         },
         style: textFormFieldStyle(),
-        decoration: textFormFieldDecoration( context,"E-mail", Icons.email_outlined),
+        decoration:
+            textFormFieldDecoration(context, "E-mail", Icons.email_outlined),
       ),
     );
   }
-
-
 
   Widget _buildPasswordRow() {
     return Padding(
@@ -173,12 +168,11 @@ class _LoginPageState extends State<LoginPage> {
           });
         },
         style: textFormFieldStyle(),
-        decoration: textFormFieldDecoration( context,"Password", Icons.key_outlined),
+        decoration:
+            textFormFieldDecoration(context, "Password", Icons.key_outlined),
       ),
     );
   }
-
-
 
   Widget _buildForgetPasswordButton() {
     return Row(
@@ -190,7 +184,7 @@ class _LoginPageState extends State<LoginPage> {
           onPressed: () {
             //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new ForgotPassword()));
           },
-          child:  Text(
+          child: Text(
             "Forgot Password",
             style: buttonTextStyle(context, blackColor, 16),
           ),
@@ -198,8 +192,6 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
-
 
   Widget _buildLoginButton() {
     return Row(
@@ -212,29 +204,28 @@ class _LoginPageState extends State<LoginPage> {
           //child: RaisedButton(
           child: ElevatedButton(
             style: ButtonStyle(
-              backgroundColor:
-              MaterialStateProperty.all(blackColor),
+              backgroundColor: MaterialStateProperty.all(blackColor),
             ),
             onPressed: () {
               //loginAPICall();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
             },
-            child: Text(
-              "Login",
-              style: /*TextStyle(
+            child: Text("Login",
+                style: /*TextStyle(
                 color: Colors.white,
                 letterSpacing: 1.5,
                 fontSize: MediaQuery.of(context).size.height / 40,
               ),*/
-              buttonTextStyle(context, Colors.white, MediaQuery.of(context).size.height / 40)
-            ),
+                    buttonTextStyle(context, Colors.white,
+                        MediaQuery.of(context).size.height / 40)),
           ),
         )
       ],
     );
   }
-
-
-
 
   Widget _buildSignUpBtn() {
     return Row(
@@ -257,7 +248,8 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: MediaQuery.of(context).size.height / 40,
                       fontWeight: FontWeight.w400,
                     ),*/
-                    buttonTextStyle(context, Colors.black, MediaQuery.of(context).size.height / 40),
+                        buttonTextStyle(context, Colors.black,
+                            MediaQuery.of(context).size.height / 40),
                   ),
                 ]),
               ),
@@ -267,5 +259,4 @@ class _LoginPageState extends State<LoginPage> {
       ],
     );
   }
-
 }

@@ -1,3 +1,4 @@
+import 'package:bookingcab_mobileapp/src/home/PackageCarousel.dart';
 import 'package:flutter/material.dart';
 
 import '../comman/Constant.dart';
@@ -13,119 +14,125 @@ class HomeTabScreen extends StatefulWidget {
 class _HomeTabScreenState extends State<HomeTabScreen> {
   String? selectedLocation = 'Delhi-NCR'; // Use String instead of Text
 
-
   TextEditingController _searchController = TextEditingController();
   bool _isSearchFocused = false;
 
   @override
   Widget build(BuildContext context) {
-    return SingleChildScrollView(
-      child: Column(
-        children: [
-          SizedBox(
-            height: 110,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: cabServiceType.length,
-              itemBuilder: (BuildContext context, int index) => CustomCard(
-                  icon: cabServiceType[index].icon!,
-                  label: "${cabServiceType[index].label}"),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.all(8),
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(10),
-                border: Border.all(
-                  color: Colors.yellow,
-                  width: 2,
+    return Scaffold(
+      body: SafeArea(
+        child: SingleChildScrollView(
+          child: Column(
+            children: [
+              SizedBox(
+                height: 110,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: cabServiceType.length,
+                  itemBuilder: (BuildContext context, int index) => CustomCard(
+                      icon: cabServiceType[index].icon!,
+                      label: "${cabServiceType[index].label}"),
                 ),
               ),
-              child: Row(
-                children: [
-                  const Padding(
-                    padding: EdgeInsets.all(8.0),
-                    child: Icon(
-                      Icons.search,
+              Padding(
+                padding: const EdgeInsets.all(8),
+                child: Container(
+                  decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(
                       color: Colors.yellow,
+                      width: 2,
                     ),
                   ),
-                  Expanded(
-                    child: TextField(
-                      controller: _searchController,
-                      decoration: const InputDecoration(
-                        hintText: 'Search your cab for anywhere',
-                        border: InputBorder.none,
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.yellow,
+                        ),
                       ),
-                      onChanged: (value) {
-                        setState(() {
-                          // Handle search query changes
-                          // Implement your search logic here
-                          _isSearchFocused = value.isNotEmpty;
-                        });
-                      },
-                    ),
-                  ),
-                  _isSearchFocused
-                      ? IconButton(
-                          icon: Icon(Icons.clear),
-                          onPressed: () {
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            hintText: 'Search your cab for anywhere',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
                             setState(() {
-                              // Clear search functionality
-                              // Implement your logic here
-                              _searchController.clear();
-                              _isSearchFocused = false;
+                              // Handle search query changes
+                              // Implement your search logic here
+                              _isSearchFocused = value.isNotEmpty;
                             });
                           },
-                        )
-                      : SizedBox.shrink(),
+                        ),
+                      ),
+                      _isSearchFocused
+                          ? IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(() {
+                                  // Clear search functionality
+                                  // Implement your logic here
+                                  _searchController.clear();
+                                  _isSearchFocused = false;
+                                });
+                              },
+                            )
+                          : SizedBox.shrink(),
+                    ],
+                  ),
+                ),
+              ),
+              Row(
+                children: [
+                  Expanded(
+                    child: SizedBox(
+                        width: MediaQuery.of(context).size.width * 0.90,
+                        child: const SliderCarosel()),
+                  )
                 ],
               ),
-            ),
-          ),
-           Row(
-            children: [
-              Expanded(
-                child: SizedBox(
-                  width: MediaQuery.of(context).size.width * 0.90,
-                    child: const SliderCarosel()
+              const SizedBox(
+                height: 10,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: PackageCarousel(),
+              ),
+              // SizedBox(
+              //   height: 220,
+              //   child: ListView.builder(
+              //     shrinkWrap: true,
+              //     scrollDirection: Axis.horizontal,
+              //     itemCount: outStationPackageList.length,
+              //     itemBuilder: (BuildContext context, int index) => PackageCard(
+              //       image: outStationPackageList[index].image!,
+              //       packageAmount: outStationPackageList[index].packageAmount,
+              //     ),
+              //   ),
+              // ),
+              const SizedBox(
+                height: 10,
+              ),
+              SizedBox(
+                height: 220,
+                child: ListView.builder(
+                  shrinkWrap: true,
+                  scrollDirection: Axis.horizontal,
+                  itemCount: outStationPackageList.length,
+                  itemBuilder: (BuildContext context, int index) => PackageCard(
+                    image: outStationPackageList[index].image!,
+                    packageAmount: outStationPackageList[index].packageAmount,
+                  ),
                 ),
               )
             ],
           ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 220,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: outStationPackageList.length,
-              itemBuilder: (BuildContext context, int index) => PackageCard(
-                image: outStationPackageList[index].image!,
-                packageAmount: outStationPackageList[index].packageAmount,
-              ),
-            ),
-          ),
-          const SizedBox(
-            height: 10,
-          ),
-          SizedBox(
-            height: 220,
-            child: ListView.builder(
-              shrinkWrap: true,
-              scrollDirection: Axis.horizontal,
-              itemCount: outStationPackageList.length,
-              itemBuilder: (BuildContext context, int index) => PackageCard(
-                image: outStationPackageList[index].image!,
-                packageAmount: outStationPackageList[index].packageAmount,
-              ),
-            ),
-          )
-        ],
+        ),
       ),
     );
   }
