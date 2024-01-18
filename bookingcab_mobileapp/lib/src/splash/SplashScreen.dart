@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bookingcab_mobileapp/src/language/LanguageSelectionScreen.dart';
+import 'package:bookingcab_mobileapp/src/login/Login.dart';
 import 'package:flutter/material.dart';
 
 import '../dashboard/DashBoardPage.dart';
@@ -38,10 +39,9 @@ class SplashScreenState extends State<SplashScreen> {
   void loadNavigateToHomepgae() {
     Timer(const Duration(seconds: 2),
             () =>
-            Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            ));
+            //Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => HomeScreen()),)
+            Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => LoginPage()),)
+    );
   }
 
   @override

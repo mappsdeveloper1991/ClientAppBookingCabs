@@ -9,3 +9,5 @@ import 'package:flutter/material.dart';
  const bodyBgColor = Color(0xffffffff);
  const bodyTextColor = Color(0xff3c3c3c);
  const iconColor = Color(0xff232323);
+
+ const lighGray2 = Color(0xff808080);
