@@ -1,9 +1,7 @@
-import 'dart:ffi';
-
-import 'package:bookingcab_mobileapp/src/home/searchbar_app.dart';
 import 'package:flutter/material.dart';
 
-import 'slider_carousel.dart';
+import '../comman/Constant.dart';
+import 'HomeCarousel.dart';
 
 class HomeTabScreen extends StatefulWidget {
   const HomeTabScreen({Key? key}) : super(key: key);
@@ -15,30 +13,6 @@ class HomeTabScreen extends StatefulWidget {
 class _HomeTabScreenState extends State<HomeTabScreen> {
   String? selectedLocation = 'Delhi-NCR'; // Use String instead of Text
 
-  var items = [
-    "Delhi-NCR",
-    "Gurgaon-NCR", // Corrected the spelling
-    "Noida-UP", // Corrected the spelling
-  ];
-
-  List<HomeCardDetails> cardList = [
-    HomeCardDetails(icon: Icons.local_taxi, label: "Local Hire"),
-    HomeCardDetails(icon: Icons.location_on, label: "City Cab"),
-    HomeCardDetails(icon: Icons.flight_takeoff, label: "Transfer"),
-    HomeCardDetails(icon: Icons.local_airport_sharp, label: "Outstation"),
-    HomeCardDetails(icon: Icons.abc_outlined, label: "Card 5"),
-  ];
-
-  List<PackageDetails> packageList = [
-    PackageDetails(
-        image: "assets/images/package_img1.jpeg", packageAmount: 70992),
-    PackageDetails(
-        image: "assets/images/package_img1.jpeg", packageAmount: 70992),
-    PackageDetails(
-        image: "assets/images/package_img1.jpeg", packageAmount: 70992),
-    PackageDetails(
-        image: "assets/images/package_img1.jpeg", packageAmount: 70992),
-  ];
 
   TextEditingController _searchController = TextEditingController();
   bool _isSearchFocused = false;
@@ -49,14 +23,14 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
       child: Column(
         children: [
           SizedBox(
-            height: 130,
+            height: 110,
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: cardList.length,
+              itemCount: cabServiceType.length,
               itemBuilder: (BuildContext context, int index) => CustomCard(
-                  icon: cardList[index].icon!,
-                  label: "${cardList[index].label}"),
+                  icon: cabServiceType[index].icon!,
+                  label: "${cabServiceType[index].label}"),
             ),
           ),
           Padding(
@@ -111,10 +85,13 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
               ),
             ),
           ),
-          const Row(
+           Row(
             children: [
               Expanded(
-                child: SliderCarosel(),
+                child: SizedBox(
+                  width: MediaQuery.of(context).size.width * 0.90,
+                    child: const SliderCarosel()
+                ),
               )
             ],
           ),
@@ -126,10 +103,10 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: packageList.length,
+              itemCount: outStationPackageList.length,
               itemBuilder: (BuildContext context, int index) => PackageCard(
-                image: packageList[index].image!,
-                packageAmount: packageList[index].packageAmount,
+                image: outStationPackageList[index].image!,
+                packageAmount: outStationPackageList[index].packageAmount,
               ),
             ),
           ),
@@ -141,10 +118,10 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             child: ListView.builder(
               shrinkWrap: true,
               scrollDirection: Axis.horizontal,
-              itemCount: packageList.length,
+              itemCount: outStationPackageList.length,
               itemBuilder: (BuildContext context, int index) => PackageCard(
-                image: packageList[index].image!,
-                packageAmount: packageList[index].packageAmount,
+                image: outStationPackageList[index].image!,
+                packageAmount: outStationPackageList[index].packageAmount,
               ),
             ),
           )
@@ -163,8 +140,8 @@ class CustomCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      width: 100,
-      height: 130,
+      width: 90,
+      height: 110,
       margin: EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
@@ -184,14 +161,14 @@ class CustomCard extends StatelessWidget {
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
             CircleAvatar(
-              radius: 30,
+              radius: 25,
               backgroundColor: Colors.red,
-              child: Icon(icon, size: 40),
+              child: Icon(icon, size: 32),
             ),
-            const SizedBox(height: 10),
+            const SizedBox(height: 6),
             Text(
               label,
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
             ),
           ],
         ),

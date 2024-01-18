@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
+import '../comman/Constant.dart';
+
 class SliderCarosel extends StatefulWidget {
   const SliderCarosel({super.key});
 
@@ -11,12 +13,6 @@ class SliderCarosel extends StatefulWidget {
 class _SliderCaroselState extends State<SliderCarosel> {
   late PageController pageController;
 
-  List<String> offerImages = [
-    "assets/images/offer_img1.jpeg",
-    "assets/images/offer_img2.jpeg",
-    "assets/images/offer_img3.jpeg",
-    "assets/images/offer_img4.jpeg",
-  ];
 
   @override
   void initState() {
@@ -27,20 +23,25 @@ class _SliderCaroselState extends State<SliderCarosel> {
 
   @override
   Widget build(BuildContext context) {
+    var width = MediaQuery.of(context).size.width * 1;
     return Column(
+
       children: [
         SizedBox(
           height: 185,
-          width: double.infinity,
+          width: MediaQuery.of(context).size.width * 0.95,
+
           child: PageView.builder(
+
             controller: pageController,
             scrollDirection: Axis.horizontal,
             itemCount: offerImages.length,
             itemBuilder: (context, index) {
-              return ClipRRect(
+             return ClipRRect(
                 clipBehavior: Clip.hardEdge,
-                borderRadius: BorderRadius.circular(30.0),
-                child: Image.asset(offerImages[index]),
+                borderRadius: BorderRadius.circular(20.0),
+                child: Image.asset(offerImages[index], fit: BoxFit.cover),
+
               );
             },
           ),

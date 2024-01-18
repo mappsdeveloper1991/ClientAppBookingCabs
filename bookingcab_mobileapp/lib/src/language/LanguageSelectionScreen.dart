@@ -1,5 +1,8 @@
-import 'package:bookingcab_mobileapp/src/home/home_screen.dart';
+import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
 import 'package:flutter/material.dart';
+import '../AppStyle/AppColors.dart';
+import '../AppStyle/AppHeadreApp.dart';
+import '../comman/Constant.dart';
 
 class LanguageSelectScreen extends StatefulWidget {
   const LanguageSelectScreen({Key? key}) : super(key: key);
@@ -11,72 +14,18 @@ class LanguageSelectScreen extends StatefulWidget {
 class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
   String? selectedLanguage;
 
-  var languageOptions = [
-    "English",
-    "Hindi  हिंदी",
-    "Punjabi ਪੰਜਾਬੀ",
-  ];
+
+
+
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      appBar: languageSelectionHeaderBar(context),
       body: SafeArea(
         child: Column(
           children: [
-            ColoredBox(
-              color: const Color(0xFFF9DDA4),
-              child: Padding(
-                padding: const EdgeInsets.fromLTRB(10, 20, 10, 20),
-                child: Row(
-                  children: [
-                    RichText(
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.w500,
-                        ),
-                        children: [
-                          TextSpan(
-                            text: "Book",
-                            style: TextStyle(
-                              color: Colors.blue,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "ing",
-                            style: TextStyle(
-                              color: Colors.orange,
-                            ),
-                          ),
-                          TextSpan(
-                            text: "cabs",
-                            style: TextStyle(
-                              color: Colors.red,
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    const Spacer(),
-                    GestureDetector(
-                      onTap: () {
-                        Navigator.pushReplacement(
-                          context,
-                          MaterialPageRoute(builder: (context) => HomeScreen()),
-                        );
-                      },
-                      child: const Text(
-                        "SKIP",
-                        style: TextStyle(
-                          color: Colors.red,
-                          fontWeight: FontWeight.w700,
-                        ),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
+           //languageSelectionHeader(context),
             const SizedBox(
               height: 10,
             ),
@@ -125,7 +74,7 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius:
-                      BorderRadius.circular(10), // Add rounded corners
+                  BorderRadius.circular(10), // Add rounded corners
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -205,9 +154,9 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                   },
                   style: ButtonStyle(
                     backgroundColor:
-                        MaterialStateProperty.all<Color>(Colors.red),
+                    MaterialStateProperty.all<Color>(Colors.red),
                     foregroundColor:
-                        MaterialStateProperty.all<Color>(Colors.white),
+                    MaterialStateProperty.all<Color>(Colors.white),
                     shape: MaterialStateProperty.all<OutlinedBorder>(
                       const RoundedRectangleBorder(
                         // borderRadius: BorderRadius.circular(
@@ -231,4 +180,5 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
       ),
     );
   }
+
 }
