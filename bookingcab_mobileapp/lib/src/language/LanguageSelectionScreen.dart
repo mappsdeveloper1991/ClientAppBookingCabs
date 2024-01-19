@@ -1,7 +1,10 @@
 import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
+import 'package:bookingcab_mobileapp/src/login/Login.dart';
+import 'package:bookingcab_mobileapp/src/onboarding/OnboardingOptions.dart';
 import 'package:flutter/material.dart';
 import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppHeadreApp.dart';
+import '../AppStyle/AppUIComponent.dart';
 import '../comman/Constant.dart';
 
 class LanguageSelectScreen extends StatefulWidget {
@@ -144,13 +147,11 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                TextButton(
+                _buildSignUpBtn()
+             /*   TextButton(
                   onPressed: () {
                     // Add your logic for handling the button press here
-                    Navigator.pushReplacement(
-                      context,
-                      MaterialPageRoute(builder: (context) => HomeScreen()),
-                    );
+                    Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OnboardingOptions()), );
                   },
                   style: ButtonStyle(
                     backgroundColor:
@@ -169,7 +170,9 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                     ),
                   ),
                   child: const Text("Continue"),
-                ),
+                ),*/
+
+
               ],
             ),
             const SizedBox(
@@ -178,6 +181,38 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
           ],
         ),
       ),
+    );
+  }
+
+  Widget _buildSignUpBtn() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 60,
+          width: MediaQuery.of(context).size.width * 0.90,
+          margin: const EdgeInsets.only(bottom: 20),
+          child: SizedBox(
+            height: 50,
+            child: OutlinedButton(
+              style:  secondaryButtonStyle(context, buttonPrimaryColor),
+              onPressed: () {
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OnboardingOptions()), );
+              },
+              child: RichText(
+                text: TextSpan(children: [
+                  TextSpan(
+                    text: 'Continue',
+                    style:
+                    buttonTextStyle(context, Colors.white,
+                        MediaQuery.of(context).size.height / 40),
+                  ),
+                ]),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 

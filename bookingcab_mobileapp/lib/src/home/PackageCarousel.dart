@@ -73,7 +73,7 @@ class _PackageCarouselState extends State<PackageCarousel> {
                       index: index,
                     ),
                   ),
-                  SizedBox(
+                  const SizedBox(
                     width: 10,
                   ),
                   Expanded(

@@ -5,6 +5,7 @@ import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
 import 'package:flutter/material.dart';
 import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppUIComponent.dart';
+import '../signup/SignupPersonalDetails.dart';
 
 class LoginPage extends StatefulWidget {
   const LoginPage({Key? key}) : super(key: key);
@@ -69,7 +70,9 @@ class _LoginPageState extends State<LoginPage> {
         Padding(
           padding: const EdgeInsets.symmetric(vertical: 20),
           child: Image.asset(
-            'assets/images/ic_launcher.png',
+            'assets/images/bookingcbas_logo.png',
+            width: 300,
+            height: 150,
             fit: BoxFit.contain,
             // height: 32,
           ),
@@ -88,7 +91,7 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: Container(
             padding: EdgeInsets.all(5),
-            height: MediaQuery.of(context).size.height * 0.6,
+            height: MediaQuery.of(context).size.height * 0.65,
             width: MediaQuery.of(context).size.width * 0.85,
             decoration: const BoxDecoration(
               color: Colors.white,
@@ -119,12 +122,31 @@ class _LoginPageState extends State<LoginPage> {
                 Column(
                   children: [
                     Container(
-                      height: 30,
+                      height: 10,
                       child: Text(""),
                     ),
                   ],
                 ),
                 _buildEmailRow(),
+
+                SegmentedButton<String>(
+
+                  segments: const <ButtonSegment<String>>[
+                    ButtonSegment<String>(
+                        value: 'Password',
+                        label: Text('Password'),
+                        icon: Icon(Icons.calendar_view_day)),
+                    ButtonSegment<String>(
+                        value: 'OTP',
+                        label: Text('OTP'),
+                        icon: Icon(Icons.calendar_view_week)),
+                  ],
+                  selected: <String>{'Password'},
+                  onSelectionChanged: (Set<String> newSelection) {
+                      print("Segment Value: $newSelection");
+                  },
+                ),
+
                 _buildPasswordRow(),
                 _buildForgetPasswordButton(),
                 _buildLoginButton(),
@@ -198,14 +220,12 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 45, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: 5 * (MediaQuery.of(context).size.width / 10),
+          height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
+          width: MediaQuery.of(context).size.width * 0.70,
           margin: const EdgeInsets.only(bottom: 20),
           //child: RaisedButton(
           child: ElevatedButton(
-            style: ButtonStyle(
-              backgroundColor: MaterialStateProperty.all(blackColor),
-            ),
+            style: primaryButtonStyle(context, buttonSecondaryColor),
             onPressed: () {
               //loginAPICall();
               Navigator.pushReplacement(
@@ -214,13 +234,8 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
             child: Text("Login",
-                style: /*TextStyle(
-                color: Colors.white,
-                letterSpacing: 1.5,
-                fontSize: MediaQuery.of(context).size.height / 40,
-              ),*/
-                    buttonTextStyle(context, Colors.white,
-                        MediaQuery.of(context).size.height / 40)),
+                style:buttonTextStyle(context,
+                    Colors.white,MediaQuery.of(context).size.height / 40)),
           ),
         )
       ],
@@ -231,13 +246,16 @@ class _LoginPageState extends State<LoginPage> {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.only(top: 10),
+        Container(
+          height: 55,
+          width: MediaQuery.of(context).size.width * 0.70,
+          margin: const EdgeInsets.only(bottom: 20),
           child: SizedBox(
             height: 50,
             child: OutlinedButton(
+              style: primaryButtonStyle(context, buttonPrimaryColor),
               onPressed: () {
-                //Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => new SignUp()));
+                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => SignupPersonalDetails()));
               },
               child: RichText(
                 text: TextSpan(children: [
@@ -248,7 +266,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: MediaQuery.of(context).size.height / 40,
                       fontWeight: FontWeight.w400,
                     ),*/
-                        buttonTextStyle(context, Colors.black,
+                        buttonTextStyle(context, Colors.white,
                             MediaQuery.of(context).size.height / 40),
                   ),
                 ]),

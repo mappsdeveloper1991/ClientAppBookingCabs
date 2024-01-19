@@ -20,29 +20,7 @@ class SplashScreenState extends State<SplashScreen> {
     isLanguageSelctedOrNot();
   }
 
-  void isLanguageSelctedOrNot() {
-    if (false) {
-      loadNavigateTolanguageSelectionPage();
-    } else {
-      loadNavigateToHomepgae();
-    }
-  }
 
-
-  void loadNavigateTolanguageSelectionPage() {
-    Timer(const Duration(seconds: 2),
-            () =>
-            Navigator.pushReplacement(context, MaterialPageRoute(
-                builder: (context) => const LanguageSelectScreen())));
-  }
-
-  void loadNavigateToHomepgae() {
-    Timer(const Duration(seconds: 2),
-            () =>
-            //Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => HomeScreen()),)
-            Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => LoginPage()),)
-    );
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -67,14 +45,41 @@ class SplashScreenState extends State<SplashScreen> {
                   child:     Container(
                     decoration: const BoxDecoration(
                       image: DecorationImage(
-                          image: AssetImage('assets/images/ic_launcher.png'),
+                          image: AssetImage('assets/images/bookingcbas_logo.png'),
                       ),
                     ),
                   ),
               )
+
             ),
           ],
         ),
+    );
+  }
+
+
+  var isLoginOrNot = true;
+  void isLanguageSelctedOrNot() {
+    if (isLoginOrNot) {
+      loadNavigateTolanguageSelectionPage();
+    } else {
+      loadNavigateToHomepgae();
+    }
+  }
+
+
+  void loadNavigateTolanguageSelectionPage() {
+    Timer(const Duration(seconds: 2),
+            () =>
+            Navigator.pushReplacement(context, MaterialPageRoute(
+                builder: (context) => const LanguageSelectScreen())));
+  }
+
+  void loadNavigateToHomepgae() {
+    Timer(const Duration(seconds: 2),
+            () =>
+        //Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => HomeScreen()),)
+        Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => LoginPage()),)
     );
   }
 }

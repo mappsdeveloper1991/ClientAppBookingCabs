@@ -44,6 +44,27 @@ AppBar languageSelectionHeaderBar(BuildContext context) {
       ]);
 }
 
+
+AppBar simpleHeaderBar(BuildContext context, String pageTitle) {
+  return AppBar(
+      automaticallyImplyLeading: true,
+      backgroundColor: primaryColor,
+      elevation: 2,
+      title: Text(pageTitle),
+      centerTitle: true,
+      leading: IconButton(
+        icon: Icon(Icons.chevron_left_outlined),
+        //tooltip: 'Open shopping cart',
+        onPressed: () {
+          Navigator.of(context).pop(true);
+        },
+      ),
+      actions: const <Widget>[
+      ]);
+}
+
+
+
 RichText bookingCabsTextLogo(BuildContext context) {
   return RichText(
           text: const TextSpan(
