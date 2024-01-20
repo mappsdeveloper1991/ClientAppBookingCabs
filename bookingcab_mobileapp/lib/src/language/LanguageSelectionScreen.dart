@@ -17,10 +17,6 @@ class LanguageSelectScreen extends StatefulWidget {
 class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
   String? selectedLanguage;
 
-
-
-
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -28,7 +24,7 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
       body: SafeArea(
         child: Column(
           children: [
-           //languageSelectionHeader(context),
+            //languageSelectionHeader(context),
             const SizedBox(
               height: 10,
             ),
@@ -77,7 +73,7 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius:
-                  BorderRadius.circular(10), // Add rounded corners
+                      BorderRadius.circular(10), // Add rounded corners
                   boxShadow: [
                     BoxShadow(
                       color: Colors.grey.withOpacity(0.5),
@@ -148,7 +144,7 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 _buildSignUpBtn()
-             /*   TextButton(
+                /*   TextButton(
                   onPressed: () {
                     // Add your logic for handling the button press here
                     Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OnboardingOptions()), );
@@ -171,8 +167,6 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                   ),
                   child: const Text("Continue"),
                 ),*/
-
-
               ],
             ),
             const SizedBox(
@@ -195,16 +189,18 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
           child: SizedBox(
             height: 50,
             child: OutlinedButton(
-              style:  secondaryButtonStyle(context, buttonPrimaryColor),
+              style: secondaryButtonStyle(context, buttonPrimaryColor),
               onPressed: () {
-                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => OnboardingOptions()), );
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OnboardingOptions()),
+                );
               },
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
                     text: 'Continue',
-                    style:
-                    buttonTextStyle(context, Colors.white,
+                    style: buttonTextStyle(context, Colors.white,
                         MediaQuery.of(context).size.height / 40),
                   ),
                 ]),
@@ -215,5 +211,4 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
       ],
     );
   }
-
 }

@@ -21,117 +21,140 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       body: SafeArea(
-        child: SingleChildScrollView(
-          child: Column(
-            children: [
-              SizedBox(
-                height: 110,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: cabServiceType.length,
-                  itemBuilder: (BuildContext context, int index) => CustomCard(
-                      icon: cabServiceType[index].icon!,
-                      label: "${cabServiceType[index].label}"),
-                ),
+        child: Column(
+          children: [
+            SizedBox(
+              height: 110,
+              child: ListView.builder(
+                shrinkWrap: true,
+                scrollDirection: Axis.horizontal,
+                itemCount: cabServiceType.length,
+                itemBuilder: (BuildContext context, int index) => CustomCard(
+                    icon: cabServiceType[index].icon!,
+                    label: "${cabServiceType[index].label}"),
               ),
-              Padding(
-                padding: const EdgeInsets.all(8),
-                child: Container(
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Colors.yellow,
-                      width: 2,
-                    ),
+            ),
+            Padding(
+              padding: const EdgeInsets.all(8),
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(
+                    color: Colors.yellow,
+                    width: 2,
                   ),
-                  child: Row(
-                    children: [
-                      const Padding(
-                        padding: EdgeInsets.all(8.0),
-                        child: Icon(
-                          Icons.search,
-                          color: Colors.yellow,
-                        ),
+                ),
+                child: Row(
+                  children: [
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: Icon(
+                        Icons.search,
+                        color: Colors.yellow,
                       ),
-                      Expanded(
-                        child: TextField(
-                          controller: _searchController,
-                          decoration: const InputDecoration(
-                            hintText: 'Search your cab for anywhere',
-                            border: InputBorder.none,
-                          ),
-                          onChanged: (value) {
-                            setState(() {
-                              // Handle search query changes
-                              // Implement your search logic here
-                              _isSearchFocused = value.isNotEmpty;
-                            });
-                          },
+                    ),
+                    Expanded(
+                      child: TextField(
+                        controller: _searchController,
+                        decoration: const InputDecoration(
+                          hintText: 'Search your cab for anywhere',
+                          border: InputBorder.none,
                         ),
+                        onChanged: (value) {
+                          setState(() {
+                            _isSearchFocused = value.isNotEmpty;
+                          });
+                        },
                       ),
-                      _isSearchFocused
-                          ? IconButton(
-                              icon: Icon(Icons.clear),
-                              onPressed: () {
-                                setState(() {
-                                  // Clear search functionality
-                                  // Implement your logic here
+                    ),
+                    _isSearchFocused
+                        ? IconButton(
+                            icon: Icon(Icons.clear),
+                            onPressed: () {
+                              setState(
+                                () {
                                   _searchController.clear();
                                   _isSearchFocused = false;
-                                });
-                              },
-                            )
-                          : SizedBox.shrink(),
-                    ],
-                  ),
+                                },
+                              );
+                            },
+                          )
+                        : const SizedBox.shrink(),
+                  ],
                 ),
               ),
-              Row(
-                children: [
-                  Expanded(
-                    child: SizedBox(
-                        width: MediaQuery.of(context).size.width * 0.90,
-                        child: const SliderCarosel()),
-                  )
-                ],
-              ),
-              const SizedBox(
-                height: 10,
-              ),
-              Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: PackageCarousel(),
-              ),
-              // SizedBox(
-              //   height: 220,
-              //   child: ListView.builder(
-              //     shrinkWrap: true,
-              //     scrollDirection: Axis.horizontal,
-              //     itemCount: outStationPackageList.length,
-              //     itemBuilder: (BuildContext context, int index) => PackageCard(
-              //       image: outStationPackageList[index].image!,
-              //       packageAmount: outStationPackageList[index].packageAmount,
-              //     ),
-              //   ),
-              // ),
-              const SizedBox(
-                height: 10,
-              ),
-              SizedBox(
-                height: 220,
-                child: ListView.builder(
-                  shrinkWrap: true,
-                  scrollDirection: Axis.horizontal,
-                  itemCount: outStationPackageList.length,
-                  itemBuilder: (BuildContext context, int index) => PackageCard(
-                    image: outStationPackageList[index].image!,
-                    packageAmount: outStationPackageList[index].packageAmount,
-                  ),
+            ),
+            Expanded(
+              child: SingleChildScrollView(
+                child: Column(
+                  children: [
+                    Row(
+                      children: [
+                        Expanded(
+                          child: SizedBox(
+                              width: MediaQuery.of(context).size.width * 0.90,
+                              child: const SliderCarosel()),
+                        )
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "One Way Transfer",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          const SizedBox(
+                            height: 5,
+                          ),
+                          Row(
+                            children: [
+                              Expanded(
+                                  child:
+                                      PackageTable(packageList: packageList)),
+                            ],
+                          ),
+                        ],
+                      ),
+                    ),
+                    const Padding(
+                      padding: EdgeInsets.all(8.0),
+                      child: PackageCarousel(),
+                    ),
+                    const SizedBox(
+                      height: 10,
+                    ),
+                    SizedBox(
+                      height: 220,
+                      child: ListView.builder(
+                        shrinkWrap: true,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: outStationPackageList.length,
+                        itemBuilder: (BuildContext context, int index) =>
+                            PackageCard(
+                          image: outStationPackageList[index].image!,
+                          packageAmount:
+                              outStationPackageList[index].packageAmount,
+                        ),
+                      ),
+                    )
+                  ],
                 ),
-              )
-            ],
-          ),
+              ),
+            ),
+          ],
         ),
       ),
     );
@@ -287,4 +310,136 @@ class PackageDetails {
 //   );
 // }
 
+class PackageTable extends StatefulWidget {
+  const PackageTable({super.key, required this.packageList});
 
+  final List<PackageDetail> packageList;
+
+  @override
+  State<PackageTable> createState() => _PackageTableState();
+}
+
+class _PackageTableState extends State<PackageTable> {
+  bool isTableExpanded = true;
+
+  void toggleTableExpansion() {
+    setState(() {
+      isTableExpanded = !isTableExpanded;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return DataTable(
+      horizontalMargin: 8,
+      columnSpacing: 36,
+      headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
+      columns: [
+        const DataColumn(
+          label: Text(
+            'From',
+            style: TextStyle(
+              color: Colors.white,
+              fontSize: 14,
+            ),
+          ),
+          // numeric: true,
+        ),
+        const DataColumn(
+          label: Text(
+            'To',
+            style: TextStyle(color: Colors.white, fontSize: 14),
+          ),
+          // numeric: true,
+        ),
+        const DataColumn(
+          label: ColoredBox(
+            color: Colors.orangeAccent,
+            child: Padding(
+              padding: EdgeInsets.only(right: 10, left: 10, top: 1, bottom: 1),
+              child: Text(
+                'Search',
+                style: TextStyle(
+                  fontSize: 14,
+                  color: Colors.black,
+                ),
+              ),
+            ),
+          ),
+          // numeric: true,
+        ),
+        DataColumn(
+          label: IconButton(
+            icon: Icon(
+              isTableExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
+              color: Colors.white,
+            ),
+            onPressed: () {
+              toggleTableExpansion();
+            },
+          ),
+          numeric: true,
+        ),
+      ],
+      rows: [
+        if (isTableExpanded)
+          for (int i = 0; i < widget.packageList.length; i++)
+            DataRow(
+              cells: [
+                DataCell(
+                  Text(
+                    widget.packageList[i].from,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    widget.packageList[i].to,
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                DataCell(
+                  Text(
+                    '\u{20B9} ${widget.packageList[i].amount}',
+                    style: const TextStyle(
+                      fontSize: 14,
+                      fontWeight: FontWeight.w500,
+                    ),
+                  ),
+                ),
+                const DataCell(
+                  ColoredBox(
+                    color: Colors.red,
+                    child: Padding(
+                      padding: EdgeInsets.only(
+                          right: 10, left: 10, top: 1, bottom: 1),
+                      child: Text(
+                        'Book Now',
+                        style: TextStyle(
+                          fontSize: 16,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ),
+                ),
+              ],
+            ), // Add more rows as needed
+      ],
+    );
+  }
+}
+
+class PackageDetail {
+  String from;
+  String to;
+  int amount;
+
+  PackageDetail({required this.from, required this.to, required this.amount});
+}

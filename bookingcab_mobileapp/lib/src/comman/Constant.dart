@@ -1,5 +1,3 @@
-
-
 import 'package:flutter/material.dart';
 
 import '../home/HomeTabScreen.dart';
@@ -14,7 +12,6 @@ var languageOptions = [
   "Marathi मराठी",
   "Kannada ಕನ್ನಡ"
 ];
-
 
 var cityListItems = [
   "Delhi-NCR",
@@ -49,11 +46,17 @@ List<PackageDetails> outStationPackageList = [
       image: "assets/images/package_img1.jpeg", packageAmount: 70992),
 ];
 
-
-
 List<String> offerImages = [
   "assets/images/offer_img1.jpeg",
   "assets/images/offer_img2.jpeg",
   "assets/images/offer_img3.jpeg",
   "assets/images/offer_img4.jpeg",
+];
+
+List<PackageDetail> packageList = [
+  PackageDetail(from: 'Jaipur', to: "Delhi", amount: 2460),
+  PackageDetail(from: 'Delhi', to: "Jaipur", amount: 3000),
+  PackageDetail(from: 'Delhi', to: "Shimla", amount: 4000),
+  PackageDetail(from: 'Agra', to: "Jaipur", amount: 3500),
+  PackageDetail(from: 'Jaipur', to: "Agra", amount: 6000),
 ];
