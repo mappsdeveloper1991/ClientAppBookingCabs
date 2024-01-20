@@ -5,6 +5,7 @@ import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppHeadreApp.dart';
 import '../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
+import '../otp/OTPVerification.dart';
 
 class SignupPersonalDetails extends StatefulWidget {
   const SignupPersonalDetails({Key? key}) : super(key: key);
@@ -216,7 +217,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
             style: primaryButtonStyle(context, buttonSecondaryColor),
             onPressed: () {
               //loginAPICall();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => HomeScreen()),
+              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OTPVerification()),
               );
             },
             child: Text("Continue",

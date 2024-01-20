@@ -2,7 +2,9 @@ import 'dart:developer';
 
 import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/src/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppUIComponent.dart';
 import '../signup/SignupPersonalDetails.dart';
@@ -15,6 +17,7 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  late String verificationType = "Password";
   late String email, password;
 
   @override
@@ -141,13 +144,22 @@ class _LoginPageState extends State<LoginPage> {
                         label: Text('OTP'),
                         icon: Icon(Icons.calendar_view_week)),
                   ],
-                  selected: <String>{'Password'},
+                  selected: <String>{verificationType},
                   onSelectionChanged: (Set<String> newSelection) {
-                      print("Segment Value: $newSelection");
+                    setState(() {
+                      verificationType = newSelection.first;
+                    });
+
+                      print("Segment Value: $newSelection  and verificationType:$verificationType");
                   },
                 ),
 
-                _buildPasswordRow(),
+                const SizedBox(height: 10),
+                if (verificationType.contains("OTP"))
+                   _otpView(context)
+                else
+                  _buildPasswordRow(),
+                const SizedBox(height: 10),
                 _buildForgetPasswordButton(),
                 _buildLoginButton(),
                 _buildSignUpBtn(),
@@ -196,6 +208,39 @@ class _LoginPageState extends State<LoginPage> {
     );
   }
 
+
+  OtpTextField _otpView(BuildContext context) {
+    return OtpTextField(
+      numberOfFields: 5,
+
+      borderColor: Color(0xFF512DA8),
+      //set to true to show as box or false to show as dash
+      showFieldAsBox: true,
+      fieldWidth: 60,
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      //runs when a code is typed in
+      onCodeChanged: (String code) {
+        //handle validation or checks here
+      },
+      //runs when every textfield is filled
+      onSubmit: (String verificationCode) {
+/*          showDialog(
+              context: context,
+              builder: (context) {
+                return AlertDialog(
+                  title: Text("Verification Code"),
+                  content: Text('Code entered is $verificationCode'),
+                );
+              }
+          );*/
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }, // end onSubmit
+    );
+  }
+
   Widget _buildForgetPasswordButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.start,
@@ -230,7 +275,7 @@ class _LoginPageState extends State<LoginPage> {
               //loginAPICall();
               Navigator.pushReplacement(
                 context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
+                MaterialPageRoute(builder: (context) => OTPVerification()),
               );
             },
             child: Text("Login",
@@ -276,5 +321,28 @@ class _LoginPageState extends State<LoginPage> {
         ),
       ],
     );
+  }
+}
+
+class OTPORPassword extends StatelessWidget {
+  const OTPORPassword({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+/*    return Container(
+      if (verificationType == "OTP") {
+         _otpView(context);
+      }else{
+        _buildPasswordRow();
+    }
+   );*/
+    return Column(children: <Widget>[
+      Text("hello"),
+      if (true)
+        Text("should not render if false"),
+      Text("world")
+    ],);
   }
 }
