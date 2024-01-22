@@ -1,3 +1,4 @@
+import 'package:bookingcab_mobileapp/src/home/DualImageCarosel.dart';
 import 'package:bookingcab_mobileapp/src/home/PackageCarousel.dart';
 import 'package:flutter/material.dart';
 
@@ -129,27 +130,78 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                         ],
                       ),
                     ),
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: PackageCarousel(),
+                    const Divider(
+                      height: 2,
+                      color: Colors.red,
                     ),
                     const SizedBox(
-                      height: 10,
+                      height: 8,
                     ),
-                    SizedBox(
-                      height: 220,
-                      child: ListView.builder(
-                        shrinkWrap: true,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: outStationPackageList.length,
-                        itemBuilder: (BuildContext context, int index) =>
-                            PackageCard(
-                          image: outStationPackageList[index].image!,
-                          packageAmount:
-                              outStationPackageList[index].packageAmount,
-                        ),
+                    Padding(
+                      padding: const EdgeInsets.all(8.0),
+                      child: Column(
+                        children: [
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Thing To Do",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          DualImageCarosel(
+                            dataList: thingTodoList,
+                            cardBuilder: (imageUrl, title) =>
+                                ThingsToDoCard(image: imageUrl, title: title),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "We Offer",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          DualImageCarosel(
+                            dataList: offerList,
+                            cardBuilder: (imageUrl, title) =>
+                                CaroselCard(image: imageUrl, title: title),
+                          ),
+                          const SizedBox(
+                            height: 10,
+                          ),
+                          const Row(
+                            mainAxisAlignment: MainAxisAlignment.start,
+                            children: [
+                              Text(
+                                "Great Hotels",
+                                style: TextStyle(
+                                  fontWeight: FontWeight.bold,
+                                  fontSize: 18,
+                                ),
+                              ),
+                            ],
+                          ),
+                          DualImageCarosel(
+                            dataList: hotelofferList,
+                            cardBuilder: (imageUrl, discount) =>
+                                HotelCaroselCard(
+                                    image: imageUrl, title: discount),
+                          ),
+                        ],
                       ),
-                    )
+                    ),
                   ],
                 ),
               ),
@@ -165,14 +217,14 @@ class CustomCard extends StatelessWidget {
   final IconData icon;
   final String label;
 
-  CustomCard({required this.icon, required this.label});
+  const CustomCard({super.key, required this.icon, required this.label});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 90,
       height: 110,
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
@@ -181,7 +233,7 @@ class CustomCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -198,7 +250,10 @@ class CustomCard extends StatelessWidget {
             const SizedBox(height: 6),
             Text(
               label,
-              style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 12,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -211,14 +266,15 @@ class PackageCard extends StatelessWidget {
   final String image;
   final int packageAmount;
 
-  PackageCard({required this.image, required this.packageAmount});
+  const PackageCard(
+      {super.key, required this.image, required this.packageAmount});
 
   @override
   Widget build(BuildContext context) {
     return Container(
       width: 200,
       height: 180,
-      margin: EdgeInsets.all(10.0),
+      margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
@@ -227,7 +283,7 @@ class PackageCard extends StatelessWidget {
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 2,
             blurRadius: 5,
-            offset: Offset(0, 3),
+            offset: const Offset(0, 3),
           ),
         ],
       ),
@@ -240,7 +296,10 @@ class PackageCard extends StatelessWidget {
             const SizedBox(height: 10),
             Text(
               "$packageAmount",
-              style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+              style: const TextStyle(
+                fontSize: 16,
+                fontWeight: FontWeight.bold,
+              ),
             ),
           ],
         ),
@@ -442,4 +501,157 @@ class PackageDetail {
   int amount;
 
   PackageDetail({required this.from, required this.to, required this.amount});
+}
+
+class CaroselCard extends StatelessWidget {
+  const CaroselCard({super.key, required this.image, required this.title});
+  final String image;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5.0,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6.0),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned.fill(
+              child: Image(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Container(
+              // width: double.infinity,
+              height: 200.0,
+              color: Colors.black.withOpacity(0.5),
+            ),
+            Positioned.fill(
+              child: Center(
+                child: Text(
+                  title,
+                  maxLines: 2,
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 16.0,
+                    fontWeight: FontWeight.bold,
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class HotelCaroselCard extends StatelessWidget {
+  const HotelCaroselCard({super.key, required this.image, required this.title});
+
+  final String image;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5.0,
+      child: ClipRRect(
+        borderRadius: BorderRadius.circular(6.0),
+        child: Stack(
+          alignment: Alignment.center,
+          children: [
+            Positioned.fill(
+              child: Image(
+                image: AssetImage(image),
+                fit: BoxFit.cover,
+              ),
+            ),
+            Positioned(
+              left: 0,
+              top: 18,
+              child: Card(
+                elevation: 2.0,
+                child: ColoredBox(
+                  color: Colors.red,
+                  child: Padding(
+                    padding: const EdgeInsets.all(4.0),
+                    child: Text(
+                      "$title % Discount",
+                      maxLines: 2,
+                      style: const TextStyle(
+                        color: Colors.white,
+                        fontSize: 16.0,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ),
+                ),
+              ),
+            )
+          ],
+        ),
+      ),
+    );
+  }
+}
+
+class ThingsToDoCard extends StatelessWidget {
+  const ThingsToDoCard({super.key, required this.image, required this.title});
+
+  final String image;
+  final String title;
+  @override
+  Widget build(BuildContext context) {
+    return Card(
+      elevation: 5.0,
+      child: ClipRRect(
+          borderRadius: BorderRadius.circular(6.0),
+          child: Column(
+            children: [
+              Expanded(
+                flex: 8,
+                child: Image(
+                  image: AssetImage(image),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              Expanded(
+                flex: 2,
+                child: ColoredBox(
+                  color: Colors.white,
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Text(
+                        "INR $title",
+                        style: const TextStyle(
+                          fontSize: 15,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const ColoredBox(
+                        color: Colors.black,
+                        child: SizedBox(
+                          height: 21,
+                          width: 2,
+                        ),
+                      ),
+                      const Text(
+                        "Book Now",
+                        style: TextStyle(
+                          fontSize: 15,
+                          color: Colors.red,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              )
+            ],
+          )),
+    );
+  }
 }
