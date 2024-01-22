@@ -1,5 +1,4 @@
 import 'package:bookingcab_mobileapp/src/home/DualImageCarosel.dart';
-import 'package:bookingcab_mobileapp/src/home/PackageCarousel.dart';
 import 'package:flutter/material.dart';
 
 import '../comman/Constant.dart';
