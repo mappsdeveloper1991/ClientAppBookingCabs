@@ -24,7 +24,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
         child: Column(
           children: [
             SizedBox(
-              height: 110,
+              height: 112,
               child: ListView.builder(
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
@@ -37,6 +37,7 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
             Padding(
               padding: const EdgeInsets.all(8),
               child: Container(
+                height: 52,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
                   border: Border.all(
@@ -44,43 +45,46 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                     width: 2,
                   ),
                 ),
-                child: Row(
-                  children: [
-                    const Padding(
-                      padding: EdgeInsets.all(8.0),
-                      child: Icon(
-                        Icons.search,
-                        color: Colors.yellow,
-                      ),
-                    ),
-                    Expanded(
-                      child: TextField(
-                        controller: _searchController,
-                        decoration: const InputDecoration(
-                          hintText: 'Search your cab for anywhere',
-                          border: InputBorder.none,
+                child: Padding(
+                  padding: const EdgeInsets.all(0.0),
+                  child: Row(
+                    children: [
+                      const Padding(
+                        padding: EdgeInsets.all(8.0),
+                        child: Icon(
+                          Icons.search,
+                          color: Colors.yellow,
                         ),
-                        onChanged: (value) {
-                          setState(() {
-                            _isSearchFocused = value.isNotEmpty;
-                          });
-                        },
                       ),
-                    ),
-                    _isSearchFocused
-                        ? IconButton(
-                            icon: Icon(Icons.clear),
-                            onPressed: () {
-                              setState(
-                                () {
-                                  _searchController.clear();
-                                  _isSearchFocused = false;
-                                },
-                              );
-                            },
-                          )
-                        : const SizedBox.shrink(),
-                  ],
+                      Expanded(
+                        child: TextField(
+                          controller: _searchController,
+                          decoration: const InputDecoration(
+                            hintText: 'Search your cab for anywhere',
+                            border: InputBorder.none,
+                          ),
+                          onChanged: (value) {
+                            setState(() {
+                              _isSearchFocused = value.isNotEmpty;
+                            });
+                          },
+                        ),
+                      ),
+                      _isSearchFocused
+                          ? IconButton(
+                              icon: Icon(Icons.clear),
+                              onPressed: () {
+                                setState(
+                                  () {
+                                    _searchController.clear();
+                                    _isSearchFocused = false;
+                                  },
+                                );
+                              },
+                            )
+                          : const SizedBox.shrink(),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -92,8 +96,9 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                       children: [
                         Expanded(
                           child: SizedBox(
-                              width: MediaQuery.of(context).size.width * 0.90,
-                              child: const SliderCarosel()),
+                            width: MediaQuery.of(context).size.width * 0.90,
+                            child: const SliderCarosel(),
+                          ),
                         )
                       ],
                     ),
@@ -119,12 +124,15 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                           const SizedBox(
                             height: 5,
                           ),
-                          Row(
-                            children: [
-                              Expanded(
-                                  child:
-                                      PackageTable(packageList: packageList)),
-                            ],
+                          SizedBox(
+                            height: 300,
+                            child: Row(
+                              children: [
+                                Expanded(
+                                    child:
+                                        PackageTable(packageList: packageList)),
+                              ],
+                            ),
                           ),
                         ],
                       ),
@@ -222,7 +230,7 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 90,
-      height: 110,
+      height: 112,
       margin: const EdgeInsets.all(10.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
@@ -250,7 +258,7 @@ class CustomCard extends StatelessWidget {
             Text(
               label,
               style: const TextStyle(
-                fontSize: 12,
+                fontSize: 14,
                 fontWeight: FontWeight.bold,
               ),
             ),
@@ -389,8 +397,8 @@ class _PackageTableState extends State<PackageTable> {
   @override
   Widget build(BuildContext context) {
     return DataTable(
-      horizontalMargin: 8,
-      columnSpacing: 36,
+      horizontalMargin: 5,
+      columnSpacing: 40,
       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
       columns: [
         const DataColumn(

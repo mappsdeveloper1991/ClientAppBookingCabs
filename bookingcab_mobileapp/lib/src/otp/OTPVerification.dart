@@ -38,25 +38,60 @@ class _OTPVerificationState extends State<OTPVerification> {
                     const SizedBox(height: 50),
                     _otpView(context),
                     const SizedBox(height: 30),
-                    _buildLoginButton()
+                    RichText(
+                      text: const TextSpan(children: [
+                        TextSpan(
+                          text: 'Time Remaining : ',
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                        TextSpan(
+                          text: '18',
+                          style: TextStyle(
+                            color: buttonPrimaryColor,
+                            fontSize: 16,
+                            fontWeight: FontWeight.bold,
+                            letterSpacing: 1,
+                          ),
+                        ),
+                      ]),
+                    ),
+                    const SizedBox(
+                      height: 20,
+                    ),
+                    Row(
+                      children: [
+                        Expanded(
+                          child: _buildVerifyOtpButton(),
+                        ),
+                        Expanded(
+                          child: _buildReSendOtpButton(),
+                        )
+                      ],
+                    ),
                   ]),
             )));
   }
-    OtpTextField _otpView(BuildContext context) {
-      return OtpTextField(
-        numberOfFields: 5,
 
-        borderColor: Color(0xFF512DA8),
-        //set to true to show as box or false to show as dash
-        showFieldAsBox: true,
-        fieldWidth: 60,
-        borderRadius: BorderRadius.all(Radius.circular(10.0)),
-        //runs when a code is typed in
-        onCodeChanged: (String code) {
-          //handle validation or checks here
-        },
-        //runs when every textfield is filled
-        onSubmit: (String verificationCode) {
+  OtpTextField _otpView(BuildContext context) {
+    return OtpTextField(
+      numberOfFields: 5,
+
+      borderColor: Color(0xFF512DA8),
+      //set to true to show as box or false to show as dash
+      showFieldAsBox: true,
+      fieldWidth: 60,
+      borderRadius: BorderRadius.all(Radius.circular(10.0)),
+      //runs when a code is typed in
+      onCodeChanged: (String code) {
+        //handle validation or checks here
+      },
+      //runs when every textfield is filled
+      onSubmit: (String verificationCode) {
 /*          showDialog(
               context: context,
               builder: (context) {
@@ -66,21 +101,21 @@ class _OTPVerificationState extends State<OTPVerification> {
                 );
               }
           );*/
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (context) => HomeScreen()),
-          );
-        }, // end onSubmit
-      );
-    }
+        Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(builder: (context) => HomeScreen()),
+        );
+      }, // end onSubmit
+    );
+  }
 
-  Widget _buildLoginButton() {
+  Widget _buildVerifyOtpButton() {
     return Row(
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
           height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.70,
+          width: MediaQuery.of(context).size.width * 0.42,
           margin: const EdgeInsets.only(bottom: 20),
           //child: RaisedButton(
           child: ElevatedButton(
@@ -92,13 +127,41 @@ class _OTPVerificationState extends State<OTPVerification> {
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
             },
-            child: Text("Login",
-                style:buttonTextStyle(context,
-                    Colors.white,MediaQuery.of(context).size.height / 40)),
+            child: Text("VERIFY OTP",
+                style: buttonTextStyle(context, Colors.white,
+                    MediaQuery.of(context).size.height / 52)),
           ),
         )
       ],
     );
   }
 
+  Widget _buildReSendOtpButton() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.center,
+      children: <Widget>[
+        Container(
+          height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
+          width: MediaQuery.of(context).size.width * 0.42,
+          margin: const EdgeInsets.only(bottom: 20),
+          //child: RaisedButton(
+          child: ElevatedButton(
+            style: primaryButtonStyle(context, buttonPrimaryColor),
+            onPressed: () {
+              //loginAPICall();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(builder: (context) => HomeScreen()),
+              );
+            },
+            child: Text(
+              "RE-SEND OTP",
+              style: buttonTextStyle(context, Colors.white,
+                  MediaQuery.of(context).size.height / 52),
+            ),
+          ),
+        )
+      ],
+    );
   }
+}

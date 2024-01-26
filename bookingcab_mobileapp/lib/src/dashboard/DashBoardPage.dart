@@ -1,4 +1,5 @@
 import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/src/home/MyAccount.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -18,7 +19,6 @@ class _HomeScreenState extends State<HomeScreen>
     with SingleTickerProviderStateMixin {
   late TabController homeTabController;
   String? selectedLocation = 'Delhi-NCR'; // Use String instead of Text
-
 
   @override
   void initState() {
@@ -58,18 +58,19 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-
   AppBar homePageHeaderBar(BuildContext context) {
-    return
-      AppBar(
+    return AppBar(
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
         elevation: 2,
         title: //Text("Home Page"),
-        Row(
+            const Row(
           mainAxisAlignment: MainAxisAlignment.start,
           children: [
-            bookingCabsTextLogo(context)
+            // bookingCabsTextLogo(context)
+            Image(
+              image: AssetImage("assets/images/bookingcbas_logo.png"),
+            )
           ],
         ),
         //centerTitle: true,
@@ -80,8 +81,16 @@ class _HomeScreenState extends State<HomeScreen>
                 Icons.notifications,
               ),
               const SizedBox(width: 10), // Added SizedBox for spacing
-              const Icon(
-                Icons.person,
+              GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(builder: (context) => MyAccount()),
+                  );
+                },
+                child: const Icon(
+                  Icons.person,
+                ),
               ),
               const SizedBox(width: 10), // Added SizedBox for spacing
               Container(
@@ -124,7 +133,6 @@ class _HomeScreenState extends State<HomeScreen>
           ),
         ]);
   }
-
 }
 
 class HomeBottomNavigationBar extends StatefulWidget {

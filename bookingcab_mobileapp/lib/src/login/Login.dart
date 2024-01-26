@@ -28,18 +28,18 @@ class _LoginPageState extends State<LoginPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: blackColor,
+      backgroundColor: whiteColor,
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
               SizedBox(
-                height: MediaQuery.of(context).size.height * 0.7,
-                width: MediaQuery.of(context).size.width,
+                // height: MediaQuery.of(context).size.height * 0.7,
+                // width: MediaQuery.of(context).size.width,
                 child: Container(
                   decoration: const BoxDecoration(
-                    color: primaryColor,
+                    color: whiteColor,
                     borderRadius: BorderRadius.only(
                       bottomLeft: Radius.circular(20),
                       bottomRight: Radius.circular(20),
@@ -53,7 +53,7 @@ class _LoginPageState extends State<LoginPage> {
                   const SizedBox(
                     height: 100,
                   ),
-                  _buildLogo(),
+                  // _buildLogo(),
                   _buildContainer(),
                   // _buildSignUpBtn(),
                 ],
@@ -94,8 +94,8 @@ class _LoginPageState extends State<LoginPage> {
           ),
           child: Container(
             padding: EdgeInsets.all(5),
-            height: MediaQuery.of(context).size.height * 0.65,
-            width: MediaQuery.of(context).size.width * 0.85,
+            //  height: MediaQuery.of(context).size.height * 0.65,
+            width: MediaQuery.of(context).size.width * 0.95,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
@@ -133,7 +133,6 @@ class _LoginPageState extends State<LoginPage> {
                 _buildEmailRow(),
 
                 SegmentedButton<String>(
-
                   segments: const <ButtonSegment<String>>[
                     ButtonSegment<String>(
                         value: 'Password',
@@ -150,19 +149,33 @@ class _LoginPageState extends State<LoginPage> {
                       verificationType = newSelection.first;
                     });
 
-                      print("Segment Value: $newSelection  and verificationType:$verificationType");
+                    print(
+                        "Segment Value: $newSelection  and verificationType:$verificationType");
                   },
                 ),
 
                 const SizedBox(height: 10),
                 if (verificationType.contains("OTP"))
-                   _otpView(context)
+                  _otpView(context)
                 else
                   _buildPasswordRow(),
                 const SizedBox(height: 10),
-                _buildForgetPasswordButton(),
-                _buildLoginButton(),
-                _buildSignUpBtn(),
+
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Expanded(
+                      child: _buildSignUpBtn(),
+                    ),
+                    Expanded(
+                      child: _buildLoginButton(),
+                    ),
+                  ],
+                ),
+                Center(
+                  child: _buildForgetPasswordButton(),
+                ),
+
                 //_buildOrRow(),
                 //_buildSocialBtnRow(),
               ],
@@ -175,17 +188,20 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildEmailRow() {
     return Padding(
-      padding: EdgeInsets.all(10),
-      child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
-        onChanged: (value) {
-          setState(() {
-            email = value;
-          });
-        },
-        style: textFormFieldStyle(),
-        decoration:
-            textFormFieldDecoration(context, "E-mail", Icons.email_outlined),
+      padding: EdgeInsets.all(5),
+      child: Container(
+        height: 50,
+        child: TextFormField(
+          keyboardType: TextInputType.emailAddress,
+          onChanged: (value) {
+            setState(() {
+              email = value;
+            });
+          },
+          style: textFormFieldStyle(),
+          decoration:
+              textFormFieldDecoration(context, "E-mail", Icons.email_outlined),
+        ),
       ),
     );
   }
@@ -207,7 +223,6 @@ class _LoginPageState extends State<LoginPage> {
       ),
     );
   }
-
 
   OtpTextField _otpView(BuildContext context) {
     return OtpTextField(
@@ -243,8 +258,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildForgetPasswordButton() {
     return Row(
-      mainAxisAlignment: MainAxisAlignment.start,
-      crossAxisAlignment: CrossAxisAlignment.start,
+      mainAxisAlignment: MainAxisAlignment.center,
+      // crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         //FlatButton(
         TextButton(
@@ -252,8 +267,8 @@ class _LoginPageState extends State<LoginPage> {
             //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new ForgotPassword()));
           },
           child: Text(
-            "Forgot Password",
-            style: buttonTextStyle(context, blackColor, 16),
+            "Forgot Password?",
+            style: buttonTextStyle(context, buttonPrimaryColor, 16),
           ),
         ),
       ],
@@ -266,11 +281,11 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         Container(
           height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.70,
-          margin: const EdgeInsets.only(bottom: 20),
+          width: MediaQuery.of(context).size.width * 0.40,
+          margin: const EdgeInsets.only(bottom: 16),
           //child: RaisedButton(
           child: ElevatedButton(
-            style: primaryButtonStyle(context, buttonSecondaryColor),
+            style: primaryButtonStyle(context, buttonPrimaryColor),
             onPressed: () {
               //loginAPICall();
               Navigator.pushReplacement(
@@ -279,8 +294,8 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
             child: Text("Login",
-                style:buttonTextStyle(context,
-                    Colors.white,MediaQuery.of(context).size.height / 40)),
+                style: buttonTextStyle(context, Colors.white,
+                    MediaQuery.of(context).size.height / 40)),
           ),
         )
       ],
@@ -292,20 +307,23 @@ class _LoginPageState extends State<LoginPage> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 55,
-          width: MediaQuery.of(context).size.width * 0.70,
-          margin: const EdgeInsets.only(bottom: 20),
+          height: 50,
+          width: MediaQuery.of(context).size.width * 0.40,
+          margin: const EdgeInsets.only(bottom: 16),
           child: SizedBox(
             height: 50,
             child: OutlinedButton(
-              style: primaryButtonStyle(context, buttonPrimaryColor),
+              style: primaryButtonStyle(context, buttonSecondaryColor),
               onPressed: () {
-                Navigator.pushReplacement(context,MaterialPageRoute(builder: (context) => SignupPersonalDetails()));
+                Navigator.pushReplacement(
+                    context,
+                    MaterialPageRoute(
+                        builder: (context) => SignupPersonalDetails()));
               },
               child: RichText(
                 text: TextSpan(children: [
                   TextSpan(
-                    text: 'Create an account',
+                    text: 'New User',
                     style: /*TextStyle(
                       color: Colors.black,
                       fontSize: MediaQuery.of(context).size.height / 40,
@@ -338,11 +356,12 @@ class OTPORPassword extends StatelessWidget {
         _buildPasswordRow();
     }
    );*/
-    return Column(children: <Widget>[
-      Text("hello"),
-      if (true)
-        Text("should not render if false"),
-      Text("world")
-    ],);
+    return const Column(
+      children: <Widget>[
+        Text("hello"),
+        if (true) Text("should not render if false"),
+        Text("world")
+      ],
+    );
   }
 }

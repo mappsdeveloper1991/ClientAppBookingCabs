@@ -3,17 +3,19 @@ import 'package:flutter/material.dart';
 import '../dashboard/DashBoardPage.dart';
 import 'AppColors.dart';
 
-
 AppBar languageSelectionHeaderBar(BuildContext context) {
   return AppBar(
       automaticallyImplyLeading: false,
       backgroundColor: primaryColor,
       elevation: 2,
       title: //Text("Home Page"),
-      Row(
+          const Row(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          bookingCabsTextLogo(context),
+          Image(
+            image: AssetImage("assets/images/bookingcbas_logo.png"),
+          )
+          //bookingCabsTextLogo(context),
         ],
       ),
       //centerTitle: true,
@@ -36,14 +38,13 @@ AppBar languageSelectionHeaderBar(BuildContext context) {
                 style: TextStyle(
                   color: Colors.red,
                   fontWeight: FontWeight.bold,
-
                 ),
               ),
-            ),),
+            ),
+          ),
         )
       ]);
 }
-
 
 AppBar simpleHeaderBar(BuildContext context, String pageTitle) {
   return AppBar(
@@ -59,41 +60,38 @@ AppBar simpleHeaderBar(BuildContext context, String pageTitle) {
           Navigator.of(context).pop(true);
         },
       ),
-      actions: const <Widget>[
-      ]);
+      actions: const <Widget>[]);
 }
-
-
 
 RichText bookingCabsTextLogo(BuildContext context) {
   return RichText(
-          text: const TextSpan(
-            style: TextStyle(
-              fontSize: 22,
-              fontWeight: FontWeight.bold,
-            ),
-            children: [
-              TextSpan(
-                text: "Book",
-                style: TextStyle(
-                  color: Colors.black,
-                ),
-              ),
-              TextSpan(
-                text: "ing",
-                style: TextStyle(
-                  color: Colors.orange,
-                ),
-              ),
-              TextSpan(
-                text: "cabs",
-                style: TextStyle(
-                  color: Colors.red,
-                ),
-              ),
-            ],
+    text: const TextSpan(
+      style: TextStyle(
+        fontSize: 22,
+        fontWeight: FontWeight.bold,
+      ),
+      children: [
+        TextSpan(
+          text: "Book",
+          style: TextStyle(
+            color: Colors.black,
           ),
-        );
+        ),
+        TextSpan(
+          text: "ing",
+          style: TextStyle(
+            color: Colors.orange,
+          ),
+        ),
+        TextSpan(
+          text: "cabs",
+          style: TextStyle(
+            color: Colors.red,
+          ),
+        ),
+      ],
+    ),
+  );
 }
 
 ColoredBox languageSelectionHeader(BuildContext context) {
@@ -152,7 +150,3 @@ ColoredBox languageSelectionHeader(BuildContext context) {
     ),
   );
 }
-
-
-
-

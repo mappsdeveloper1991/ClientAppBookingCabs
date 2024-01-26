@@ -69,9 +69,12 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
+              padding: const EdgeInsets.all(12.0),
               child: Container(
                 decoration: BoxDecoration(
+                  border: Border.all(
+                    color: Colors.grey.withOpacity(0.5),
+                  ),
                   borderRadius:
                       BorderRadius.circular(10), // Add rounded corners
                   boxShadow: [
@@ -84,12 +87,17 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                   ],
                 ),
                 child: DropdownButtonFormField<String>(
-                  hint: const Text("Select Language"),
+                  hint: const Text(
+                    "Select Language",
+                    style: TextStyle(
+                      color: Color.fromARGB(255, 175, 173, 173),
+                    ),
+                  ),
                   decoration: InputDecoration(
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: Colors.black,
+                        color: Color.fromARGB(255, 212, 212, 212),
                         width: 2.0,
                       ),
                     ),
@@ -97,10 +105,11 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                         horizontal: 16, vertical: 12),
                     filled: true,
                     fillColor: Colors.white,
+                    focusColor: Color.fromARGB(255, 212, 212, 212),
                     enabledBorder: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(10),
                       borderSide: const BorderSide(
-                        color: Colors.black,
+                        color: Color.fromARGB(255, 231, 231, 231),
                         width: 1.0,
                       ),
                     ),
@@ -108,34 +117,35 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
                   value: selectedLanguage,
                   items: languageOptions.map((String language) {
                     return DropdownMenuItem<String>(
-                        value: language,
-                        child: Row(
-                          children: [
-                            Radio<String>(
-                              value: language,
-                              groupValue: selectedLanguage,
-                              onChanged: (value) {
-                                setState(() {
-                                  selectedLanguage = value;
-                                });
-                              },
+                      value: language,
+                      child: Row(
+                        children: [
+                          Radio<String>(
+                            value: language,
+                            groupValue: selectedLanguage,
+                            onChanged: (value) {
+                              setState(() {
+                                selectedLanguage = value;
+                              });
+                            },
+                          ),
+                          Text(
+                            language,
+                            style: const TextStyle(
+                              color: Colors.black,
+                              fontSize: 14,
                             ),
-                            Text(
-                              language,
-                              style: const TextStyle(
-                                color: Colors.black,
-                                fontSize: 14,
-                              ),
-                            ),
-                          ],
-                        ));
+                          ),
+                        ],
+                      ),
+                    );
                   }).toList(),
                   onChanged: (value) {
                     setState(() {
                       selectedLanguage = value;
                     });
                   },
-                  iconEnabledColor: Colors.black,
+                  iconEnabledColor: Colors.grey,
                 ),
               ),
             ),
@@ -183,11 +193,11 @@ class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Container(
-          height: 60,
+          height: 50,
           width: MediaQuery.of(context).size.width * 0.90,
           margin: const EdgeInsets.only(bottom: 20),
           child: SizedBox(
-            height: 50,
+            height: 40,
             child: OutlinedButton(
               style: secondaryButtonStyle(context, buttonPrimaryColor),
               onPressed: () {
