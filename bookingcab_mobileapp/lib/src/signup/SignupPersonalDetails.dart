@@ -50,7 +50,8 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildFirstNameRow() {
     return Container(
-       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
+      height: 50,
+      margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
@@ -67,6 +68,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildLastNameRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -84,6 +86,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildEmailRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -98,8 +101,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       ),
     );
   }
+
   Widget _buildMobileNoRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -117,6 +122,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildReferByRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -134,6 +140,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildPasswordRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -151,6 +158,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildConfirmPasswordRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -168,6 +176,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildCitydRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -185,6 +194,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
   Widget _buildNationalityRow() {
     return Container(
+      height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
         keyboardType: TextInputType.emailAddress,
@@ -200,32 +210,32 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
     );
   }
 
-
   Widget _buildSignupButton() {
-    return
-      Container(
-        margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
-        child: Row(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Container(
-          height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.70,
-          margin: const EdgeInsets.only(bottom: 20),
-          //child: RaisedButton(
-          child: ElevatedButton(
-            style: primaryButtonStyle(context, buttonSecondaryColor),
-            onPressed: () {
-              //loginAPICall();
-              Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => OTPVerification()),
-              );
-            },
-            child: Text("Continue",
-                style:buttonTextStyle(context,
-                    Colors.white,MediaQuery.of(context).size.height / 40)),
-          ),
-        )
-      ],
+    return Container(
+      margin: const EdgeInsets.fromLTRB(0, 30, 0, 0),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: <Widget>[
+          Container(
+            height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
+            width: MediaQuery.of(context).size.width * .9,
+            margin: const EdgeInsets.only(bottom: 20),
+            //child: RaisedButton(
+            child: ElevatedButton(
+              style: primaryButtonStyle(context, buttonSecondaryColor),
+              onPressed: () {
+                //loginAPICall();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => OTPVerification()),
+                );
+              },
+              child: Text("Continue",
+                  style: buttonTextStyle(context, Colors.white,
+                      MediaQuery.of(context).size.height / 40)),
+            ),
+          )
+        ],
       ),
     );
   }

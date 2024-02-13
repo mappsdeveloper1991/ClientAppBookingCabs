@@ -1,4 +1,6 @@
 import 'package:bookingcab_mobileapp/src/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/src/profile/ChangePassword.dart';
+import 'package:bookingcab_mobileapp/src/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 
 import '../AppStyle/AppHeadreApp.dart';
@@ -31,15 +33,18 @@ class MyAccount extends StatelessWidget {
                       ),
                       child: const CircleAvatar(
                         backgroundColor: Colors.white,
-                        maxRadius: 80,
+                        maxRadius: 70,
                         child: Icon(
                           Icons.person,
                           color: Colors.grey,
-                          size: 150,
+                          size: 140,
                         ),
                       ),
                     ),
                   ],
+                ),
+                const SizedBox(
+                  height: 10,
                 ),
                 const Text(
                   "Kunal",
@@ -65,42 +70,65 @@ class MyAccount extends StatelessWidget {
                 const SizedBox(
                   height: 5,
                 ),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add your action for the yellow button
-                      },
-                      style: ElevatedButton.styleFrom(
-                        backgroundColor: buttonSecondaryColor,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(8.0),
-                        ),
-                        elevation: 5.0,
-                      ),
-                      child: const Text(
-                        'Change Password',
-                        style: TextStyle(color: Colors.white),
-                      ),
-                    ),
-                    const SizedBox(width: 16.0), // Adjust spacing as needed
-                    ElevatedButton(
-                      onPressed: () {
-                        // Add your action for the red button
-                      },
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: buttonPrimaryColor,
-                          shape: RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(8.0),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => ChangePassword()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: buttonSecondaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(8.0),
+                            ),
+                            elevation: 5.0,
                           ),
-                          elevation: 5.0),
-                      child: const Text(
-                        'Edit Profile',
-                        style: TextStyle(color: Colors.white),
+                          child: const Text(
+                            'Change Password',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
                       ),
-                    ),
-                  ],
+                      const SizedBox(width: 7.0), // Adjust spacing as needed
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Add your action for the red button
+
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => EditProfile()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: buttonPrimaryColor,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(8.0),
+                              ),
+                              elevation: 5.0),
+                          child: const Text(
+                            'Edit Profile',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               ],
             ),
@@ -117,7 +145,7 @@ class MyAccount extends StatelessWidget {
                       Text(
                         "Advantages",
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 20,
                           fontWeight: FontWeight.bold,
                         ),
                       ),

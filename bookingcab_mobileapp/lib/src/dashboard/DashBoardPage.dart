@@ -1,5 +1,6 @@
+import 'package:bookingcab_mobileapp/src/booking_history/MyTrips.dart';
 import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
-import 'package:bookingcab_mobileapp/src/home/MyAccount.dart';
+import 'package:bookingcab_mobileapp/src/profile/MyAccount.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -42,7 +43,7 @@ class _HomeScreenState extends State<HomeScreen>
               child: TabBarView(
                 controller: homeTabController,
                 children: const [
-                  Icon(Icons.format_list_bulleted),
+                  MyTrips(),
                   Icon(Icons.currency_rupee_rounded),
                   HomeTabScreen(),
                   Icon(Icons.earbuds_battery_outlined),

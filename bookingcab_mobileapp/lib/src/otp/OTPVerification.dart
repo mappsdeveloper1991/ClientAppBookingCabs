@@ -28,8 +28,8 @@ class _OTPVerificationState extends State<OTPVerification> {
         appBar: simpleHeaderBar(context, "OTP Verification"),
         backgroundColor: whiteColor,
         body: Container(
-            margin: EdgeInsets.all(10),
-            padding: const EdgeInsets.all(10),
+            margin: EdgeInsets.all(5),
+            padding: const EdgeInsets.all(5),
             child: SingleChildScrollView(
               child: Column(
                   crossAxisAlignment: CrossAxisAlignment.center,
@@ -115,22 +115,20 @@ class _OTPVerificationState extends State<OTPVerification> {
       children: <Widget>[
         Container(
           height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.42,
-          margin: const EdgeInsets.only(bottom: 20),
+          width: MediaQuery.of(context).size.width * 0.44,
+          //margin: const EdgeInsets.only(bottom: 20),
           //child: RaisedButton(
           child: ElevatedButton(
-            style: primaryButtonStyle(context, buttonSecondaryColor),
-            onPressed: () {
-              //loginAPICall();
-              Navigator.pushReplacement(
-                context,
-                MaterialPageRoute(builder: (context) => HomeScreen()),
-              );
-            },
-            child: Text("VERIFY OTP",
-                style: buttonTextStyle(context, Colors.white,
-                    MediaQuery.of(context).size.height / 52)),
-          ),
+              style: primaryButtonStyle(context, buttonSecondaryColor),
+              onPressed: () {
+                //loginAPICall();
+                Navigator.pushReplacement(
+                  context,
+                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                );
+              },
+              child: Text("VERIFY OTP",
+                  style: buttonTextStyle(context, Colors.white, 15))),
         )
       ],
     );
@@ -142,8 +140,8 @@ class _OTPVerificationState extends State<OTPVerification> {
       children: <Widget>[
         Container(
           height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.42,
-          margin: const EdgeInsets.only(bottom: 20),
+          width: MediaQuery.of(context).size.width * 0.44,
+          //margin: const EdgeInsets.only(bottom: 20),
           //child: RaisedButton(
           child: ElevatedButton(
             style: primaryButtonStyle(context, buttonPrimaryColor),
@@ -156,8 +154,7 @@ class _OTPVerificationState extends State<OTPVerification> {
             },
             child: Text(
               "RE-SEND OTP",
-              style: buttonTextStyle(context, Colors.white,
-                  MediaQuery.of(context).size.height / 52),
+              style: buttonTextStyle(context, Colors.white, 16),
             ),
           ),
         )

@@ -1,3 +1,4 @@
+import 'package:bookingcab_mobileapp/cabservice/TransferService.dart';
 import 'package:bookingcab_mobileapp/src/home/DualImageCarosel.dart';
 import 'package:flutter/material.dart';
 
@@ -29,9 +30,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                 shrinkWrap: true,
                 scrollDirection: Axis.horizontal,
                 itemCount: cabServiceType.length,
-                itemBuilder: (BuildContext context, int index) => CustomCard(
+                itemBuilder: (BuildContext context, int index) =>
+                    GestureDetector(
+                  onTap: () {
+                    _cabServiceTypeRedirect(cabServiceType[index].label);
+                  },
+                  child: CustomCard(
                     icon: cabServiceType[index].icon!,
-                    label: "${cabServiceType[index].label}"),
+                    label: "${cabServiceType[index].label}",
+                  ),
+                ),
               ),
             ),
             Padding(
@@ -218,6 +226,16 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
       ),
     );
   }
+
+  void _cabServiceTypeRedirect(String? label) {
+    if (label == "Transfer") {
+      print("transfer selected");
+      Navigator.push(
+        context,
+        MaterialPageRoute(builder: (context) => TransferService()),
+      );
+    }
+  }
 }
 
 class CustomCard extends StatelessWidget {
@@ -398,7 +416,7 @@ class _PackageTableState extends State<PackageTable> {
   Widget build(BuildContext context) {
     return DataTable(
       horizontalMargin: 5,
-      columnSpacing: 40,
+      columnSpacing: 35,
       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
       columns: [
         const DataColumn(
@@ -455,7 +473,9 @@ class _PackageTableState extends State<PackageTable> {
                 DataCell(
                   Text(
                     widget.packageList[i].from,
+                    maxLines: 1,
                     style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -464,7 +484,9 @@ class _PackageTableState extends State<PackageTable> {
                 DataCell(
                   Text(
                     widget.packageList[i].to,
+                    maxLines: 1,
                     style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -473,7 +495,9 @@ class _PackageTableState extends State<PackageTable> {
                 DataCell(
                   Text(
                     '\u{20B9} ${widget.packageList[i].amount}',
+                    maxLines: 1,
                     style: const TextStyle(
+                      overflow: TextOverflow.ellipsis,
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
@@ -486,9 +510,11 @@ class _PackageTableState extends State<PackageTable> {
                       padding: EdgeInsets.only(
                           right: 10, left: 10, top: 1, bottom: 1),
                       child: Text(
+                        maxLines: 1,
                         'Book Now',
                         style: TextStyle(
-                          fontSize: 16,
+                          fontSize: 15,
+                          overflow: TextOverflow.ellipsis,
                           color: Colors.white,
                         ),
                       ),

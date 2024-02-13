@@ -6,6 +6,7 @@ import 'package:bookingcab_mobileapp/src/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../AppStyle/AppColors.dart';
+import '../AppStyle/AppHeadreApp.dart';
 import '../AppStyle/AppUIComponent.dart';
 import '../signup/SignupPersonalDetails.dart';
 
@@ -29,6 +30,7 @@ class _LoginPageState extends State<LoginPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: whiteColor,
+      appBar: simpleHeaderBar(context, "Login"),
       body: Padding(
         padding: const EdgeInsets.all(0),
         child: SingleChildScrollView(
@@ -95,7 +97,7 @@ class _LoginPageState extends State<LoginPage> {
           child: Container(
             padding: EdgeInsets.all(5),
             //  height: MediaQuery.of(context).size.height * 0.65,
-            width: MediaQuery.of(context).size.width * 0.95,
+            width: MediaQuery.of(context).size.width * 0.97,
             decoration: const BoxDecoration(
               color: Colors.white,
             ),
@@ -132,26 +134,91 @@ class _LoginPageState extends State<LoginPage> {
                 ),
                 _buildEmailRow(),
 
-                SegmentedButton<String>(
-                  segments: const <ButtonSegment<String>>[
-                    ButtonSegment<String>(
-                        value: 'Password',
-                        label: Text('Password'),
-                        icon: Icon(Icons.calendar_view_day)),
-                    ButtonSegment<String>(
-                        value: 'OTP',
-                        label: Text('OTP'),
-                        icon: Icon(Icons.calendar_view_week)),
-                  ],
-                  selected: <String>{verificationType},
-                  onSelectionChanged: (Set<String> newSelection) {
-                    setState(() {
-                      verificationType = newSelection.first;
-                    });
+                // SegmentedButton<String>(
+                //   segments: const <ButtonSegment<String>>[
+                //     ButtonSegment<String>(
+                //         value: 'Password',
+                //         label: Text('Password'),
+                //         icon: Icon(Icons.calendar_view_day)),
+                //     ButtonSegment<String>(
+                //         value: 'OTP',
+                //         label: Text('OTP'),
+                //         icon: Icon(Icons.calendar_view_week)),
+                //   ],
+                //   selected: <String>{verificationType},
+                //   onSelectionChanged: (Set<String> newSelection) {
+                //     setState(() {
+                //       verificationType = newSelection.first;
+                //     });
 
-                    print(
-                        "Segment Value: $newSelection  and verificationType:$verificationType");
-                  },
+                //     print(
+                //         "Segment Value: $newSelection  and verificationType:$verificationType");
+                //   },
+                // ),
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              verificationType = "Password";
+                            });
+                            // Add your action for the yellow button
+                          },
+                          style: ElevatedButton.styleFrom(
+                            // if (verificationType.contains("OTP")){
+
+                            // }else{
+
+                            // }
+                            backgroundColor: verificationType == "Password"
+                                ? buttonPrimaryColor
+                                : whiteColor,
+                            shape: RoundedRectangleBorder(),
+                            elevation: 5.0,
+                          ),
+                          child: Text(
+                            'Password',
+                            style: TextStyle(
+                              color: verificationType == "Password"
+                                  ? whiteColor
+                                  : buttonPrimaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 60.0), // Adjust spacing as needed
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            setState(() {
+                              verificationType = "OTP";
+                            });
+                            // Add your action for the red button
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: verificationType != "Password"
+                                  ? buttonPrimaryColor
+                                  : Colors.white,
+                              shape: RoundedRectangleBorder(),
+                              elevation: 5.0),
+                          child: Text(
+                            'OTP',
+                            style: TextStyle(
+                              color: verificationType != "Password"
+                                  ? Colors.white
+                                  : buttonPrimaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
 
                 const SizedBox(height: 10),
@@ -161,17 +228,79 @@ class _LoginPageState extends State<LoginPage> {
                   _buildPasswordRow(),
                 const SizedBox(height: 10),
 
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Expanded(
-                      child: _buildSignUpBtn(),
-                    ),
-                    Expanded(
-                      child: _buildLoginButton(),
-                    ),
-                  ],
+                Padding(
+                  padding: const EdgeInsets.all(8.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushReplacement(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) =>
+                                        SignupPersonalDetails()));
+                            // Add your action for the yellow button
+                          },
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: buttonSecondaryColor,
+                            shape: RoundedRectangleBorder(),
+                            elevation: 5.0,
+                          ),
+                          child: Text(
+                            'NEW USER?',
+                            style: TextStyle(
+                              color: verificationType == "Password"
+                                  ? whiteColor
+                                  : buttonPrimaryColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                      const SizedBox(width: 20.0), // Adjust spacing as needed
+                      Expanded(
+                        child: ElevatedButton(
+                          onPressed: () {
+                            // Add your action for the red button
+                            Navigator.pushReplacement(
+                              context,
+                              MaterialPageRoute(
+                                  builder: (context) => OTPVerification()),
+                            );
+                          },
+                          style: ElevatedButton.styleFrom(
+                              backgroundColor: buttonPrimaryColor,
+                              shape: RoundedRectangleBorder(),
+                              elevation: 5.0),
+                          child: const Text(
+                            'LOGIN',
+                            style: TextStyle(
+                              color: whiteColor,
+                              fontSize: 16,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
+
+                // Row(
+                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                //   children: [
+                //     Expanded(
+                //       child: _buildSignUpBtn(),
+                //     ),
+                //     const SizedBox(
+                //       width: 5,
+                //     ),
+                //     Expanded(
+                //       child: _buildLoginButton(),
+                //     ),
+                //   ],
+                // ),
                 Center(
                   child: _buildForgetPasswordButton(),
                 ),
@@ -188,8 +317,8 @@ class _LoginPageState extends State<LoginPage> {
 
   Widget _buildEmailRow() {
     return Padding(
-      padding: EdgeInsets.all(5),
-      child: Container(
+      padding: const EdgeInsets.all(5),
+      child: SizedBox(
         height: 50,
         child: TextFormField(
           keyboardType: TextInputType.emailAddress,
@@ -281,8 +410,8 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         Container(
           height: 50, //1.4 * (MediaQuery.of(context).size.height / 20),
-          width: MediaQuery.of(context).size.width * 0.40,
-          margin: const EdgeInsets.only(bottom: 16),
+          width: MediaQuery.of(context).size.width * 0.45,
+          //margin: const EdgeInsets.only(bottom: 16),
           //child: RaisedButton(
           child: ElevatedButton(
             style: primaryButtonStyle(context, buttonPrimaryColor),
@@ -294,8 +423,7 @@ class _LoginPageState extends State<LoginPage> {
               );
             },
             child: Text("Login",
-                style: buttonTextStyle(context, Colors.white,
-                    MediaQuery.of(context).size.height / 40)),
+                style: buttonTextStyle(context, Colors.white, 16)),
           ),
         )
       ],
@@ -308,8 +436,8 @@ class _LoginPageState extends State<LoginPage> {
       children: <Widget>[
         Container(
           height: 50,
-          width: MediaQuery.of(context).size.width * 0.40,
-          margin: const EdgeInsets.only(bottom: 16),
+          width: MediaQuery.of(context).size.width * 0.45,
+          //margin: const EdgeInsets.only(bottom: 16),
           child: SizedBox(
             height: 50,
             child: OutlinedButton(
@@ -329,8 +457,7 @@ class _LoginPageState extends State<LoginPage> {
                       fontSize: MediaQuery.of(context).size.height / 40,
                       fontWeight: FontWeight.w400,
                     ),*/
-                        buttonTextStyle(context, Colors.white,
-                            MediaQuery.of(context).size.height / 40),
+                        buttonTextStyle(context, Colors.white, 16),
                   ),
                 ]),
               ),
