@@ -1,3 +1,5 @@
+
+import 'package:bookingcab_mobileapp/data/remoteServer/MyHttpOverrides.dart';
 import 'package:bookingcab_mobileapp/view/AppStyle/AppTheme.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/language/LanguageSelectionScreen.dart';
@@ -5,7 +7,8 @@ import 'package:bookingcab_mobileapp/view/splash/SplashScreen.dart';
 import 'package:flutter/material.dart';
 
 
-void main() {
+Future<void> main() async {
+  setupHttpOverrides(); // Set up SSL pinning
   runApp(const MyApp());
 }
 

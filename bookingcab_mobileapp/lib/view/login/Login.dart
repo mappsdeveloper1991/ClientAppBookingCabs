@@ -1,5 +1,6 @@
 import 'dart:developer';
 
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
 import 'package:bookingcab_mobileapp/view/otp/OTPVerification.dart';
@@ -25,6 +26,31 @@ class _LoginPageState extends State<LoginPage> {
   void initState() {
     super.initState();
   }
+
+  Future<void> loginAPICallUsingOTP() async {
+    Map<String, String> queryParams = {'username': 'mdsr2@gmail.com'};
+    try {
+    String endPointName = "";
+    if(verificationType == "Password"){
+          queryParams = {'username': 'mdsr2@gmail.com'};
+    }else{
+          queryParams = {'username': 'mdsr2@gmail.com'};
+    }
+      final response = await postRequest(loginByEmailAPIName, queryParams);
+      if (response.statusCode == 200) {
+        // Handle successful response
+        print('Response: ${response.body}');
+      } else {
+        // Handle error response
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception occurred: $e');
+    }
+  }
+
+  
 
   @override
   Widget build(BuildContext context) {

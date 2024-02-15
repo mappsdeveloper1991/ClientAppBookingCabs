@@ -1,11 +1,106 @@
 import 'dart:async';
 import 'dart:convert';
+import 'dart:io';
 import 'package:bookingcab_mobileapp/domain/model/Album.dart';
+import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
 
 
+String baseURL = "https://api.bookingcabs.com";
+String portNo = "3001";
+String subURL = "/api/v1/user";
+String  finalBaseURL = "$baseURL:$portNo$subURL";
 
 
+String loginByEmailAPIName = "getuserbyusername";
+String newSignUpEndPoint = "newsignup";
+
+
+
+// Method for making GET requests
+   Future<http.Response> getRequest(String endpoint) async {
+    try {
+      final response = await http.get(Uri.parse('$finalBaseURL/$endpoint'));
+      if (response.statusCode == 200) {
+          // Handle successful response
+          print('Request success: Response: ${response.body}');
+          return response;
+       } else {
+          // Handle error response
+          print('Request failed: status: ${response.statusCode}');
+          throw Exception('Failed');
+       }
+    } catch (e) {
+       print('Request failed: exception message: ${e.toString()}');
+       throw Exception('Failed');
+    }
+  }
+
+  // Method for making POST requests
+   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> body) async {
+    try {
+      final response = await http.post(
+        Uri.parse('$finalBaseURL/$endpoint'),
+        body: body,
+      );
+
+      if (response.statusCode == 200) {
+          // Handle successful response
+          print('Request success: Response: ${response.body}');
+          return response;
+       } else {
+          // Handle error response
+          print('Request failed: status: ${response.statusCode}');
+          throw Exception('Failed');
+       }
+    } catch (e) {
+       print('Request failed: exception message: ${e.toString()}');
+       throw Exception('Failed');
+    }
+  }
+
+
+
+
+/*
+
+
+Future<List<dynamic>?> getTrendingProductList() async {
+  try {
+    final headers = <String, String>{
+      'Content-Type': 'application/json',
+    };
+
+    Map<String, String> queryParams = {
+      'username': 'mdsr2@gmail.com'
+    };
+
+    Uri uri = Uri.parse('$finalBaseURL$loginByEmailAPIName');
+    final finalUri = uri.replace(queryParameters: queryParams); //USE THIS
+    print("httpRequest getTrendingProductList Request URL $uri");
+    var request = http.Request('POST', finalUri);
+
+
+    request.headers.addAll(headers);
+    http.StreamedResponse response = await request.send();
+
+    if (response.statusCode == 200) {
+      var value = await response.stream.bytesToString();
+      print('httpRequest getTrendingProductList => Success is comming: ${value}');
+
+      //var data = ProductsListResponse.fromJson(jsonDecode(value));
+
+      //return data.products;
+      Exception('Success');
+    } else {
+      print('httpRequest getTrendingProductList => Not success is comming: ');
+      throw Exception('Failed');
+    }
+  } catch (e) {
+    print('httpRequest getTrendingProductList => Error is comming: ${e}');
+    throw Exception('Error');
+  }
+}
 
 
 
@@ -24,7 +119,7 @@ Future<Album> fetchAlbum() async {
     throw Exception('Failed to load album');
   }
 }
-/*
+
 
 
 Future<ShopDetailsData> getShopDetailsData(String pageNameOrNo) async {
@@ -138,3 +233,7 @@ class Album {
 }
 
 */
+
+
+
+

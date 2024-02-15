@@ -1,3 +1,4 @@
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
@@ -15,11 +16,43 @@ class SignupPersonalDetails extends StatefulWidget {
 }
 
 class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
-  late String email, password;
+  late String firstName = "", lastName ="", emailID = "", mobileNo = "", referBy = "", password = "", confirmPassword = "", citys ="", nationality ="";
 
   @override
   void initState() {
     super.initState();
+  }
+
+
+Future<void> signUpAPICall() async {
+    Map<String, String> queryParams = {
+      "user_type_id": "1",
+      "company_id": "1",
+      "user_grade": "5",
+      "newsletter_subscription": "1",
+      'first_name': firstName,
+      "last_name": lastName,
+      "email": emailID,
+      "mobile_prefix": "91",
+      "mobile": mobileNo,
+      "city_id" : "707",
+      "state_id": "10",
+      "country_id": "101",
+      "parent_id" :"0"
+      };
+    try {
+      final response = await postRequest(newSignUpEndPoint, queryParams);
+      if (response.statusCode == 200) {
+        // Handle successful response
+        print('Response: ${response.body}');
+      } else {
+        // Handle error response
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception occurred: $e');
+    }
   }
 
   @override
@@ -53,10 +86,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: (value) {
           setState(() {
-            email = value;
+            firstName = value;
           });
         },
         style: textFormFieldStyle(),
@@ -71,10 +104,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: (value) {
           setState(() {
-            email = value;
+            lastName = value;
           });
         },
         style: textFormFieldStyle(),
@@ -92,7 +125,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
         keyboardType: TextInputType.emailAddress,
         onChanged: (value) {
           setState(() {
-            email = value;
+            emailID = value;
           });
         },
         style: textFormFieldStyle(),
@@ -107,10 +140,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.phone,
         onChanged: (value) {
           setState(() {
-            email = value;
+            mobileNo = value;
           });
         },
         style: textFormFieldStyle(),
@@ -125,10 +158,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: (value) {
           setState(() {
-            email = value;
+            referBy = value;
           });
         },
         style: textFormFieldStyle(),
@@ -143,10 +176,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.visiblePassword,
         onChanged: (value) {
           setState(() {
-            email = value;
+            password = value;
           });
         },
         style: textFormFieldStyle(),
@@ -161,10 +194,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.visiblePassword,
         onChanged: (value) {
           setState(() {
-            email = value;
+            confirmPassword = value;
           });
         },
         style: textFormFieldStyle(),
@@ -179,10 +212,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: (value) {
           setState(() {
-            email = value;
+            citys = value;
           });
         },
         style: textFormFieldStyle(),
@@ -197,10 +230,10 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       height: 50,
       margin: const EdgeInsets.fromLTRB(0, 10, 0, 0),
       child: TextFormField(
-        keyboardType: TextInputType.emailAddress,
+        keyboardType: TextInputType.text,
         onChanged: (value) {
           setState(() {
-            email = value;
+            nationality = value;
           });
         },
         style: textFormFieldStyle(),
@@ -225,10 +258,11 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
               style: primaryButtonStyle(context, buttonSecondaryColor),
               onPressed: () {
                 //loginAPICall();
-                Navigator.pushReplacement(
+              /*  Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => OTPVerification()),
-                );
+                ); */
+                signUpAPICall();
               },
               child: Text("Continue",
                   style: buttonTextStyle(context, Colors.white,
