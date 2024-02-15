@@ -1,5 +1,5 @@
-import 'package:bookingcab_mobileapp/cabservice/TransferService.dart';
-import 'package:bookingcab_mobileapp/src/home/DualImageCarosel.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/TransferService.dart';
+import 'package:bookingcab_mobileapp/view/home/DualImageCarosel.dart';
 import 'package:flutter/material.dart';
 
 import '../comman/Constant.dart';

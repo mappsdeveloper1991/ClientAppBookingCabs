@@ -1,6 +1,6 @@
-import 'package:bookingcab_mobileapp/src/AppStyle/AppColors.dart';
-import 'package:bookingcab_mobileapp/src/profile/ChangePassword.dart';
-import 'package:bookingcab_mobileapp/src/profile/EditProfile.dart';
+import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/view/profile/ChangePassword.dart';
+import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 
 import '../AppStyle/AppHeadreApp.dart';

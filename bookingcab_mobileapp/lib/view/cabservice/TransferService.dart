@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-import '../src/AppStyle/AppColors.dart';
-import '../src/AppStyle/AppHeadreApp.dart';
+import '../AppStyle/AppColors.dart';
+import '../AppStyle/AppHeadreApp.dart';
 
 class TransferService extends StatefulWidget {
   const TransferService({super.key});

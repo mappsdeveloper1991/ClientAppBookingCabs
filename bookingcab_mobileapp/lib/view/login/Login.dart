@@ -1,8 +1,8 @@
 import 'dart:developer';
 
-import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
-import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
-import 'package:bookingcab_mobileapp/src/otp/OTPVerification.dart';
+import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
+import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../AppStyle/AppColors.dart';

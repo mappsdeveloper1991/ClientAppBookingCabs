@@ -1,4 +1,4 @@
-import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 

@@ -1,7 +1,7 @@
 import 'dart:async';
 
-import 'package:bookingcab_mobileapp/src/language/LanguageSelectionScreen.dart';
-import 'package:bookingcab_mobileapp/src/login/Login.dart';
+import 'package:bookingcab_mobileapp/view/language/LanguageSelectionScreen.dart';
+import 'package:bookingcab_mobileapp/view/login/Login.dart';
 import 'package:flutter/material.dart';
 
 import '../dashboard/DashBoardPage.dart';

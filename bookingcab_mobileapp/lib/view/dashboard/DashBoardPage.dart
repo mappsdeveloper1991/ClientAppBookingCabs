@@ -1,6 +1,6 @@
-import 'package:bookingcab_mobileapp/src/booking_history/MyTrips.dart';
-import 'package:bookingcab_mobileapp/src/home/HomeTabScreen.dart';
-import 'package:bookingcab_mobileapp/src/profile/MyAccount.dart';
+import 'package:bookingcab_mobileapp/view/booking_history/MyTrips.dart';
+import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/profile/MyAccount.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';

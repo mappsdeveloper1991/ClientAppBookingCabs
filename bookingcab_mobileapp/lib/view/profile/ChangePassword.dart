@@ -1,4 +1,4 @@
-import 'package:bookingcab_mobileapp/src/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
 import 'package:flutter/material.dart';
 
 import '../AppStyle/AppHeadreApp.dart';

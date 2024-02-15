@@ -1,6 +1,6 @@
-import 'package:bookingcab_mobileapp/src/AppStyle/AppColors.dart';
-import 'package:bookingcab_mobileapp/src/profile/CompanyInfo.dart';
-import 'package:bookingcab_mobileapp/src/profile/Personalnfo.dart';
+import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/view/profile/CompanyInfo.dart';
+import 'package:bookingcab_mobileapp/view/profile/Personalnfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 

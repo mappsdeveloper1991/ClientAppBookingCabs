@@ -1,4 +1,4 @@
-import 'package:bookingcab_mobileapp/src/login/Login.dart';
+import 'package:bookingcab_mobileapp/view/login/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 

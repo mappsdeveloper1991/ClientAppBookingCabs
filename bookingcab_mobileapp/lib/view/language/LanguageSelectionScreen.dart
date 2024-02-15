@@ -1,6 +1,6 @@
-import 'package:bookingcab_mobileapp/src/dashboard/DashBoardPage.dart';
-import 'package:bookingcab_mobileapp/src/login/Login.dart';
-import 'package:bookingcab_mobileapp/src/onboarding/OnboardingOptions.dart';
+import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
+import 'package:bookingcab_mobileapp/view/login/Login.dart';
+import 'package:bookingcab_mobileapp/view/onboarding/OnboardingOptions.dart';
 import 'package:flutter/material.dart';
 import '../AppStyle/AppColors.dart';
 import '../AppStyle/AppHeadreApp.dart';

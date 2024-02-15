@@ -1,4 +1,4 @@
-import 'package:bookingcab_mobileapp/src/booking_history/TripCompleted.dart';
+import 'package:bookingcab_mobileapp/view/booking_history/TripCompleted.dart';
 import 'package:flutter/material.dart';
 
 import '../AppStyle/AppHeadreApp.dart';

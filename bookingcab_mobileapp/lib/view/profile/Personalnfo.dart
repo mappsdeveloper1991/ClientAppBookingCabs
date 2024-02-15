@@ -1,4 +1,4 @@
-import 'package:bookingcab_mobileapp/src/profile/EditProfile.dart';
+import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import '../AppStyle/AppColors.dart';
