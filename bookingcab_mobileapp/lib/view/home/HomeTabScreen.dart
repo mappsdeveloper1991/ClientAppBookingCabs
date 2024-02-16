@@ -2,7 +2,7 @@ import 'package:bookingcab_mobileapp/view/cabservice/TransferService.dart';
 import 'package:bookingcab_mobileapp/view/home/DualImageCarosel.dart';
 import 'package:flutter/material.dart';
 
-import '../comman/Constant.dart';
+import '../../comman/Constant.dart';
 import 'HomeCarousel.dart';
 
 class HomeTabScreen extends StatefulWidget {

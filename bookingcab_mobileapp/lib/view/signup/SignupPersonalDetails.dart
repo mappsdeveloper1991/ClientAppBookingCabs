@@ -2,9 +2,9 @@ import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
-import '../AppStyle/AppUIComponent.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
 import '../otp/OTPVerification.dart';
 
@@ -25,20 +25,23 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
 
 
 Future<void> signUpAPICall() async {
-    Map<String, String> queryParams = {
-      "user_type_id": "1",
-      "company_id": "1",
-      "user_grade": "5",
-      "newsletter_subscription": "1",
-      'first_name': firstName,
-      "last_name": lastName,
-      "email": emailID,
-      "mobile_prefix": "91",
-      "mobile": mobileNo,
-      "city_id" : "707",
-      "state_id": "10",
-      "country_id": "101",
-      "parent_id" :"0"
+    Map<String, Object> queryParams = {
+  "first_name": firstName,
+  "last_name": lastName,
+  "email": emailID,
+  "mobile": mobileNo,
+  "password": password,
+  "mobile_prefix": "91",
+  "city_id": "707",
+  "state_id": "10",
+  "country_id": 101,
+  "nationality": "101",
+
+  "user_type_id": "1",
+  "user_grade": "5",
+  "newsletter_subscription": "1",
+  "parent_id": "0",
+  "company_id": "1"
       };
     try {
       final response = await postRequest(newSignUpEndPoint, queryParams);

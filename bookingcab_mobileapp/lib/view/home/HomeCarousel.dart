@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
-import '../comman/Constant.dart';
+import '../../comman/Constant.dart';
 
 class SliderCarosel extends StatefulWidget {
   const SliderCarosel({super.key});

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../dashboard/DashBoardPage.dart';
+import '../view/dashboard/DashBoardPage.dart';
 import 'AppColors.dart';
 
 AppBar languageSelectionHeaderBar(BuildContext context) {

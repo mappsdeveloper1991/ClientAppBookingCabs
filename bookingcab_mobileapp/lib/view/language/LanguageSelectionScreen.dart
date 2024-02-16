@@ -2,10 +2,10 @@ import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/login/Login.dart';
 import 'package:bookingcab_mobileapp/view/onboarding/OnboardingOptions.dart';
 import 'package:flutter/material.dart';
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
-import '../AppStyle/AppUIComponent.dart';
-import '../comman/Constant.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppUIComponent.dart';
+import '../../comman/Constant.dart';
 
 class LanguageSelectScreen extends StatefulWidget {
   const LanguageSelectScreen({Key? key}) : super(key: key);

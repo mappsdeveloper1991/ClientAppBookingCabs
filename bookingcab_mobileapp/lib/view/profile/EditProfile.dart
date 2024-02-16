@@ -1,10 +1,10 @@
-import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/view/profile/CompanyInfo.dart';
 import 'package:bookingcab_mobileapp/view/profile/Personalnfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 
 class EditProfile extends StatefulWidget {
   const EditProfile({super.key});

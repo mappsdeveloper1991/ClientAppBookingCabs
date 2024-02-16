@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
-import '../AppStyle/AppUIComponent.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
 
 class OTPVerification extends StatefulWidget {

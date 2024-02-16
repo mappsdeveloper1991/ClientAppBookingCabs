@@ -1,14 +1,17 @@
+import 'dart:convert';
 import 'dart:developer';
 
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/login/loginResponseData.dart';
 import 'package:bookingcab_mobileapp/view/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
-import '../AppStyle/AppUIComponent.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppUIComponent.dart';
 import '../signup/SignupPersonalDetails.dart';
 
 class LoginPage extends StatefulWidget {
@@ -27,16 +30,63 @@ class _LoginPageState extends State<LoginPage> {
     super.initState();
   }
 
-  Future<void> loginAPICallUsingOTP() async {
-    Map<String, String> queryParams = {'username': 'mdsr2@gmail.com'};
-    try {
-    String endPointName = "";
-    if(verificationType == "Password"){
-          queryParams = {'username': 'mdsr2@gmail.com'};
+  Future<void> loginwithEmailOrPhoneWithPassword(BuildContext context) async {
+    if(email.isEmpty || email.length <= 5){
+      showErrorTost(context, INVALID_EMAIL_MSG);
+    }else if(password.isEmpty || password.length <=4){
+        showErrorTost(context, INVALID_PASSWORD_MSG);
     }else{
-          queryParams = {'username': 'mdsr2@gmail.com'};
+      Map<String, Object> queryParams = {
+        "username": email,
+        "password": password,
+        "sms_send_status": "false",
+        "ip": "1.0.1.0",
+        "lat": "00.00",
+        "log": "00.00",
+        "login_location": "E City, BLR - 560100",
+        "callfrom": "MobileApp",
+        "user_type_id": "1,2,6,7,8"
+      };
+      try {
+        final response =
+            await postRequest(API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD, queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = LoginResponseData.fromJson(jsonData['responsedata']);
+          if (responseData.status == SUCCESS_STATUS) {
+            Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const OTPVerification()),
+            );
+          } else {
+            showSuccessTost(context, responseData.error ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          print('Request failed with status: ${response.statusCode}');
+          showErrorTost(context, SOMETHING_WENT_WRONG_MSG);
+        }
+      } catch (e) {
+        print('Exception occurred: $e');
+        showErrorTost(context, SOMETHING_WENT_WRONG_MSG);
+      }
     }
-      final response = await postRequest(loginByEmailAPIName, queryParams);
+  }
+
+  Future<void> loginGetOTP() async {
+    Map<String, Object> queryParams = {
+      "username": email,
+      "password": password,
+      "sms_send_status": "false",
+      "ip": "1.0.1.0",
+      "lat": "00.00",
+      "log": "00.00",
+      "login_location": "E City, BLR - 560100",
+      "callfrom": "MobileApp",
+      "user_type_id": "1,2,6,7,8"
+    };
+    try {
+      final response = await postRequest(newSignUpEndPoint, queryParams);
       if (response.statusCode == 200) {
         // Handle successful response
         print('Response: ${response.body}');
@@ -50,7 +100,32 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-  
+  Future<void> loginVerifyOTP() async {
+    Map<String, Object> queryParams = {
+      "username": email,
+      "password": password,
+      "sms_send_status": "false",
+      "ip": "1.0.1.0",
+      "lat": "00.00",
+      "log": "00.00",
+      "login_location": "E City, BLR - 560100",
+      "callfrom": "MobileApp",
+      "user_type_id": "1,2,6,7,8"
+    };
+    try {
+      final response = await postRequest(newSignUpEndPoint, queryParams);
+      if (response.statusCode == 200) {
+        // Handle successful response
+        print('Response: ${response.body}');
+      } else {
+        // Handle error response
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      print('Exception occurred: $e');
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -290,11 +365,7 @@ class _LoginPageState extends State<LoginPage> {
                         child: ElevatedButton(
                           onPressed: () {
                             // Add your action for the red button
-                            Navigator.pushReplacement(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => OTPVerification()),
-                            );
+                            loginwithEmailOrPhoneWithPassword(context);
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: buttonPrimaryColor,

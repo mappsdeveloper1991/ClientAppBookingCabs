@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 
-import '../home/HomeTabScreen.dart';
+import '../view/home/HomeTabScreen.dart';
 
 var languageOptions = [
   "English",

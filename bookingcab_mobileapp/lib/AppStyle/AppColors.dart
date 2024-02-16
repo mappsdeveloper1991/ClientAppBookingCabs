@@ -12,3 +12,5 @@ import 'package:flutter/material.dart';
  const iconColor = Color(0xff232323);
 
  const lighGray2 = Color(0xff808080);
+ const success_color = Color(0xff4BB543);
+ const error_color = Color.fromARGB(255, 220, 82, 82);

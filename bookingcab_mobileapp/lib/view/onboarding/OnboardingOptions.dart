@@ -2,8 +2,8 @@ import 'package:bookingcab_mobileapp/view/login/Login.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppUIComponent.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
 import '../signup/SignupPersonalDetails.dart';
 

@@ -5,9 +5,9 @@ import 'package:bookingcab_mobileapp/view/profile/MyAccount.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
-import '../comman/Constant.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
+import '../../comman/Constant.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);

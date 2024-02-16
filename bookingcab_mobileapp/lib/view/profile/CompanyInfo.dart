@@ -2,8 +2,8 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CompanyInfo extends StatefulWidget {

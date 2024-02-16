@@ -1,7 +1,7 @@
-import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 
 class ChangePassword extends StatefulWidget {
   const ChangePassword({super.key});

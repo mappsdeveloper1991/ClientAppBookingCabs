@@ -1,9 +1,9 @@
-import 'package:bookingcab_mobileapp/view/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/view/profile/ChangePassword.dart';
 import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 
 class MyAccount extends StatelessWidget {
   const MyAccount({super.key});

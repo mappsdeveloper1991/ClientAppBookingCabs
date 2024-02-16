@@ -4,14 +4,19 @@ import 'dart:io';
 import 'package:bookingcab_mobileapp/domain/model/Album.dart';
 import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
+import 'package:http/http.dart';
 
 
 String baseURL = "https://api.bookingcabs.com";
-String portNo = "3001";
-String subURL = "/api/v1/user";
-String  finalBaseURL = "$baseURL:$portNo$subURL";
+String portNo = ":3001";
+String subURL = "/api/v1/user/";
+String  finalBaseURL = "$baseURL$portNo$subURL";
 
+final String SUCCESS_STATUS = "success";
+final String FAILED_STATUS = "failed";
+final String SOMETHING_WENT_WRONG_MSG = "Something went wrong please try again";
 
+String API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD ="login";
 String loginByEmailAPIName = "getuserbyusername";
 String newSignUpEndPoint = "newsignup";
 
@@ -27,7 +32,7 @@ String newSignUpEndPoint = "newsignup";
           return response;
        } else {
           // Handle error response
-          print('Request failed: status: ${response.statusCode}');
+          print('Request failed: status code: ${response.statusCode}   , reasonPhrase:${response.reasonPhrase}');
           throw Exception('Failed');
        }
     } catch (e) {
@@ -37,11 +42,192 @@ String newSignUpEndPoint = "newsignup";
   }
 
   // Method for making POST requests
-   Future<http.Response> postRequest(String endpoint, Map<String, dynamic> body) async {
-    try {
+   Future<http.Response> postRequest(String apiEndPointName, Map<String, Object> bodydata) async {
+        try{
+
+            final Map<String, String> headers = {
+                  'Content-Type': 'application/json',
+                };
+
+                var response  = await http.post(
+                  Uri.parse('$finalBaseURL$apiEndPointName'),
+                  headers: headers,
+                  body: json.encode(bodydata),
+                );
+
+                if (response.statusCode == 200) {
+                  print('Request success: Response: ${response.body}');
+                  // Handle the response data here
+                  return response;
+                } else {
+                  print('Request failed: ${response.reasonPhrase}');
+                  throw Exception('Failed: ${response.reasonPhrase}');
+                }
+/*
+          var headers = {
+            'Content-Type': 'application/json'  
+          };
+
+          print(bodydata);
+          var request = http.Request('POST', Uri.parse('$finalBaseURL$apiEndPointName'));
+
+          request.body = json.encode(bodydata);
+          request.headers.addAll(headers);
+
+          var response = await request.send();
+
+          if (response.statusCode == 200) {
+            print(await response.stream.bytesToString());
+            print('Request success: Response: ${response.stream}');
+           
+          }
+          else {
+            print(response.reasonPhrase);
+            print('Request failed: exception message: ${response.reasonPhrase}');
+            throw Exception('Failed');
+          }
+*/
+        }catch(e){
+            print('Request failed: exception message: ${e.toString()}');
+            throw Exception('Exception');
+        }
+
+
+
+
+
+/*
+        try {
+          var headers = {
+      'Content-Type': 'application/json'
+    };
+
+ String jsonBody = json.encode(bodydata);
+  final encoding = Encoding.getByName('utf-8');
+
+var  bodd = json.encode({
+  "company_id": "1",
+  "first_name": "Srikant",
+  "last_name": "Mehta",
+  "email": "ade1@gmail.com",
+  "mobile": "7091266478",
+  "mobile_prefix": "91",
+  "user_type_id": "1",
+  "password": "123456",
+  "nationality": "101",
+  "user_grade": "5",
+  "newsletter_subscription": "1",
+  "city_id": "707",
+  "state_id": "10",
+  "country_id": 101,
+  "parent_id": "0"
+});
+
       final response = await http.post(
-        Uri.parse('$finalBaseURL/$endpoint'),
-        body: body,
+        Uri.parse('https://api.bookingcabs.com:3001/api/v1/user/newsignup'),
+        body: bodd,
+    //encoding: encoding,
+        //body: body,
+      );
+
+      if (response.statusCode == 200) {
+          // Handle successful response
+          print('Request success: Response: ${response.body}');
+          return response;
+       } else {
+          // Handle error response
+          print('Request failed: status: ${response.statusCode}');
+          throw Exception('Failed');
+       }
+    } catch (e) {
+       print('Request failed: exception message: ${e.toString()}');
+       throw Exception('Failed');
+    }
+    */
+  }
+
+
+/*
+
+  // Method for making POST requests
+   Future<http.Response> postRequest(String endpoint, Map<String, Object> bodydata) async {
+
+
+
+    var headers = {
+      'Content-Type': 'application/json'  
+    };
+
+print(bodydata);
+var request = http.Request('POST', Uri.parse('https://api.bookingcabs.com:3001/api/v1/user/newsignup'));
+/*request.body = json.encode(
+    bodydata
+  ); */
+  Map <String, Object> datax = {
+  "company_id": "1",
+  "first_name": "Srikant",
+  "last_name": "Mehta",
+  "email": "ade1@gmail.com",
+  "mobile": "7091266478",
+  "mobile_prefix": "91",
+  "user_type_id": "1",
+  "password": "123456",
+  "nationality": "101",
+  "user_grade": "5",
+  "newsletter_subscription": "1",
+  "city_id": "707",
+  "state_id": "10",
+  "country_id": 101,
+  "parent_id": "0"
+};
+request.body = json.encode(bodydata);
+request.headers.addAll(headers);
+
+http.StreamedResponse response = await request.send();
+
+if (response.statusCode == 200) {
+  print(await response.stream.bytesToString());
+}
+else {
+  print(response.reasonPhrase);
+}
+
+
+
+
+
+
+        try {
+          var headers = {
+      'Content-Type': 'application/json'
+    };
+
+ String jsonBody = json.encode(bodydata);
+  final encoding = Encoding.getByName('utf-8');
+
+var  bodd = json.encode({
+  "company_id": "1",
+  "first_name": "Srikant",
+  "last_name": "Mehta",
+  "email": "ade1@gmail.com",
+  "mobile": "7091266478",
+  "mobile_prefix": "91",
+  "user_type_id": "1",
+  "password": "123456",
+  "nationality": "101",
+  "user_grade": "5",
+  "newsletter_subscription": "1",
+  "city_id": "707",
+  "state_id": "10",
+  "country_id": 101,
+  "parent_id": "0"
+});
+
+      final response = await http.post(
+        Uri.parse('https://api.bookingcabs.com:3001/api/v1/user/newsignup'),
+        body: bodd,
+    //encoding: encoding,
+        //body: body,
       );
 
       if (response.statusCode == 200) {
@@ -58,8 +244,7 @@ String newSignUpEndPoint = "newsignup";
        throw Exception('Failed');
     }
   }
-
-
+*/
 
 
 /*

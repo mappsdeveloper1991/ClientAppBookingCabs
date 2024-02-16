@@ -1,8 +1,8 @@
 import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
-import '../AppStyle/AppColors.dart';
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppColors.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 
 class PersonalInfo extends StatefulWidget {
   const PersonalInfo({super.key});

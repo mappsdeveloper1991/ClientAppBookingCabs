@@ -1,7 +1,7 @@
 import 'package:bookingcab_mobileapp/view/booking_history/TripCompleted.dart';
 import 'package:flutter/material.dart';
 
-import '../AppStyle/AppHeadreApp.dart';
+import '../../AppStyle/AppHeadreApp.dart';
 
 class MyTrips extends StatelessWidget {
   const MyTrips({super.key});
