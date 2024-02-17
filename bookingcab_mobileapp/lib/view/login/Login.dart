@@ -23,7 +23,7 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late String verificationType = "Password";
-  late String email, password;
+   String email = "", password = "", strOTP = "";
 
   @override
   void initState() {
@@ -48,7 +48,7 @@ class _LoginPageState extends State<LoginPage> {
         "user_type_id": "1,2,6,7,8"
       };
       try {
-        final response =
+        var  response =
             await postRequest(API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD, queryParams);
         if (response.statusCode == 200) {
           print('Response: ${response.body}');
@@ -57,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           if (responseData.status == SUCCESS_STATUS) {
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const OTPVerification()),
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else {
             showSuccessTost(context, responseData.error ?? "$SOMETHING_WENT_WRONG_MSG");
@@ -74,56 +74,68 @@ class _LoginPageState extends State<LoginPage> {
   }
 
   Future<void> loginGetOTP() async {
-    Map<String, Object> queryParams = {
-      "username": email,
-      "password": password,
-      "sms_send_status": "false",
-      "ip": "1.0.1.0",
-      "lat": "00.00",
-      "log": "00.00",
-      "login_location": "E City, BLR - 560100",
-      "callfrom": "MobileApp",
-      "user_type_id": "1,2,6,7,8"
-    };
-    try {
-      final response = await postRequest(newSignUpEndPoint, queryParams);
-      if (response.statusCode == 200) {
-        // Handle successful response
-        print('Response: ${response.body}');
-      } else {
-        // Handle error response
-        print('Request failed with status: ${response.statusCode}');
+     if(email.isEmpty || email.length <= 5){
+      showErrorTost(context, INVALID_EMAIL_MSG);
+    }else{
+      Map<String, Object> queryParams = {
+        "username": email,
+        "password": password,
+        "sms_send_status": "false",
+        "ip": "1.0.1.0",
+        "lat": "00.00",
+        "log": "00.00",
+        "login_location": "E City, BLR - 560100",
+        "callfrom": "MobileApp",
+        "user_type_id": "1,2,6,7,8"
+      };
+      try {
+        final response = await postRequest(newSignUpEndPoint, queryParams);
+        if (response.statusCode == 200) {
+          // Handle successful response
+          print('Response: ${response.body}');
+        } else {
+          // Handle error response
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception occurred: $e');
       }
-    } catch (e) {
-      // Handle exceptions
-      print('Exception occurred: $e');
     }
   }
 
-  Future<void> loginVerifyOTP() async {
-    Map<String, Object> queryParams = {
-      "username": email,
-      "password": password,
-      "sms_send_status": "false",
-      "ip": "1.0.1.0",
-      "lat": "00.00",
-      "log": "00.00",
-      "login_location": "E City, BLR - 560100",
-      "callfrom": "MobileApp",
-      "user_type_id": "1,2,6,7,8"
-    };
-    try {
-      final response = await postRequest(newSignUpEndPoint, queryParams);
-      if (response.statusCode == 200) {
-        // Handle successful response
-        print('Response: ${response.body}');
-      } else {
-        // Handle error response
-        print('Request failed with status: ${response.statusCode}');
+  Future<void> loginWithVerifyOTP(String otp) async {
+     if(email.isEmpty || email.length <= 5){
+      showErrorTost(context, INVALID_EMAIL_MSG);
+    }
+    else if(otp.isEmpty || otp.length <=4){
+        showErrorTost(context, INVALID_OTP_MSG);
+    }
+    else{
+      Map<String, Object> queryParams = {
+        "username": email,
+        "password": password,
+        "sms_send_status": "false",
+        "ip": "1.0.1.0",
+        "lat": "00.00",
+        "log": "00.00",
+        "login_location": "E City, BLR - 560100",
+        "callfrom": "MobileApp",
+        "user_type_id": "1,2,6,7,8"
+      };
+      try {
+        final response = await postRequest(newSignUpEndPoint, queryParams);
+        if (response.statusCode == 200) {
+          // Handle successful response
+          print('Response: ${response.body}');
+        } else {
+          // Handle error response
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        print('Exception occurred: $e');
       }
-    } catch (e) {
-      // Handle exceptions
-      print('Exception occurred: $e');
     }
   }
 
@@ -234,28 +246,6 @@ class _LoginPageState extends State<LoginPage> {
                   ],
                 ),
                 _buildEmailRow(),
-
-                // SegmentedButton<String>(
-                //   segments: const <ButtonSegment<String>>[
-                //     ButtonSegment<String>(
-                //         value: 'Password',
-                //         label: Text('Password'),
-                //         icon: Icon(Icons.calendar_view_day)),
-                //     ButtonSegment<String>(
-                //         value: 'OTP',
-                //         label: Text('OTP'),
-                //         icon: Icon(Icons.calendar_view_week)),
-                //   ],
-                //   selected: <String>{verificationType},
-                //   onSelectionChanged: (Set<String> newSelection) {
-                //     setState(() {
-                //       verificationType = newSelection.first;
-                //     });
-
-                //     print(
-                //         "Segment Value: $newSelection  and verificationType:$verificationType");
-                //   },
-                // ),
                 Padding(
                   padding: const EdgeInsets.all(8.0),
                   child: Row(
@@ -267,14 +257,8 @@ class _LoginPageState extends State<LoginPage> {
                             setState(() {
                               verificationType = "Password";
                             });
-                            // Add your action for the yellow button
                           },
                           style: ElevatedButton.styleFrom(
-                            // if (verificationType.contains("OTP")){
-
-                            // }else{
-
-                            // }
                             backgroundColor: verificationType == "Password"
                                 ? buttonPrimaryColor
                                 : whiteColor,
@@ -337,11 +321,16 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            Navigator.pushReplacement(
+                              if(verificationType == "Password"){
+                                 Navigator.push(
                                 context,
                                 MaterialPageRoute(
                                     builder: (context) =>
                                         SignupPersonalDetails()));
+                              }else{
+                                    loginGetOTP();
+                              }
+                           
                             // Add your action for the yellow button
                           },
                           style: ElevatedButton.styleFrom(
@@ -350,11 +339,11 @@ class _LoginPageState extends State<LoginPage> {
                             elevation: 5.0,
                           ),
                           child: Text(
-                            'NEW USER?',
+                             verificationType == "Password"? 'NEW USER?' : "RE-SEND OTP",
                             style: TextStyle(
                               color: verificationType == "Password"
                                   ? whiteColor
-                                  : buttonPrimaryColor,
+                                  : whiteColor,
                               fontSize: 16,
                             ),
                           ),
@@ -364,15 +353,18 @@ class _LoginPageState extends State<LoginPage> {
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            // Add your action for the red button
-                            loginwithEmailOrPhoneWithPassword(context);
+                            if(verificationType == "Password"){
+                              loginwithEmailOrPhoneWithPassword(context);
+                            }else{
+                              loginWithVerifyOTP(strOTP);
+                            }
                           },
                           style: ElevatedButton.styleFrom(
                               backgroundColor: buttonPrimaryColor,
                               shape: RoundedRectangleBorder(),
                               elevation: 5.0),
-                          child: const Text(
-                            'LOGIN',
+                          child:  Text(
+                            verificationType == "Password" ? 'LOGIN' : "VERIFY OTP",
                             style: TextStyle(
                               color: whiteColor,
                               fontSize: 16,
@@ -384,20 +376,6 @@ class _LoginPageState extends State<LoginPage> {
                   ),
                 ),
 
-                // Row(
-                //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                //   children: [
-                //     Expanded(
-                //       child: _buildSignUpBtn(),
-                //     ),
-                //     const SizedBox(
-                //       width: 5,
-                //     ),
-                //     Expanded(
-                //       child: _buildLoginButton(),
-                //     ),
-                //   ],
-                // ),
                 Center(
                   child: _buildForgetPasswordButton(),
                 ),
@@ -465,19 +443,14 @@ class _LoginPageState extends State<LoginPage> {
       },
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
-/*          showDialog(
-              context: context,
-              builder: (context) {
-                return AlertDialog(
-                  title: Text("Verification Code"),
-                  content: Text('Code entered is $verificationCode'),
-                );
-              }
-          );*/
+        
+          loginWithVerifyOTP(strOTP);
+      /*  
         Navigator.pushReplacement(
-          context,
-          MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+            context,
+            MaterialPageRoute(builder: (context) => HomeScreen()),
+          ); 
+        */
       }, // end onSubmit
     );
   }
@@ -540,7 +513,7 @@ class _LoginPageState extends State<LoginPage> {
             child: OutlinedButton(
               style: primaryButtonStyle(context, buttonSecondaryColor),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
                         builder: (context) => SignupPersonalDetails()));

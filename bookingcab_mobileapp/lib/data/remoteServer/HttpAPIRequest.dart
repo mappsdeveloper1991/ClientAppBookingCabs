@@ -1,24 +1,35 @@
+// ignore_for_file: non_constant_identifier_names, constant_identifier_names, avoid_print
+
 import 'dart:async';
 import 'dart:convert';
-import 'dart:io';
-import 'package:bookingcab_mobileapp/domain/model/Album.dart';
-import 'package:flutter/services.dart';
 import 'package:http/http.dart' as http;
-import 'package:http/http.dart';
 
 
-String baseURL = "https://api.bookingcabs.com";
-String portNo = ":3001";
-String subURL = "/api/v1/user/";
-String  finalBaseURL = "$baseURL$portNo$subURL";
+const String baseURL = "https://api.bookingcabs.com";
+const String portNo = ":3001";
+const String subURL = "/api/v1/user/";
+const String  finalBaseURL = "$baseURL$portNo$subURL";
 
-final String SUCCESS_STATUS = "success";
-final String FAILED_STATUS = "failed";
-final String SOMETHING_WENT_WRONG_MSG = "Something went wrong please try again";
 
-String API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD ="login";
-String loginByEmailAPIName = "getuserbyusername";
-String newSignUpEndPoint = "newsignup";
+const  String API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD ="login";
+const String loginByEmailAPIName = "getuserbyusername";
+const String newSignUpEndPoint = "newsignup";
+
+
+const String SUCCESS_STATUS = "success";
+const String FAILED_STATUS = "failed";
+const String SOMETHING_WENT_WRONG_MSG = "Something went wrong please try again";
+const String INVALID_EMAIL_MSG = "Please enter the valid email id or mobile number";
+const String INVALID_PASSWORD_MSG = "Please enter the valid password";
+const String INVALID_OTP_MSG = "Please enter the valid OTP";
+const String INVALID_FIRST_NAME_MSG = "Please enter your first name";
+const String INVALID_LAST_NAME_MSG = "Please enter your last name";
+const String INVALID_EMAIL_ID_MSG = "Please enter the valid email id";
+const String INVALID_PHONE_NO_MSG = "Please enter the valid mobile no";
+const String INVALID_CONFIRM_PASSORD_MSG = "Please enter the valid password";
+const String INVALID_PASSWORD_CONFIRM_PASSWORD_MSG = "Password and confirm password should be same";
+const String INVALID_CITY_MSG = "Please slect your city";
+const String INVALID_NATIONALITY_MSG = "Please slect your nationality";
 
 
 
@@ -41,14 +52,16 @@ String newSignUpEndPoint = "newsignup";
     }
   }
 
+
+
+
   // Method for making POST requests
    Future<http.Response> postRequest(String apiEndPointName, Map<String, Object> bodydata) async {
         try{
-
             final Map<String, String> headers = {
                   'Content-Type': 'application/json',
                 };
-
+                
                 var response  = await http.post(
                   Uri.parse('$finalBaseURL$apiEndPointName'),
                   headers: headers,
@@ -63,87 +76,10 @@ String newSignUpEndPoint = "newsignup";
                   print('Request failed: ${response.reasonPhrase}');
                   throw Exception('Failed: ${response.reasonPhrase}');
                 }
-/*
-          var headers = {
-            'Content-Type': 'application/json'  
-          };
-
-          print(bodydata);
-          var request = http.Request('POST', Uri.parse('$finalBaseURL$apiEndPointName'));
-
-          request.body = json.encode(bodydata);
-          request.headers.addAll(headers);
-
-          var response = await request.send();
-
-          if (response.statusCode == 200) {
-            print(await response.stream.bytesToString());
-            print('Request success: Response: ${response.stream}');
-           
-          }
-          else {
-            print(response.reasonPhrase);
-            print('Request failed: exception message: ${response.reasonPhrase}');
-            throw Exception('Failed');
-          }
-*/
         }catch(e){
             print('Request failed: exception message: ${e.toString()}');
             throw Exception('Exception');
         }
-
-
-
-
-
-/*
-        try {
-          var headers = {
-      'Content-Type': 'application/json'
-    };
-
- String jsonBody = json.encode(bodydata);
-  final encoding = Encoding.getByName('utf-8');
-
-var  bodd = json.encode({
-  "company_id": "1",
-  "first_name": "Srikant",
-  "last_name": "Mehta",
-  "email": "ade1@gmail.com",
-  "mobile": "7091266478",
-  "mobile_prefix": "91",
-  "user_type_id": "1",
-  "password": "123456",
-  "nationality": "101",
-  "user_grade": "5",
-  "newsletter_subscription": "1",
-  "city_id": "707",
-  "state_id": "10",
-  "country_id": 101,
-  "parent_id": "0"
-});
-
-      final response = await http.post(
-        Uri.parse('https://api.bookingcabs.com:3001/api/v1/user/newsignup'),
-        body: bodd,
-    //encoding: encoding,
-        //body: body,
-      );
-
-      if (response.statusCode == 200) {
-          // Handle successful response
-          print('Request success: Response: ${response.body}');
-          return response;
-       } else {
-          // Handle error response
-          print('Request failed: status: ${response.statusCode}');
-          throw Exception('Failed');
-       }
-    } catch (e) {
-       print('Request failed: exception message: ${e.toString()}');
-       throw Exception('Failed');
-    }
-    */
   }
 
 
