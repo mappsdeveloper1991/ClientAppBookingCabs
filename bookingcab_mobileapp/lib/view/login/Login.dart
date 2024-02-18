@@ -1,10 +1,14 @@
-import 'dart:convert';
-import 'dart:developer';
+// ignore_for_file: library_private_types_in_public_api, use_build_context_synchronously, avoid_print
 
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
-import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTP.dart';
+import 'package:bookingcab_mobileapp/view/login/GetOTPResponseData.dart';
+import 'package:bookingcab_mobileapp/view/login/VerifyOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/loginResponseData.dart';
 import 'package:bookingcab_mobileapp/view/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
@@ -24,11 +28,16 @@ class LoginPage extends StatefulWidget {
 class _LoginPageState extends State<LoginPage> {
   late String verificationType = "Password";
    String email = "", password = "", strOTP = "";
+   String userID = "";
+
+
 
   @override
   void initState() {
     super.initState();
   }
+
+
 
   Future<void> loginwithEmailOrPhoneWithPassword(BuildContext context) async {
     if(email.isEmpty || email.length <= 5){
@@ -36,6 +45,7 @@ class _LoginPageState extends State<LoginPage> {
     }else if(password.isEmpty || password.length <=4){
         showErrorTost(context, INVALID_PASSWORD_MSG);
     }else{
+      showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": email,
         "password": password,
@@ -54,7 +64,9 @@ class _LoginPageState extends State<LoginPage> {
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
           var responseData = LoginResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
+            userID = (responseData.data!.userId).toString();
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -62,12 +74,15 @@ class _LoginPageState extends State<LoginPage> {
           } else {
             showSuccessTost(context, responseData.error ?? "$SOMETHING_WENT_WRONG_MSG");
           }
+          
         } else {
           print('Request failed with status: ${response.statusCode}');
+          hideCustomeLoader(context);
           showErrorTost(context, SOMETHING_WENT_WRONG_MSG);
         }
       } catch (e) {
         print('Exception occurred: $e');
+        hideCustomeLoader(context);
         showErrorTost(context, SOMETHING_WENT_WRONG_MSG);
       }
     }
@@ -77,63 +92,79 @@ class _LoginPageState extends State<LoginPage> {
      if(email.isEmpty || email.length <= 5){
       showErrorTost(context, INVALID_EMAIL_MSG);
     }else{
+      showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": email,
-        "password": password,
-        "sms_send_status": "false",
-        "ip": "1.0.1.0",
-        "lat": "00.00",
-        "log": "00.00",
-        "login_location": "E City, BLR - 560100",
         "callfrom": "MobileApp",
-        "user_type_id": "1,2,6,7,8"
+        "user_type_id": "1"
       };
       try {
-        final response = await postRequest(newSignUpEndPoint, queryParams);
+        final response = await postRequest(loginByEmailAPINameGetOTP, queryParams);
         if (response.statusCode == 200) {
-          // Handle successful response
-          print('Response: ${response.body}');
+         print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = GetOTPResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+             userID = (responseData.data![0].userId).toString();
+              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          }else{
+               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
         } else {
-          // Handle error response
           print('Request failed with status: ${response.statusCode}');
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         }
       } catch (e) {
-        // Handle exceptions
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         print('Exception occurred: $e');
       }
     }
   }
 
+
   Future<void> loginWithVerifyOTP(String otp) async {
-     if(email.isEmpty || email.length <= 5){
-      showErrorTost(context, INVALID_EMAIL_MSG);
+     if(userID.isEmpty){
+      showErrorTost(context, "Invalid user id");
     }
     else if(otp.isEmpty || otp.length <=4){
         showErrorTost(context, INVALID_OTP_MSG);
     }
     else{
+      showCustomeLoader(context);
       Map<String, Object> queryParams = {
-        "username": email,
-        "password": password,
-        "sms_send_status": "false",
-        "ip": "1.0.1.0",
-        "lat": "00.00",
-        "log": "00.00",
-        "login_location": "E City, BLR - 560100",
+        "user_id": userID,
+        "confirm_otp": otp,
         "callfrom": "MobileApp",
-        "user_type_id": "1,2,6,7,8"
       };
       try {
-        final response = await postRequest(newSignUpEndPoint, queryParams);
+        final response = await postRequest(Verify_OTP, queryParams);
         if (response.statusCode == 200) {
-          // Handle successful response
           print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = VerifyOTPResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+              showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+               Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }else{
+               showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
         } else {
           // Handle error response
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
           print('Request failed with status: ${response.statusCode}');
         }
       } catch (e) {
         // Handle exceptions
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         print('Exception occurred: $e');
       }
     }
@@ -443,7 +474,7 @@ class _LoginPageState extends State<LoginPage> {
       },
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
-        
+         strOTP = verificationCode;
           loginWithVerifyOTP(strOTP);
       /*  
         Navigator.pushReplacement(
@@ -463,7 +494,7 @@ class _LoginPageState extends State<LoginPage> {
         //FlatButton(
         TextButton(
           onPressed: () {
-            //Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => new ForgotPassword()));
+            Navigator.push(context, MaterialPageRoute(builder: (context) => new ForgotPasswordGetOTP()));
           },
           child: Text(
             "Forgot Password?",
@@ -487,10 +518,10 @@ class _LoginPageState extends State<LoginPage> {
             style: primaryButtonStyle(context, buttonPrimaryColor),
             onPressed: () {
               //loginAPICall();
-              Navigator.pushReplacement(
+             /* Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => OTPVerification()),
-              );
+              ); */
             },
             child: Text("Login",
                 style: buttonTextStyle(context, Colors.white, 16)),

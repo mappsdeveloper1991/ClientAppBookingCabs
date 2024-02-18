@@ -1,3 +1,10 @@
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/login/GetOTPResponseData.dart';
+import 'package:bookingcab_mobileapp/view/login/VerifyOTPResponseData.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
@@ -8,22 +15,123 @@ import '../../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
 
 class OTPVerification extends StatefulWidget {
-  const OTPVerification({Key? key}) : super(key: key);
+    /*
+    String email = "", userID = "", strOTP = "";
+
+  const OTPVerification(this.email, this.userID, {Key? key}) : super(key: key);
+*/
+  final String emailID;
+  final String userID;
+  
+
+  const OTPVerification(this.emailID, this.userID, {Key? key}) : super(key: key);
+
 
   @override
+  // ignore: library_private_types_in_public_api
   _OTPVerificationState createState() => _OTPVerificationState();
 }
 
 class _OTPVerificationState extends State<OTPVerification> {
-  late String email, password;
+    late String emailID = widget.emailID;
+    late String userID = widget.userID;
+    late String strOTP = "";
 
   @override
   void initState() {
     super.initState();
   }
 
+
+
+ Future<void> loginGetOTP() async {
+     if(emailID.isEmpty || emailID.length <= 5){
+      showErrorTost(context, INVALID_EMAIL_MSG);
+    }else{
+      showCustomeLoader(context);
+      Map<String, Object> queryParams = {
+        "username": emailID,
+        "callfrom": "MobileApp",
+        "user_type_id": "1"
+      };
+      try {
+        final response = await postRequest(loginByEmailAPINameGetOTP, queryParams);
+        if (response.statusCode == 200) {
+         print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = GetOTPResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+             userID = (responseData.data![0].userId).toString();
+              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          }else{
+               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          print('Request failed with status: ${response.statusCode}');
+           hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        }
+      } catch (e) {
+        // Handle exceptions
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+         hideCustomeLoader(context);
+        print('Exception occurred: $e');
+      }
+    }
+  }
+
+
+  Future<void> loginWithVerifyOTP(String otp) async {
+     if(userID.isEmpty){
+      showErrorTost(context, "Invalid user id");
+    }
+    else if(otp.isEmpty || otp.length <=4){
+        showErrorTost(context, INVALID_OTP_MSG);
+    }
+    else{
+      showCustomeLoader(context);
+      Map<String, Object> queryParams = {
+        "user_id": userID,
+        "confirm_otp": otp,
+        "callfrom": "MobileApp",
+      };
+      try {
+        final response = await postRequest(Verify_OTP, queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = VerifyOTPResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+              showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+               Navigator.pushReplacement(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreen()),
+            );
+          }else{
+               showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+    }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+
+   
     return Scaffold(
         appBar: simpleHeaderBar(context, "OTP Verification"),
         backgroundColor: whiteColor,
@@ -92,6 +200,8 @@ class _OTPVerificationState extends State<OTPVerification> {
       },
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
+        strOTP = verificationCode;
+        loginWithVerifyOTP(strOTP);
 /*          showDialog(
               context: context,
               builder: (context) {
@@ -101,10 +211,11 @@ class _OTPVerificationState extends State<OTPVerification> {
                 );
               }
           );*/
-        Navigator.pushReplacement(
+
+      /*  Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
-        );
+        ); */
       }, // end onSubmit
     );
   }
@@ -122,10 +233,12 @@ class _OTPVerificationState extends State<OTPVerification> {
               style: primaryButtonStyle(context, buttonSecondaryColor),
               onPressed: () {
                 //loginAPICall();
+                loginWithVerifyOTP(strOTP);
+                /*
                 Navigator.pushReplacement(
                   context,
                   MaterialPageRoute(builder: (context) => HomeScreen()),
-                );
+                ); */
               },
               child: Text("VERIFY OTP",
                   style: buttonTextStyle(context, Colors.white, 15))),
@@ -147,10 +260,12 @@ class _OTPVerificationState extends State<OTPVerification> {
             style: primaryButtonStyle(context, buttonPrimaryColor),
             onPressed: () {
               //loginAPICall();
-              Navigator.pushReplacement(
+              loginGetOTP();
+            /*  Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );
+              */
             },
             child: Text(
               "RE-SEND OTP",

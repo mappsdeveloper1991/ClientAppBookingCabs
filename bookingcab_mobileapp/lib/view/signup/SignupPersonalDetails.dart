@@ -1,5 +1,8 @@
+// ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
+
 import 'dart:convert';
 
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/signup/SignupResponseData.dart';
@@ -51,6 +54,8 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
     } else if (nationality.isEmpty) {
       showErrorTost(context, INVALID_NATIONALITY_MSG);
     } else {
+
+      showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "first_name": firstName,
         "last_name": lastName,
@@ -78,15 +83,15 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
            print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
           var responseData = SignupResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
             if(responseData.data!.status ==   SUCCESS_STATUS){
               showSuccessTost(context, responseData.data!.message +"\n "+responseData.data!.emailMessage);
 
-             
-
+              String userID =  responseData.data!.userId.toString();
                 Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => OTPVerification()),
+              MaterialPageRoute(builder: (context) => OTPVerification(emailID, userID)),
             );
             }else{
               showErrorTost(context, responseData.data!.message);
@@ -94,10 +99,13 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
           }
         } else {
           // Handle error response
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
           print('Request failed with status: ${response.statusCode}');
         }
       } catch (e) {
-        // Handle exceptions
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         print('Exception occurred: $e');
       }
     }

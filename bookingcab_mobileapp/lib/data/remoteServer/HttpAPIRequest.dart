@@ -2,18 +2,31 @@
 
 import 'dart:async';
 import 'dart:convert';
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:http/http.dart' as http;
 
 
 const String baseURL = "https://api.bookingcabs.com";
 const String portNo = ":3001";
-const String subURL = "/api/v1/user/";
+const String subURL = "/api/v1/";
+const String subURLUser = "user/";
+const String subURLActivation = "activation/";
+
 const String  finalBaseURL = "$baseURL$portNo$subURL";
 
 
-const  String API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD ="login";
-const String loginByEmailAPIName = "getuserbyusername";
-const String newSignUpEndPoint = "newsignup";
+const  String API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD = "${subURLUser}login";
+const String loginByEmailAPINameGetOTP = "${subURLUser}getuserbyusername";
+const String newSignUpEndPoint = "${subURLUser}newsignup";
+const String forGotPasswordEndPointGetOTP = "${subURLUser}forgotuserpassword";
+const String forGotPasswordEndPointVerifyOTP = "${subURLUser}changeuserpassword";
+const String accountChangePassword = "${subURLUser}changePassword";
+
+
+
+
+const String Verify_OTP = "${subURLActivation}fetchOtp";
 
 
 const String SUCCESS_STATUS = "success";
@@ -21,6 +34,7 @@ const String FAILED_STATUS = "failed";
 const String SOMETHING_WENT_WRONG_MSG = "Something went wrong please try again";
 const String INVALID_EMAIL_MSG = "Please enter the valid email id or mobile number";
 const String INVALID_PASSWORD_MSG = "Please enter the valid password";
+const String INVALID_OLD_PASSWORD_MSG = "Please enter the valid old password";
 const String INVALID_OTP_MSG = "Please enter the valid OTP";
 const String INVALID_FIRST_NAME_MSG = "Please enter your first name";
 const String INVALID_LAST_NAME_MSG = "Please enter your last name";
@@ -58,26 +72,30 @@ const String INVALID_NATIONALITY_MSG = "Please slect your nationality";
   // Method for making POST requests
    Future<http.Response> postRequest(String apiEndPointName, Map<String, Object> bodydata) async {
         try{
+          String APIURL = '$finalBaseURL$apiEndPointName';
+           print('API Request ApiURL: $APIURL    bodyData: $bodydata');
+
             final Map<String, String> headers = {
                   'Content-Type': 'application/json',
                 };
                 
+
                 var response  = await http.post(
-                  Uri.parse('$finalBaseURL$apiEndPointName'),
+                  Uri.parse(APIURL),
                   headers: headers,
                   body: json.encode(bodydata),
                 );
 
                 if (response.statusCode == 200) {
-                  print('Request success: Response: ${response.body}');
+                  print('API Request Response: success: Data: ${response.body}');
                   // Handle the response data here
                   return response;
                 } else {
-                  print('Request failed: ${response.reasonPhrase}');
+                  print('API Request Response: failed: Data: ${response.reasonPhrase}');
                   throw Exception('Failed: ${response.reasonPhrase}');
                 }
         }catch(e){
-            print('Request failed: exception message: ${e.toString()}');
+            print('API Request Response: exception message: ${e.toString()}');
             throw Exception('Exception');
         }
   }

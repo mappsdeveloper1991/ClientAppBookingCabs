@@ -43,6 +43,7 @@ dependencies:
   #Http networkin librery
   http: ^1.2.0
   fluttertoast: ^8.2.4
+  flutter_overlay_loader: ^2.0.0
 
 
 dev_dependencies:
