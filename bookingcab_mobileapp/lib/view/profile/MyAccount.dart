@@ -1,15 +1,74 @@
+import 'dart:convert';
+
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/profile/ChangePassword.dart';
 import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
+import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
 import 'package:flutter/material.dart';
 
 import '../../AppStyle/AppHeadreApp.dart';
 
-class MyAccount extends StatelessWidget {
+class MyAccount extends StatefulWidget {
   const MyAccount({super.key});
+
+
+  @override
+  State<MyAccount> createState() => _MyAccountState();
+}
+
+class _MyAccountState extends State<MyAccount> {
+
+/*
+  @override
+  void initState() {
+    super.initState();
+    getProfileInfoAPICall();
+  }
+*/
+   UserProfileData? userProfileData = null;
+@override
+  void initState() {
+    super.initState();
+    getProfileInfoAPICall();
+  }
+
+Future<void> getProfileInfoAPICall() async {
+      //showCustomeLoader(context);
+      try {
+        final response = await getRequest(userProfileInforEndPOint);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = MyAccountResponseData.fromJson(jsonData['responsedata']);
+         // hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+              setState(() {
+                userProfileData = responseData.data!;
+              });
+          }else{
+               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          //hideCustomeLoader(context);
+          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        //hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
+    //getProfileInfoAPICall();
+    
     return Scaffold(
       appBar: simpleHeaderBar(context, "My Account"),
       body: SingleChildScrollView(
@@ -46,23 +105,24 @@ class MyAccount extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
-                const Text(
-                  "Kunal",
-                  style: TextStyle(
+                 Text(
+                
+                  '${userProfileData?.firstName ?? 'N/A'}',
+                  style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const Text(
-                  "android1@bookingcabs.com",
-                  style: TextStyle(
+                 Text(
+                  '${userProfileData?.email ?? 'N/A'}',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                const Text(
-                  "9871030690",
-                  style: TextStyle(
+                 Text(
+                  '${userProfileData?.mobile ?? 'N/A'}',
+                  style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
@@ -109,7 +169,7 @@ class MyAccount extends StatelessWidget {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditProfile()),
+                                  builder: (context) => EditProfile(userProfileData!)),
                             );
                           },
                           style: ElevatedButton.styleFrom(

@@ -6,6 +6,8 @@ import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:http/http.dart' as http;
 
+const userID = '457';
+
 
 const String baseURL = "https://api.bookingcabs.com";
 const String portNo = ":3001";
@@ -22,7 +24,7 @@ const String newSignUpEndPoint = "${subURLUser}newsignup";
 const String forGotPasswordEndPointGetOTP = "${subURLUser}forgotuserpassword";
 const String forGotPasswordEndPointVerifyOTP = "${subURLUser}changeuserpassword";
 const String accountChangePassword = "${subURLUser}changePassword";
-
+const String userProfileInforEndPOint = "${subURLUser}userpersonalinfo?user_id=$userID";
 
 
 
@@ -50,19 +52,20 @@ const String INVALID_NATIONALITY_MSG = "Please slect your nationality";
 // Method for making GET requests
    Future<http.Response> getRequest(String endpoint) async {
     try {
-      final response = await http.get(Uri.parse('$finalBaseURL/$endpoint'));
+       String APIURL = '$finalBaseURL/$endpoint';
+      print('API Request ApiURL: $APIURL   ');
+
+      final response = await http.get(Uri.parse(APIURL));
       if (response.statusCode == 200) {
-          // Handle successful response
-          print('Request success: Response: ${response.body}');
+          print('API Request Response: success: Data: ${response.body}');
           return response;
        } else {
-          // Handle error response
-          print('Request failed: status code: ${response.statusCode}   , reasonPhrase:${response.reasonPhrase}');
-          throw Exception('Failed');
+          print('API Request Response: failed: Data: ${response.reasonPhrase}');
+          throw Exception('Failed: ${response.reasonPhrase}');
        }
     } catch (e) {
-       print('Request failed: exception message: ${e.toString()}');
-       throw Exception('Failed');
+          print('API Request Response: exception message: ${e.toString()}');
+          throw Exception('Exception');
     }
   }
 

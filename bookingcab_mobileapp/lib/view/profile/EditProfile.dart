@@ -1,5 +1,6 @@
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/view/profile/CompanyInfo.dart';
+import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
 import 'package:bookingcab_mobileapp/view/profile/Personalnfo.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
@@ -7,24 +8,31 @@ import 'package:flutter_svg/svg.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+
+  final UserProfileData userProfileData;
+
+  const EditProfile(this.userProfileData, {super.key});
 
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
 
 class _EditProfileState extends State<EditProfile> {
+
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
+  TextEditingController _mobileAltController = TextEditingController();
+  TextEditingController _landlineontroller = TextEditingController();
   TextEditingController _emailController = TextEditingController();
+  TextEditingController _compEmailController = TextEditingController();
+  TextEditingController _compAltEmailController = TextEditingController();
   TextEditingController _companyController = TextEditingController();
 
+   
   // Dropdown values
-  String _selectedCountryCode =
-      '+91'; // Initial value for country code dropdown
-  String _selectedCountry =
-      'United States'; // Initial value for country dropdown
+  String _selectedCountryCode = '+91'; // Initial value for country code dropdown
+  String _selectedCountry = 'United States'; // Initial value for country dropdown
 
   // List of countries
   List<String> _countries = [
@@ -36,13 +44,36 @@ class _EditProfileState extends State<EditProfile> {
     // Add more countries as needed
   ];
 
+
   bool acceptTerms = false;
   bool subscribeNewsletter = false;
+ late UserProfileData userProfileData = widget.userProfileData;
+
+
+@override
+  void initState() {
+    super.initState();
+    setProfileDataToView();
+  }
+
+  void setProfileDataToView() {
+    setState(() {
+      _firstNameController.text = userProfileData.firstName!;
+      _lastNameController.text = userProfileData.lastName!;
+      _mobileController.text = userProfileData.mobile!;
+      _emailController.text = userProfileData.email!;
+      _mobileAltController.text = userProfileData.alternateMobile!;
+      _landlineontroller.text = userProfileData.landlineNumber!;
+      _companyController.text = userProfileData.companyName!;
+      _compEmailController.text = userProfileData.userCompanyEmail!;
+      _compAltEmailController.text = userProfileData.userCompanyAltEmail!;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: simpleHeaderBar(context, "Kunal"),
+      appBar: simpleHeaderBar(context, '${userProfileData.firstName}'),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: SingleChildScrollView(
@@ -95,16 +126,16 @@ class _EditProfileState extends State<EditProfile> {
                   const SizedBox(width: 10.0),
                   Expanded(
                     child:
-                        _buildTextField('Alt Mobile Number', _mobileController),
+                        _buildTextField('Alt Mobile Number', _mobileAltController),
                   ),
                 ],
               ),
               const SizedBox(height: 10.0),
-              _buildTextField('Landline Number', _mobileController),
+              _buildTextField('Landline Number', _landlineontroller),
               const SizedBox(height: 10.0),
-              _buildTextField('support@bookingcabs.com', _emailController),
+              _buildTextField('Email', _compEmailController),
               const SizedBox(height: 10.0),
-              _buildTextField('Alternate Email Id', _emailController),
+              _buildTextField('Alternate Email Id', _compAltEmailController),
               const SizedBox(height: 10.0),
               _buildTextField('Company', _companyController),
               const SizedBox(height: 10.0),
@@ -340,4 +371,6 @@ class _EditProfileState extends State<EditProfile> {
       ),
     );
   }
+  
+  
 }
