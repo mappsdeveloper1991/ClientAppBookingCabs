@@ -1,5 +1,6 @@
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/FilterVehicle.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/SelectedVehicleDetails.dart';
 import 'package:flutter/material.dart';
 
@@ -29,12 +30,12 @@ class _TransferVehiclesState extends State<TransferVehicles> {
           const Divider(
             color: buttonPrimaryColor,
           ),
-          const Padding(
-            padding: EdgeInsets.only(left: 8, right: 8),
+          Padding(
+            padding: const EdgeInsets.only(left: 8, right: 8),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                Text(
+                const Text(
                   "No of Results: 12",
                   style: TextStyle(
                     fontSize: 14,
@@ -43,15 +44,24 @@ class _TransferVehiclesState extends State<TransferVehicles> {
                 ),
                 Row(
                   children: [
-                    Icon(
+                    const Icon(
                       Icons.filter_alt,
                       color: buttonPrimaryColor,
                     ),
-                    Text(
-                      "Filter",
-                      style: TextStyle(
-                        fontSize: 14,
-                        fontWeight: FontWeight.w500,
+                    GestureDetector(
+                      onTap: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const FilterVehicle()),
+                        );
+                      },
+                      child: const Text(
+                        "Filter",
+                        style: TextStyle(
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
                       ),
                     ),
                   ],
