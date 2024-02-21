@@ -10,6 +10,14 @@ class SelectedVehicleDetails extends StatefulWidget {
 }
 
 class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
+  bool _showCard = false;
+
+  void _toggleCardVisibility() {
+    setState(() {
+      _showCard = !_showCard;
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -18,55 +26,72 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
       body: Column(
         children: [
           const _headerDetails(),
-          //  const Divider(),
-          SingleChildScrollView(
-            child: Column(
-              children: [
-                ColoredBox(
-                  color: const Color.fromARGB(255, 208, 207, 207),
-                  child: Column(
-                    children: [
-                      _carDetailCard(),
-                      _otherFairDetailCard(
-                        "Sightseeings",
-                        "Red Fort, Lotus Temple",
-                      ),
-                      _driverDetailCard(),
-                      _otherFairDetailCard(
-                        "Guide",
-                        "Hindi UnderStanding...",
-                      ),
-                      _otherFairDetailCard(
-                        "Attraction",
-                        "Light and Sound Show..",
-                      ),
-                      Padding(
-                        padding: const EdgeInsets.only(top: 30),
-                        child: SizedBox(
-                          height: 40,
-                          child: ElevatedButton(
-                            style: ElevatedButton.styleFrom(
-                              padding: const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                              backgroundColor:
-                                  buttonPrimaryColor, // buttonSecondaryColor, // Adjust according to your theme
-                              shape: const RoundedRectangleBorder(),
-                            ),
-                            onPressed: () {},
-                            child: const Text(
-                              "Next",
-                              style: TextStyle(
-                                color: Colors.white,
-                                fontSize: 18,
+          Stack(
+            children: [
+              SingleChildScrollView(
+                child: Column(
+                  children: [
+                    ColoredBox(
+                      color: const Color.fromARGB(255, 208, 207, 207),
+                      child: Column(
+                        children: [
+                          _carDetailCard(),
+                          _otherFairDetailCard(
+                            "Sightseeings",
+                            "Red Fort, Lotus Temple",
+                          ),
+                          _driverDetailCard(),
+                          _otherFairDetailCard(
+                            "Guide",
+                            "Hindi UnderStanding...",
+                          ),
+                          _otherFairDetailCard(
+                            "Attraction",
+                            "Light and Sound Show..",
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.only(top: 30),
+                            child: SizedBox(
+                              height: 40,
+                              child: ElevatedButton(
+                                style: ElevatedButton.styleFrom(
+                                  padding:
+                                      const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                                  backgroundColor:
+                                      buttonPrimaryColor, // buttonSecondaryColor, // Adjust according to your theme
+                                  shape: const RoundedRectangleBorder(),
+                                ),
+                                onPressed: () {
+                                  // Test
+                                  // Navigator.push(
+                                  //   context,
+                                  //   MaterialPageRoute(builder: (context) => Test()),
+                                  // );
+                                },
+                                child: const Text(
+                                  "Next",
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 18,
+                                  ),
+                                ),
                               ),
                             ),
                           ),
-                        ),
+                        ],
                       ),
-                    ],
-                  ),
-                )
-              ],
-            ),
+                    )
+                  ],
+                ),
+              ),
+              if (_showCard)
+                Positioned.fill(
+                  //top: MediaQuery.of(context).size.height * 0.01,
+                  child: _InfoCard(
+                    toggleCard: _toggleCardVisibility,
+                  ), //infoCard(),
+                ),
+            ],
           ),
         ],
       ),
@@ -115,9 +140,9 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                     fit: BoxFit.cover,
                   ),
                 ),
-                const Row(
+                Row(
                   children: [
-                    Text(
+                    const Text(
                       '\u{20B9} 5000',
                       style: TextStyle(
                         color: buttonPrimaryColor,
@@ -125,12 +150,17 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                         fontWeight: FontWeight.bold,
                       ),
                     ),
-                    SizedBox(
+                    const SizedBox(
                       width: 3,
                     ),
-                    Icon(
-                      Icons.info,
-                      color: buttonPrimaryColor,
+                    GestureDetector(
+                      onTap: () {
+                        _toggleCardVisibility();
+                      },
+                      child: const Icon(
+                        Icons.info,
+                        color: buttonPrimaryColor,
+                      ),
                     ),
                   ],
                 ),
@@ -507,6 +537,211 @@ class _headerDetails extends StatelessWidget {
           )
           //header(),
           ),
+    );
+  }
+}
+
+class _InfoCard extends StatelessWidget {
+  final VoidCallback toggleCard;
+  const _InfoCard({super.key, required this.toggleCard});
+
+  @override
+  Widget build(BuildContext context) {
+    return SizedBox(
+      //height: MediaQuery.of(context).size.height,
+      child: Card(
+        surfaceTintColor: Colors.white,
+        child: Column(
+          children: [
+            Padding(
+              padding: const EdgeInsets.all(6.0),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  const Text(
+                    "Terms & conditions ",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                  GestureDetector(
+                    onTap: () {
+                      toggleCard();
+                    },
+                    child: const Icon(
+                      Icons.close,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 10),
+              child: Column(
+                // mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  _termsConditionWidget(
+                      "Incuded km:750 km;Extra fare/km: 12km"),
+                  _termsConditionWidget(
+                      "Toll/State Tax,Parking fee,etc. executed"),
+                  _termsConditionWidget("Approximate one way toll price 288"),
+                  _termsConditionWidget("Service Provider: Hello42cab Pvt Ltd"),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 6, right: 6),
+              child: Column(
+                children: [
+                  _detailsWidget("Included km", "750 km"),
+                  _detailsWidget("Extra Fare/km", "12 km"),
+                  _detailsWidget("Driver Allowance", "Included"),
+                  _detailsWidget("Fuel Charges", "Included"),
+                  _detailsWidget("One pickup & One drop", "Included"),
+                ],
+              ),
+            ),
+            const SizedBox(
+              height: 8,
+            ),
+            const Padding(
+              padding: EdgeInsets.only(left: 10),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  Text(
+                    "Important Info",
+                    style: TextStyle(
+                      fontWeight: FontWeight.bold,
+                      fontSize: 16,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            Padding(
+              padding: const EdgeInsets.only(left: 4),
+              child: Column(
+                children: [
+                  _importantInfoWidget(
+                      "Guest will have to pay the parking fee, Toll/State Tax & other similar charges directly to the driver at the point of payment"),
+                  _importantInfoWidget(
+                      "Guest will have to pay the parking fee, Toll/State Tax & other similar charges directly to the driver at the point of payment"),
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _detailsWidget(String value1, String value2) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              value1,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              value2,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+        const Divider(
+          color: Colors.grey,
+        ),
+      ],
+    );
+  }
+
+  Widget _termsConditionWidget(String value) {
+    return Row(
+      children: [
+        const CircleAvatar(
+          maxRadius: 4,
+          backgroundColor: buttonPrimaryColor,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _importantInfoWidget(String value) {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const CircleAvatar(
+                backgroundColor: buttonPrimaryColor,
+                maxRadius: 4,
+              ),
+              Flexible(
+                child: Text(
+                  value,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _importantInfoWidget2(String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          // crossAxisAlignment: CrossAxisAlignment.end,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              maxRadius: 4,
+              backgroundColor: buttonPrimaryColor,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Flexible(
+          child: Text(
+            value,
+            softWrap: true,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
     );
   }
 }
