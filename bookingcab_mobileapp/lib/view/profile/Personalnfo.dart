@@ -1,3 +1,7 @@
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/language/LanguageResponseData.dart';
 import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -44,6 +48,10 @@ class _PersonalInfoState extends State<PersonalInfo> {
     'Female',
   ];
 
+
+
+
+
   bool acceptTerms = false;
 
   DateTime selectedDate = DateTime.now();
@@ -66,6 +74,12 @@ class _PersonalInfoState extends State<PersonalInfo> {
       });
     }
   }
+
+
+
+
+  
+
 
   @override
   Widget build(BuildContext context) {

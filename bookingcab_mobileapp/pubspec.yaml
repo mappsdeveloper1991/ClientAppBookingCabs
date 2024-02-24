@@ -44,6 +44,9 @@ dependencies:
   http: ^1.2.0
   fluttertoast: ^8.2.4
   flutter_overlay_loader: ^2.0.0
+  shared_preferences: ^2.0.9
+  animated_custom_dropdown: 3.0.0
+
 
 
 dev_dependencies:

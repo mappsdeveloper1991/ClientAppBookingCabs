@@ -4,9 +4,12 @@ import 'dart:convert';
 
 import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
+import 'package:bookingcab_mobileapp/data/localDB/SharedPreferencesUtil.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTP.dart';
+import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/GetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/VerifyOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/loginResponseData.dart';
@@ -66,7 +69,24 @@ class _LoginPageState extends State<LoginPage> {
           var responseData = LoginResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-            userID = (responseData.data!.userId).toString();
+            var data = responseData.data!; 
+            userID = data.userId.toString();
+            USER_ID = userID;
+            USER_FIRST_NAME = data.firstName;
+            USER_LAST_NAME = data.lastName;
+            USER_EMAIL_ID = data.email;
+            USER_MOBILE_PREFIX = data.mobilePrefix;
+            USER_MOBILE_NO= data.mobile;
+            USER_IS_ACTIVE= data.isActive.toString();
+            USER_SIGNUP_STATUS = data.signupStatus.toString();
+            COUNTRY_ID = data.companyId.toString();
+            USER_TOCKEN = data.token;
+            USER_GRADE = data.userGrade;
+            USER_TYPE_ID = data.userTypeId.toString();
+            COMPANY_ID = data.companyId.toString();
+
+            SharedPreferencesUtil.saveUserProfileData(USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL_ID, USER_MOBILE_PREFIX, USER_MOBILE_NO);
+
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
@@ -88,6 +108,8 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
+late dynamic userDta  ;
+
   Future<void> loginGetOTP() async {
      if(email.isEmpty || email.length <= 5){
       showErrorTost(context, INVALID_EMAIL_MSG);
@@ -106,6 +128,7 @@ class _LoginPageState extends State<LoginPage> {
           var responseData = GetOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
+             userDta = responseData.data![0];
              userID = (responseData.data![0].userId).toString();
               showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }else{
@@ -147,7 +170,24 @@ class _LoginPageState extends State<LoginPage> {
           var responseData = VerifyOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-              showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+            //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+
+            userID = userDta.userId.toString();
+            USER_ID = userID;
+            USER_FIRST_NAME = userDta.firstName;
+            USER_LAST_NAME = userDta.lastName;
+            USER_EMAIL_ID = userDta.email;
+            USER_MOBILE_PREFIX = userDta.mobilePrefix;
+            USER_MOBILE_NO= userDta.mobile;
+            USER_IS_ACTIVE= userDta.isActive.toString();
+            USER_SIGNUP_STATUS = userDta.signupStatus.toString();
+            COUNTRY_ID = userDta.companyId.toString();
+            USER_TOCKEN = userDta.token;
+            USER_GRADE = userDta.userGrade;
+            USER_TYPE_ID = userDta.userTypeId.toString();
+            COMPANY_ID = userDta.companyId.toString();
+            SharedPreferencesUtil.saveUserProfileData(USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL_ID, USER_MOBILE_PREFIX, USER_MOBILE_NO);
+
                Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),

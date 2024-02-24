@@ -6,7 +6,9 @@ import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:flutter_overlay_loader/flutter_overlay_loader.dart';
 import 'package:http/http.dart' as http;
 
-const userID = '457';
+import '../localDB/GlobalValue.dart';
+
+//const userID = '';
 
 
 const String baseURL = "https://api.bookingcabs.com";
@@ -24,11 +26,18 @@ const String newSignUpEndPoint = "${subURLUser}newsignup";
 const String forGotPasswordEndPointGetOTP = "${subURLUser}forgotuserpassword";
 const String forGotPasswordEndPointVerifyOTP = "${subURLUser}changeuserpassword";
 const String accountChangePassword = "${subURLUser}changePassword";
-const String userProfileInforEndPOint = "${subURLUser}userpersonalinfo?user_id=$userID";
-
+String userProfileInforEndPOint = "${subURLUser}userpersonalinfo?user_id=$USER_ID";
 
 
 const String Verify_OTP = "${subURLActivation}fetchOtp";
+
+
+const String LanguageAPI_END_POINT = "master-language";
+const String Nationality_API_END_POINT = "city/fetchNationality";
+const String CITY_API_END_POINT = "city/stateCountryByCityName?city_name=";
+
+
+
 
 
 const String SUCCESS_STATUS = "success";

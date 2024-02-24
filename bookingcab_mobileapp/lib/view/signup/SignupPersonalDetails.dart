@@ -1,10 +1,14 @@
 // ignore_for_file: use_build_context_synchronously, prefer_interpolation_to_compose_strings
 
 import 'dart:convert';
+import 'dart:math';
 
+import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/signup/CityAPIResponseData.dart';
+import 'package:bookingcab_mobileapp/view/signup/NationalityAPIResponseData.dart';
 import 'package:bookingcab_mobileapp/view/signup/SignupResponseData.dart';
 import 'package:flutter/material.dart';
 
@@ -29,11 +33,14 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
       password = "",
       confirmPassword = "",
       city = "707",
+      stateID = "10",
       nationality = "101";
 
   @override
   void initState() {
     super.initState();
+
+    getNationaListAPICall("Ind");
   }
 
   Future<void> signUpAPICall(BuildContext context) async {
@@ -54,7 +61,6 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
     } else if (nationality.isEmpty) {
       showErrorTost(context, INVALID_NATIONALITY_MSG);
     } else {
-
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "first_name": firstName,
@@ -80,20 +86,26 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
           // Handle successful response
           print('Response: ${response.body}');
 
-           print('Response: ${response.body}');
+          print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = SignupResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              SignupResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-            if(responseData.data!.status ==   SUCCESS_STATUS){
-              showSuccessTost(context, responseData.data!.message +"\n "+responseData.data!.emailMessage);
+            if (responseData.data!.status == SUCCESS_STATUS) {
+              showSuccessTost(
+                  context,
+                  responseData.data!.message +
+                      "\n " +
+                      responseData.data!.emailMessage);
 
-              String userID =  responseData.data!.userId.toString();
-                Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => OTPVerification(emailID, userID)),
-            );
-            }else{
+              String userID = responseData.data!.userId.toString();
+              Navigator.pushReplacement(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => OTPVerification(emailID, userID)),
+              );
+            } else {
               showErrorTost(context, responseData.data!.message);
             }
           }
@@ -108,6 +120,91 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
         showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         print('Exception occurred: $e');
       }
+    }
+  }
+
+  late List<NationalityList> nationalityList = [];
+  late List<City> cityList = [];
+
+  Future<List<NationalityList>> seachNationality(String query) async {
+    getNationaListAPICall(query);
+    return await Future.delayed(const Duration(seconds: 1), () {
+      return nationalityList.where((e) {
+        return e.nationality.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    });
+  }
+
+  Future<List<City>> seachCity(String query) async {
+    getCityListAPICall(query);
+    return await Future.delayed(const Duration(seconds: 1), () {
+      return cityList.where((e) {
+        return e.cityStateCountry.toLowerCase().contains(query.toLowerCase());
+      }).toList();
+    });
+  }
+
+  Future<void> getCityListAPICall(String query) async {
+    String cityName = query;
+    showCustomeLoader(context);
+    try {
+      final response = await getRequest('$CITY_API_END_POINT$cityName');
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData = CityAPIResponseData.fromJson(jsonData['response']);
+        hideCustomeLoader(context);
+        if (responseData.status == SUCCESS_STATUS) {
+          setState(() {
+            cityList = responseData.data;
+          });
+        } else {
+          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+        }
+      } else {
+        // Handle error response
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      hideCustomeLoader(context);
+      showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+      print('Exception occurred: $e');
+    }
+  }
+
+  Future<void> getNationaListAPICall(String nationality) async {
+    Map<String, Object> queryParams = {"nationality": nationality};
+    //showCustomeLoader(context);
+    try {
+      final response =
+          await postRequest(Nationality_API_END_POINT, queryParams);
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData =
+            NationalityAPIResponseData.fromJson(jsonData['responsedata']);
+        //hideCustomeLoader(context);
+        if (responseData.status == SUCCESS_STATUS) {
+          setState(() {
+            nationalityList = responseData.data;
+          });
+        } else {
+          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+        }
+      } else {
+        // Handle error response
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      //hideCustomeLoader(context);
+      //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+      print('Exception occurred: $e');
     }
   }
 
@@ -130,9 +227,61 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
                     _buildReferByRow(),
                     _buildPasswordRow(),
                     _buildConfirmPasswordRow(),
-                    _buildCitydRow(),
-                    _buildNationalityRow(),
-                    _buildSignupButton()
+                    //_buildCitydRow(),
+                    //_buildNationalityRow(),
+                    Container(
+                      height: 10,
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: primaryColor,
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(5), // Add rounded corners
+                          ),
+                          child: CustomDropdown<City>.searchRequest(
+                            futureRequest: seachCity,
+                            hintText: 'Search City',
+                            items: cityList,
+                            onChanged: (value) {
+                              var vv = value.cityStateCountry.toString;
+                              city = value.cityId.toString();
+                              stateID = value.stateId.toString();
+                              print('changing value to: $vv');
+                            },
+                          ),
+                        )),
+                    Container(
+                      height: 10,
+                    ),
+                    Padding(
+                        padding: const EdgeInsets.all(1.0),
+                        child: Container(
+                          decoration: BoxDecoration(
+                            border: Border.all(
+                              color: primaryColor,
+                            ),
+                            borderRadius:
+                                BorderRadius.circular(5), // Add rounded corners
+                          ),
+                          child: CustomDropdown<NationalityList>.searchRequest(
+                            futureRequest: seachNationality,
+                            hintText: 'Search Nationality',
+                            items: nationalityList,
+                            onChanged: (value) {
+                              var vv = value.nationality.toString;
+                              nationality = value.countryId.toString();
+                              print('changing value to: $vv');
+                            },
+                          ),
+                        )),
+                    _buildSignupButton(),
+                    Container(
+                      height: 20,
+                    ),
                   ]),
             )));
   }

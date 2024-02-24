@@ -1,3 +1,4 @@
+import 'package:bookingcab_mobileapp/view/onboarding/OnboardingOptions.dart';
 import 'package:flutter/material.dart';
 
 import '../view/dashboard/DashBoardPage.dart';
@@ -30,7 +31,7 @@ AppBar languageSelectionHeaderBar(BuildContext context) {
               onTap: () {
                 Navigator.pushReplacement(
                   context,
-                  MaterialPageRoute(builder: (context) => HomeScreen()),
+                  MaterialPageRoute(builder: (context) => OnboardingOptions()),
                 );
               },
               child: const Text(

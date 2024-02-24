@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/profile/ChangePassword.dart';
 import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
@@ -32,7 +33,11 @@ class _MyAccountState extends State<MyAccount> {
 @override
   void initState() {
     super.initState();
-    getProfileInfoAPICall();
+    if(userProfileInfoData != null){
+      userProfileData = userProfileInfoData ;
+    }else{
+      getProfileInfoAPICall();
+    }
   }
 
 Future<void> getProfileInfoAPICall() async {
@@ -47,6 +52,7 @@ Future<void> getProfileInfoAPICall() async {
           if (responseData.status == SUCCESS_STATUS) {
               setState(() {
                 userProfileData = responseData.data!;
+                userProfileInfoData = userProfileData;
               });
           }else{
                //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
