@@ -1,5 +1,13 @@
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferService.dart';
 import 'package:bookingcab_mobileapp/view/home/DualImageCarosel.dart';
+import 'package:bookingcab_mobileapp/view/home/OneWaysTransferAPIResponseData.dart';
+import 'package:bookingcab_mobileapp/view/home/ThingToDoAPIResponseData.dart';
 import 'package:flutter/material.dart';
 
 import '../../comman/Constant.dart';
@@ -18,8 +26,103 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
   TextEditingController _searchController = TextEditingController();
   bool _isSearchFocused = false;
 
+
+@override
+  void initState() {
+    super.initState();
+      getOneWayPackageList();
+      getThingToDoPackageList();
+  }
+
+
+late List<OneWayPackageList> oneWaypackageList = [];
+Future<void> getOneWayPackageList() async {
+
+      //showCustomeLoader(context);
+      Map<String, Object> queryParams = {
+        "source_city_id": "707",
+        "destination_city_id": "4536",
+        "user_grade": "5",
+        "user_id": USER_ID,
+        "callfrom": "MobileApp",
+      };
+      try {
+        final response = await postRequest(OneWayPackageList_API_ENDPOINT_NAME, queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = OneWaysTransferAPIResponseData.fromJson(jsonData['responsedata']);
+          //hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+            setState(() {
+              oneWaypackageList = responseData.packageList;
+            });
+            
+              //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }else{
+               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          //hideCustomeLoader(context);
+          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+  }
+
+
+late List<ThingToDoList> thingToDoPackageList = [];
+Future<void> getThingToDoPackageList() async {
+
+      //showCustomeLoader(context);
+      Map<String, Object> queryParams = {
+        "city": "707",
+        "master_package_type": "6",
+        "master_booking_type": "7",
+        "user_id": USER_ID,
+        "callfrom": "MobileApp",
+      };
+      try {
+        final response = await postRequest(THING_TO_DO_API_ENDPOINT_NAME, queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = ThingToDoAPIResponseData.fromJson(jsonData['responsedata']);
+          //hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+            setState(() {
+              thingToDoPackageList = responseData.data;
+            });
+            
+              //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }else{
+               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          //hideCustomeLoader(context);
+          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+  }
+
+
   @override
   Widget build(BuildContext context) {
+    
+     
     return Scaffold(
       body: SafeArea(
         child: Column(
@@ -133,12 +236,13 @@ class _HomeTabScreenState extends State<HomeTabScreen> {
                             height: 5,
                           ),
                           SizedBox(
-                            height: 300,
+                            //height: 300,
                             child: Row(
                               children: [
                                 Expanded(
                                     child:
-                                        PackageTable(packageList: packageList)),
+                                        PackageTable(packageList: oneWaypackageList)),
+                                        
                               ],
                             ),
                           ),
@@ -347,57 +451,13 @@ class PackageDetails {
   PackageDetails({required this.image, required this.packageAmount});
 }
 
-// Widget searchBar() {
-//   return SearchAnchor(
-//     builder: (BuildContext context, SearchController controller) {
-//       return SearchBar(
-//         controller: controller,
-//         padding: const MaterialStatePropertyAll<EdgeInsets>(
-//             EdgeInsets.symmetric(horizontal: 16.0)),
-//         onTap: () {
-//           controller.openView();
-//         },
-//         onChanged: (_) {
-//           controller.openView();
-//         },
-//         leading: const Icon(Icons.search),
-//         trailing: <Widget>[
-//           Tooltip(
-//             message: 'Change brightness mode',
-//             child: IconButton(
-//               isSelected: isDark,
-//               onPressed: () {
-//                 setState(() {
-//                   isDark = !isDark;
-//                 });
-//               },
-//               icon: const Icon(Icons.wb_sunny_outlined),
-//               selectedIcon: const Icon(Icons.brightness_2_outlined),
-//             ),
-//           )
-//         ],
-//       );
-//     },
-//     suggestionsBuilder: (BuildContext context, SearchController controller) {
-//       return List<ListTile>.generate(5, (int index) {
-//         final String item = 'item $index';
-//         return ListTile(
-//           title: Text(item),
-//           onTap: () {
-//             setState(() {
-//               controller.closeView(item);
-//             });
-//           },
-//         );
-//       });
-//     },
-//   );
-// }
+
+
 
 class PackageTable extends StatefulWidget {
   const PackageTable({super.key, required this.packageList});
 
-  final List<PackageDetail> packageList;
+  final List<OneWayPackageList> packageList;
 
   @override
   State<PackageTable> createState() => _PackageTableState();
@@ -414,12 +474,13 @@ class _PackageTableState extends State<PackageTable> {
 
   @override
   Widget build(BuildContext context) {
+    
     return DataTable(
       horizontalMargin: 5,
       columnSpacing: 35,
       headingRowColor: MaterialStateColor.resolveWith((states) => Colors.black),
-      columns: [
-        const DataColumn(
+      columns: const [
+        DataColumn(
           label: Text(
             'From',
             style: TextStyle(
@@ -429,14 +490,14 @@ class _PackageTableState extends State<PackageTable> {
           ),
           // numeric: true,
         ),
-        const DataColumn(
+        DataColumn(
           label: Text(
             'To',
             style: TextStyle(color: Colors.white, fontSize: 14),
           ),
           // numeric: true,
         ),
-        const DataColumn(
+        DataColumn(
           label: ColoredBox(
             color: Colors.orangeAccent,
             child: Padding(
@@ -453,7 +514,9 @@ class _PackageTableState extends State<PackageTable> {
           // numeric: true,
         ),
         DataColumn(
-          label: IconButton(
+          label: SizedBox(
+            child: Text(''))
+          /*IconButton(
             icon: Icon(
               isTableExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
               color: Colors.white,
@@ -462,17 +525,29 @@ class _PackageTableState extends State<PackageTable> {
               toggleTableExpansion();
             },
           ),
-          numeric: true,
+          numeric: true, */
         ),
       ],
       rows: [
-        if (isTableExpanded)
+        //if (isTableExpanded)
           for (int i = 0; i < widget.packageList.length; i++)
             DataRow(
               cells: [
                 DataCell(
+                     Text(
+                      widget.packageList[i].sourceCityName,
+                      maxLines: 1,
+                      style: const TextStyle(
+                        overflow: TextOverflow.ellipsis,
+                        fontSize: 14,
+                        fontWeight: FontWeight.w500,
+                      ),
+                    ),
+                  
+                ),
+                DataCell(
                   Text(
-                    widget.packageList[i].from,
+                    widget.packageList[i].destinationCityName,
                     maxLines: 1,
                     style: const TextStyle(
                       overflow: TextOverflow.ellipsis,
@@ -483,18 +558,7 @@ class _PackageTableState extends State<PackageTable> {
                 ),
                 DataCell(
                   Text(
-                    widget.packageList[i].to,
-                    maxLines: 1,
-                    style: const TextStyle(
-                      overflow: TextOverflow.ellipsis,
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ),
-                DataCell(
-                  Text(
-                    '\u{20B9} ${widget.packageList[i].amount}',
+                    '\u{20B9} ${widget.packageList[i].totalCharge}',
                     maxLines: 1,
                     style: const TextStyle(
                       overflow: TextOverflow.ellipsis,
@@ -508,14 +572,15 @@ class _PackageTableState extends State<PackageTable> {
                     color: Colors.red,
                     child: Padding(
                       padding: EdgeInsets.only(
-                          right: 10, left: 10, top: 1, bottom: 1),
+                          right: 5, left: 5, top: 1, bottom: 1),
                       child: Text(
                         maxLines: 1,
-                        'Book Now',
+                        'Book',
                         style: TextStyle(
-                          fontSize: 15,
+                          fontSize: 16,
                           overflow: TextOverflow.ellipsis,
                           color: Colors.white,
+                          
                         ),
                       ),
                     ),
@@ -672,7 +737,7 @@ class ThingsToDoCard extends StatelessWidget {
                         ),
                       ),
                       const Text(
-                        "Book Now",
+                        "Book",
                         style: TextStyle(
                           fontSize: 15,
                           color: Colors.red,

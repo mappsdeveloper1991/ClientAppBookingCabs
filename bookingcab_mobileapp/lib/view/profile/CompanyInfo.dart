@@ -1,13 +1,23 @@
+import 'dart:convert';
 import 'dart:io';
 
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
+import 'package:bookingcab_mobileapp/view/profile/UpdateProfileInfoAPIResponseData.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 import 'package:image_picker/image_picker.dart';
 
 class CompanyInfo extends StatefulWidget {
-  const CompanyInfo({super.key});
+  final UserProfileData userProfileData;
+
+  const CompanyInfo(this.userProfileData, {super.key});
 
   @override
   State<CompanyInfo> createState() => _CompanyInfoState();
@@ -22,12 +32,33 @@ class _CompanyInfoState extends State<CompanyInfo> {
   TextEditingController _pinCodeController = TextEditingController();
   TextEditingController _officeAddressController = TextEditingController();
   TextEditingController _panCardController = TextEditingController();
-  TextEditingController _aadharCardController = TextEditingController();
+  //TextEditingController _aadharCardController = TextEditingController();
   TextEditingController _contactController = TextEditingController();
   TextEditingController _mobileController = TextEditingController();
   TextEditingController _phoneController = TextEditingController();
   TextEditingController _companyEmailController = TextEditingController();
   TextEditingController _companyUrlController = TextEditingController();
+
+  late UserProfileData userProfileData = widget.userProfileData;
+  String companyName = '',
+      companyAddress = '',
+      cityID = '',
+      cityName = '',
+      stateID = '',
+      stateName = '',
+      nationalityID = '',
+      nationalityName = '',
+      pincode = '',
+      serviceTaxGST = '',
+      panCardNo = '',
+      contactPersonName = '',
+      landlineNo = '',
+      mobileNo = '',
+      companyEmail = '',
+      websiteURL = '',
+      createdDate = '';
+
+  DateTime selectedDate = DateTime.now();
 
   List<String> _countries = [
     'Country',
@@ -50,6 +81,175 @@ class _CompanyInfoState extends State<CompanyInfo> {
         _image = File(pickedFile.path);
       }
     });
+  }
+
+  @override
+  void initState() {
+    super.initState();
+    setProfileDataToView();
+    getProfileInfoAPICall();
+    createdDate = DateFormat('yyyy-MM-dd').format(selectedDate);
+  }
+
+  void setProfileDataToView() {
+    setState(() {
+      serviceTaxGST = userProfileData.companySetupGstNo ?? '';
+      companyName = userProfileData.companyName ?? '';
+
+      cityID = userProfileData.cityId.toString();
+      cityName = userProfileData.cityName ?? '';
+      stateID = userProfileData.stateId.toString();
+
+      stateName = userProfileData.stateName ?? '';
+      companyAddress = userProfileData.companyAddress ?? '';
+      panCardNo = userProfileData.companyPancardNo ?? '';
+      contactPersonName = userProfileData.contactPersonName ?? '';
+
+      nationalityID = userProfileData.companyId.toString();
+      nationalityName = userProfileData.countryName ?? '';
+      mobileNo = userProfileData.mobile ?? '';
+
+      landlineNo = userProfileData.userCompanyLandlineNo ?? '';
+      companyEmail = userProfileData.userCompanyEmail ?? '';
+      pincode = userProfileData.userCompanyPincode ?? '';
+      websiteURL = userProfileData.websiteUrl ?? '';
+
+      _gstController.text = serviceTaxGST;
+      _companyNameController.text = companyName;
+      _cityController.text = cityName;
+      _pinCodeController.text = pincode;
+      _officeAddressController.text = companyAddress;
+      _panCardController.text = panCardNo;
+      //_aadharCardController.text = ;
+      _contactController.text = contactPersonName;
+      _mobileController.text = mobileNo;
+      _phoneController.text = landlineNo;
+      _companyEmailController.text = companyEmail;
+      _companyUrlController.text = websiteURL;
+    });
+  }
+
+  Future<void> signUpAPICall(BuildContext context) async {
+    serviceTaxGST = _gstController.text.toString();
+    companyName = _companyNameController.text.toString();
+    cityName = _cityController.text.toString();
+    pincode = _pinCodeController.text.toString();
+    companyAddress = _officeAddressController.text.toString();
+    panCardNo = _panCardController.text.toString();
+    //_aadharCardController.text = ;
+    contactPersonName = _contactController.text.toString();
+    mobileNo = _mobileController.text.toString();
+    landlineNo = _phoneController.text.toString();
+    companyEmail = _companyEmailController.text.toString();
+    websiteURL = _companyUrlController.text.toString();
+
+    if (serviceTaxGST.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_GST_NO_MSG);
+    } else if (companyName.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_NAME_MSG);
+    } else if (cityName.isEmpty) {
+      showErrorTost(context, INVALID_CITY_MSG);
+    } else if (pincode.isEmpty) {
+      showErrorTost(context, INVALID_PIN_CODE);
+    } else if (companyAddress.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_Office_Address_MSG);
+    } else if (panCardNo.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_PAN_MSG);
+    }else if (contactPersonName.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_CONTACT_PERSONAL_NAME_MSG);
+    } else if (mobileNo.isEmpty) {
+      showErrorTost(context, INVALID_ALT_PHONE_NO_MSG);
+    } else if (landlineNo.isEmpty) {
+      showErrorTost(context, INVALID_LANDINE_NO_MSG);
+    }else if (companyEmail.isEmpty) {
+      showErrorTost(context, INVALID_EMAIL_ID_MSG);
+    }else if (websiteURL.isEmpty) {
+      showErrorTost(context, INVALID_COMAPNY_URL_MSG);
+    } else {
+      showCustomeLoader(context);
+
+      Map<String, Object> queryParams = {
+        "user_id": USER_ID,
+        "company_name": companyName,
+        "company_address": companyAddress,
+        "city": cityID,
+        "state": stateID,
+        "country_id": nationalityID,
+        "pincode": pincode,
+        "service_tax_gst": serviceTaxGST,
+        "pancard_no": panCardNo,
+        "contact_person_name": contactPersonName,
+        "landline_no": landlineNo,
+        "mobile_no": mobileNo,
+        "email": companyEmail,
+        "website_url": websiteURL,
+        "added_by": USER_ID,
+        "created_date": createdDate
+      };
+
+      try {
+        final response =
+            await postRequest(UPADTE_COMPANY_END_POINT, queryParams);
+        if (response.statusCode == 200) {
+          // Handle successful response
+          print('Response: ${response.body}');
+
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData =
+              UpdateProfileInfoAPIResponseData.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+            showErrorTost(context, responseData.message);
+            getProfileInfoAPICall();
+          } else {
+            showErrorTost(context, responseData.message);
+          }
+        } else {
+          // Handle error response
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+    }
+  }
+
+  Future<void> getProfileInfoAPICall() async {
+    //showCustomeLoader(context);
+    try {
+      final response = await getRequest(userProfileInforEndPOint);
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData =
+            MyAccountResponseData.fromJson(jsonData['responsedata']);
+        // hideCustomeLoader(context);
+        if (responseData.status == SUCCESS_STATUS) {
+          setState(() {
+            userProfileData = responseData.data!;
+            userProfileInfoData = userProfileData;
+            setProfileDataToView();
+          });
+        } else {
+          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+        }
+      } else {
+        // Handle error response
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Request failed with status: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle exceptions
+      //hideCustomeLoader(context);
+      showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+      print('Exception occurred: $e');
+    }
   }
 
   @override
@@ -142,7 +342,7 @@ class _CompanyInfoState extends State<CompanyInfo> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10.0),
+              /* const SizedBox(height: 10.0),
               Row(
                 children: [
                   Expanded(
@@ -174,6 +374,7 @@ class _CompanyInfoState extends State<CompanyInfo> {
                   ),
                 ],
               ),
+              */
               const SizedBox(height: 10.0),
               _buildTextField('Contact Person', _contactController),
               const SizedBox(height: 10.0),
@@ -191,10 +392,12 @@ class _CompanyInfoState extends State<CompanyInfo> {
               ),
               Row(
                 children: [
-                  _buildCountryDropdown(),
+                  /* _buildCountryDropdown(),
                   const SizedBox(width: 10.0),
+                  */
                   Expanded(
-                    child: _buildTextField('Mobile Number', _mobileController),
+                    child:
+                        _buildTextField('landline Number', _mobileController),
                   ),
                 ],
               ),
@@ -244,9 +447,8 @@ class _CompanyInfoState extends State<CompanyInfo> {
                               borderRadius: BorderRadius.circular(8)),
                           elevation: 5.0),
                       onPressed: () {
-                        // Handle signup logic here
-                        // You can access user inputs using _firstNameController.text, _lastNameController.text, etc.
-                      },
+                          signUpAPICall(context);
+                            },
                       child: const Text(
                         'Submit',
                         style: TextStyle(

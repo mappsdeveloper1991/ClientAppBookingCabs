@@ -33,11 +33,12 @@ class _MyAccountState extends State<MyAccount> {
 @override
   void initState() {
     super.initState();
-    if(userProfileInfoData != null){
+    /*if(userProfileInfoData != null){
       userProfileData = userProfileInfoData ;
     }else{
-      getProfileInfoAPICall();
-    }
+      
+    } */
+    getProfileInfoAPICall();
   }
 
 Future<void> getProfileInfoAPICall() async {
