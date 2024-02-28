@@ -1,5 +1,6 @@
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/BookingRequest.dart';
 import 'package:flutter/material.dart';
 
 class SelectedVehicleDetails extends StatefulWidget {
@@ -63,10 +64,10 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                                 ),
                                 onPressed: () {
                                   // Test
-                                  // Navigator.push(
-                                  //   context,
-                                  //   MaterialPageRoute(builder: (context) => Test()),
-                                  // );
+                                  Navigator.push(
+                                   context,
+                                    MaterialPageRoute(builder: (context) => BookingRequest()),
+                                   );
                                 },
                                 child: const Text(
                                   "Next",

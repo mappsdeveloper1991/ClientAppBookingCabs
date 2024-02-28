@@ -46,6 +46,8 @@ dependencies:
   flutter_overlay_loader: ^2.0.0
   shared_preferences: ^2.0.9
   animated_custom_dropdown: 3.0.0
+  percent_indicator: ^4.0.1
+  circular_countdown_timer: ^0.2.3
 
 
 

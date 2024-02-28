@@ -45,6 +45,8 @@ const String OneWayPackageList_API_ENDPOINT_NAME = "lowest_fare_wrapper/getLowes
 const String THING_TO_DO_API_ENDPOINT_NAME = "sightseeing/listsightseeing";
 
 
+const String BOOKING_LIST_API_ENDPOINT_NAME = "booking/bookingListSearch?access_token=";
+
 
 
 const String SUCCESS_STATUS = "success";

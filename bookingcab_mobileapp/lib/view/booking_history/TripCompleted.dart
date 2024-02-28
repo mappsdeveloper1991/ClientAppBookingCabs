@@ -1,22 +1,144 @@
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/booking_history/BookingListAPIResponseData.dart';
 import 'package:flutter/material.dart';
 
-class TripCompleted extends StatelessWidget {
+class TripCompleted extends StatefulWidget {
+  
   const TripCompleted({super.key});
+
+  @override
+  State<TripCompleted> createState() => _TripCompletedState();
+}
+
+class _TripCompletedState extends State<TripCompleted> {
+
+
+  @override
+  void initState() {
+    super.initState();
+     getBookingList();
+  }
+
+ List<BookingDetails> bookingListData = [];
+Future<void> getBookingList() async {
+   Map<String, Object> queryParams = {
+       
+      };
+      //showCustomeLoader(context);
+      try {
+        final response = await postRequest(BOOKING_LIST_API_ENDPOINT_NAME+"340b26cb68ad51a74c6a1b2bdb70d00aaa5cf07848da4f0210c07aa3a161dc33", queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = BookingListAPIResponseData.fromJson(jsonData['responsedata']);
+          //hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+              setState(() {
+                bookingListData = responseData.bookingList;
+              });
+          }else{
+               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          //hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+  }
 
   @override
   Widget build(BuildContext context) {
     return ListView.builder(
       scrollDirection: Axis.vertical,
-      itemCount: 15,
+      itemCount: bookingListData.length,
       itemBuilder: (context, index) {
-        return _tripCard();
+        return _tripCard(bookingListData[index]);
       },
     );
   }
+
 }
 
+
+/*
+extends StatefulWidget {
+  const LanguageSelectScreen({Key? key}) : super(key: key);
+
+  @override
+  State<LanguageSelectScreen> createState() => _LanguageSelectScreenState();
+}
+
+class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
+  String? selectedLanguage;
+ late List<Language>?  languageListData = [];
+
+
+@override
+  void initState() {
+    super.initState();
+     // getLanguageListAPICall();
+  }
+
+Future<void> getLanguageListAPICall() async {
+  
+      //showCustomeLoader(context);
+      try {
+        final response = await getRequest(LanguageAPI_END_POINT);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = LanguageResponseData.fromJson(jsonData);
+          //hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+              setState(() {
+                languageListData = responseData.languageListData;
+              });
+          }else{
+               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          }
+        } else {
+          // Handle error response
+          //hideCustomeLoader(context);
+          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        // Handle exceptions
+        //hideCustomeLoader(context);
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+  }
+
+
+
+  @override
+  Widget build(BuildContext context) {
+*/
+
+
+
+
+
+
+
+
+
 class _tripCard extends StatelessWidget {
-  const _tripCard({
+  final BookingDetails details;
+   const _tripCard(this.details,{
     super.key,
   });
 
@@ -30,7 +152,7 @@ class _tripCard extends StatelessWidget {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10.0),
         ),
-        child: const Row(
+        child:  Row(
           // mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
             Padding(
@@ -54,7 +176,7 @@ class _tripCard extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    "05:54 pm From: 108, Desh Bandhu",
+                    "${details.bookingTime} From: ${details.pickupArea}",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 16,
@@ -62,7 +184,7 @@ class _tripCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "Gupta Market",
+                    "${details.dropTime} From: ${details.dropArea}",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 16,
@@ -70,7 +192,7 @@ class _tripCard extends StatelessWidget {
                     ),
                   ),
                   Text(
-                    "02-09-2019",
+                    "Date: ${details.bookingDate}",
                     overflow: TextOverflow.ellipsis,
                     style: TextStyle(
                       fontSize: 16,
