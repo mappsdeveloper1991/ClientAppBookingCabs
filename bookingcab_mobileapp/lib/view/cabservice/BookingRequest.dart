@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/DriverDetails.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:circular_countdown_timer/countdown_text_format.dart';
 import 'package:flutter/material.dart';
@@ -309,6 +310,11 @@ barrierDismissible: false,
                     borderRadius: new BorderRadius.circular(12)),
                 onPressed: () {
                   Navigator.pop(context); 
+                   Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => DriverDetails()),
+                        );
                 },
                 child: Text(
                   "Ok",
