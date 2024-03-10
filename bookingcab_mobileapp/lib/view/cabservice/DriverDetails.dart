@@ -40,10 +40,12 @@ class _DriverDetailsState extends State<DriverDetails> {
 
   Widget _driverDetailCard() {
     return SizedBox(
+      
       height: 335,
       child: Card(
         surfaceTintColor: Colors.white,
         elevation: 1,
+       // margin: EdgeInsets.all(5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
         ),
@@ -54,14 +56,14 @@ class _DriverDetailsState extends State<DriverDetails> {
             ),
 
             Padding(
-              padding: EdgeInsets.all(5),
+              padding: EdgeInsets.all(3),
               child: Row(
                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Image(
                     image: AssetImage("assets/images/driver-icon-27013.png"),
-                    height: 70, // Set the desired height
-                    width: 70, // Set the desired width
+                    height: 60, // Set the desired height
+                    width: 60, // Set the desired width
                     fit: BoxFit.cover, // Adjust the fit as needed
                   ),
                   const Column(
@@ -86,7 +88,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                     ],
                   ),
                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.center,
+                     crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text(
                         "Tyota Etios",
@@ -103,8 +105,8 @@ class _DriverDetailsState extends State<DriverDetails> {
                         ),
                       ),
                       Container(
-                        
-                        width: 150,
+                      
+                        width: 130,
                        // height: 100,
                         //height: MediaQuery.of(context).size.height * .10,
                         child: Image.asset(
@@ -131,17 +133,18 @@ class _DriverDetailsState extends State<DriverDetails> {
                       ),
             Container(
               height: 150,
+              padding: EdgeInsets.all(5),
               child:  const Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: <Widget>[
               
                   Column(
                     children: <Widget>[
-                      Icon(Icons.call, size: 62,),
+                      Icon(Icons.call, size: 48,),
                        Text(
                         "Call Driver",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.red
                         ),
@@ -151,11 +154,11 @@ class _DriverDetailsState extends State<DriverDetails> {
 
                       Column(
                     children: <Widget>[
-                      Icon(Icons.star, size: 62,),
+                      Icon(Icons.star, size: 48,),
                        Text(
                         "Rate Driver",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.red
                         ),
@@ -166,11 +169,11 @@ class _DriverDetailsState extends State<DriverDetails> {
 
                       Column(
                     children: <Widget>[
-                      Icon(Icons.share, size: 62,),
+                      Icon(Icons.share, size: 48,),
                        Text(
                         "Share Details",
                         style: TextStyle(
-                          fontSize: 18,
+                          fontSize: 16,
                           fontWeight: FontWeight.bold,
                           color: Colors.red
                         ),

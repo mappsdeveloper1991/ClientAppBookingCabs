@@ -14,6 +14,14 @@ class TransferService extends StatefulWidget {
 class _TransferServiceState extends State<TransferService> {
   TextEditingController _searchController = TextEditingController();
   TextEditingController _cityController = TextEditingController();
+  TextEditingController _airportStationController = TextEditingController();
+  TextEditingController _FlightTrainNoController = TextEditingController();
+  TextEditingController _FlightTrainTimeController = TextEditingController();
+  TextEditingController _PickupDropLocationController = TextEditingController();
+  TextEditingController _LandmarkController = TextEditingController();
+  TextEditingController _PickupAddressController = TextEditingController();
+
+
   bool _isSearchFocused = false;
   bool _isPickup = true;
   bool _isDrop = false;
@@ -70,7 +78,9 @@ class _TransferServiceState extends State<TransferService> {
                 children: [
                   Row(
                     children: [
-                      const Text("Pickup"),
+                      const Text("Pickup",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
                       Transform.scale(
                         scale: 0.75,
                         child: Switch(
@@ -92,7 +102,9 @@ class _TransferServiceState extends State<TransferService> {
                   ),
                   Row(
                     children: [
-                      const Text("Drop"),
+                      const Text("Drop",
+                          style: TextStyle(
+                              fontSize: 14, fontWeight: FontWeight.bold)),
                       Transform.scale(
                         scale: 0.75,
                         child: Switch(
@@ -119,35 +131,55 @@ class _TransferServiceState extends State<TransferService> {
               height: 1,
               color: Color.fromARGB(255, 197, 195, 195),
             ),
-            const SizedBox(
-              height: 10,
-            ),
+            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  _buildTextField("City", _cityController),
-                  _buildTextField("Airport/Railway Station", _cityController),
+                  _buildTextField("", "City", _cityController),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  _buildTextField(
+                      "", "Airport/Railway Station", _airportStationController),
+                  const SizedBox(
+                    height: 5,
+                  ),
                   Row(
                     children: [
                       Expanded(
                         flex: 2,
                         child: _buildTextField(
-                            "Flight/ Train No", _cityController),
+                            "", "Flight/ Train No", _FlightTrainNoController),
                       ),
                       const Spacer(
                         flex: 1,
                       ),
                       Expanded(
                         flex: 2,
-                        child: _buildTextField("Flight Time", _cityController),
+                        child:
+                            _buildTextField("", "Flight Time", _FlightTrainTimeController),
                       ),
                     ],
                   ),
-                  _buildTextField(_isDrop ? "Drop Location" : "Pickup Location",
-                      _cityController),
-                  _buildTextField("Landmark", _cityController),
-                  _buildTextField("Pickup Address", _cityController),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  _buildTextField(
+                      "",
+                      _isDrop ? "Drop Location" : "Pickup Location",
+                      _PickupDropLocationController),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  _buildTextField("", "Landmark", _LandmarkController),
+                  const SizedBox(
+                    height: 5,
+                  ),
+                  _buildTextField("", "Pickup Address", _PickupAddressController),
+                  const SizedBox(
+                    height: 5,
+                  ),
                 ],
               ),
             ),
@@ -172,56 +204,65 @@ class _TransferServiceState extends State<TransferService> {
               ),
             ),
             Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Row(
-                    children: [
-                      const Text("Ride Now (within 30 min)"),
-                      Transform.scale(
-                        scale: 0.75,
-                        child: Switch(
-                          value: _isRideNow,
-                          onChanged: (value) {
-                            setState(() {
-                              _isRideNow = value;
-                              _isRideLater = !value;
-                            });
-                          },
-                          activeColor: buttonPrimaryColor,
-                          activeTrackColor:
-                              const Color.fromARGB(60, 95, 94, 94),
-                          inactiveThumbColor: Colors.black,
-                          inactiveTrackColor: Colors.white,
+              padding: const EdgeInsets.all(5.0),
+              child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    const Text(
+                      "Ride",
+                      style:
+                          TextStyle(fontSize: 14, fontWeight: FontWeight.bold),
+                    ),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Row(
+                          children: [
+                            const Text("Now (within 30 min)"),
+                            Transform.scale(
+                              scale: 0.75,
+                              child: Switch(
+                                value: _isRideNow,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isRideNow = value;
+                                    _isRideLater = !value;
+                                  });
+                                },
+                                activeColor: buttonPrimaryColor,
+                                activeTrackColor:
+                                    const Color.fromARGB(60, 95, 94, 94),
+                                inactiveThumbColor: Colors.black,
+                                inactiveTrackColor: Colors.white,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                  Row(
-                    children: [
-                      const Text("Ride Later"),
-                      Transform.scale(
-                        scale: 0.75,
-                        child: Switch(
-                          value: _isRideLater,
-                          onChanged: (value) {
-                            setState(() {
-                              _isRideLater = value;
-                              _isRideNow = !value;
-                            });
-                          },
-                          activeColor: buttonPrimaryColor,
-                          activeTrackColor:
-                              const Color.fromARGB(60, 95, 94, 94),
-                          inactiveThumbColor: Colors.black,
-                          inactiveTrackColor: Colors.white,
+                        Row(
+                          children: [
+                            const Text("Later"),
+                            Transform.scale(
+                              scale: 0.75,
+                              child: Switch(
+                                value: _isRideLater,
+                                onChanged: (value) {
+                                  setState(() {
+                                    _isRideLater = value;
+                                    _isRideNow = !value;
+                                  });
+                                },
+                                activeColor: buttonPrimaryColor,
+                                activeTrackColor:
+                                    const Color.fromARGB(60, 95, 94, 94),
+                                inactiveThumbColor: Colors.black,
+                                inactiveTrackColor: Colors.white,
+                              ),
+                            )
+                          ],
                         ),
-                      )
-                    ],
-                  ),
-                ],
-              ),
+                      ],
+                    ),
+                  ]),
             ),
             if (_isRideLater) ...[
               Padding(
@@ -304,7 +345,11 @@ class _TransferServiceState extends State<TransferService> {
                     children: [
                       Column(
                         children: [
-                          const Text('Adults:'),
+                          const Text(
+                            'Adults:',
+                            style: TextStyle(
+                                fontSize: 14, fontWeight: FontWeight.bold),
+                          ),
                           Row(
                             children: [
                               const Icon(Icons.man),
@@ -327,43 +372,51 @@ class _TransferServiceState extends State<TransferService> {
                           ),
                         ],
                       ),
-                      Column(
+                    ],
+                  ),
+                  Column(
+                    children: [
+                      const Text(
+                        'Children:',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
+                      Row(
                         children: [
-                          const Text('Children:'),
-                          Row(
-                            children: [
-                              const Icon(Icons.boy),
-                              DropdownButton<int>(
-                                value: selectedAdults,
-                                onChanged: (newValue) {
-                                  setState(() {
-                                    selectedAdults = newValue!;
-                                  });
-                                },
-                                items: List.generate(4, (index) {
-                                  return DropdownMenuItem<int>(
-                                    value: index + 1,
-                                    child: Text((index + 1).toString()),
-                                  );
-                                }),
-                              ),
-                            ],
-                          )
+                          const Icon(Icons.boy),
+                          DropdownButton<int>(
+                            value: selectedChildren,
+                            onChanged: (newValue) {
+                              setState(() {
+                                selectedChildren = newValue!;
+                              });
+                            },
+                            items: List.generate(4, (index) {
+                              return DropdownMenuItem<int>(
+                                value: index + 1,
+                                child: Text((index + 1).toString()),
+                              );
+                            }),
+                          ),
                         ],
                       )
                     ],
                   ),
                   Column(
                     children: [
-                      const Text('Luggages:'),
+                      const Text(
+                        'Luggages:',
+                        style: TextStyle(
+                            fontSize: 14, fontWeight: FontWeight.bold),
+                      ),
                       Row(
                         children: [
                           const Icon(Icons.luggage),
                           DropdownButton<int>(
-                            value: selectedAdults,
+                            value: selectedLuggages,
                             onChanged: (newValue) {
                               setState(() {
-                                selectedAdults = newValue!;
+                                selectedLuggages = newValue!;
                               });
                             },
                             items: List.generate(4, (index) {
@@ -380,6 +433,8 @@ class _TransferServiceState extends State<TransferService> {
                 ],
               ),
             ),
+
+/*
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Row(
@@ -412,6 +467,8 @@ class _TransferServiceState extends State<TransferService> {
                 ],
               ),
             ),
+          */
+
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -530,19 +587,28 @@ class _TransferServiceState extends State<TransferService> {
     );
   }
 
-  Widget _buildTextField(String labelText, TextEditingController controller) {
+  Widget _buildTextField(
+      String labelText, String hindTerxt, TextEditingController controller) {
     return SizedBox(
-      height: 45,
+      //height: 55,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          labelText: labelText,
-          // border: const OutlineInputBorder(
-          //   borderRadius: BorderRadius.all(
-          //     Radius.circular(10),
-          //   ),
-          // ),
-        ),
+          // labelText: labelText,
+          // border: const UnderlineInputBorder(),
+          // labelStyle: const TextStyle(fontSize: 16, color: blackColor),
+          // hintText: hindTerxt,
+          // contentPadding: const EdgeInsets.all(10),
+          // hintStyle: const TextStyle(fontSize: 16.0, color: Colors.grey),
+          // const InputDecoration(hintText: 'Default hint text color')
+          
+              border: UnderlineInputBorder(),
+              labelText: hindTerxt,
+                hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+                 labelStyle: TextStyle(fontSize: 13, color: Colors.grey),
+          
+            ),
+       
       ),
     );
   }

@@ -352,8 +352,8 @@ class CustomCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: 90,
-      height: 112,
-      margin: const EdgeInsets.all(10.0),
+      height: 90,
+      margin: const EdgeInsets.all(5.0),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(15.0),
         color: Colors.white,
@@ -367,7 +367,7 @@ class CustomCard extends StatelessWidget {
         ],
       ),
       child: Padding(
-        padding: const EdgeInsets.all(8.0),
+        padding: const EdgeInsets.all(5.0),
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
@@ -376,9 +376,10 @@ class CustomCard extends StatelessWidget {
               backgroundColor: Colors.red,
               child: Icon(icon, size: 32),
             ),
-            const SizedBox(height: 6),
+            const SizedBox(height: 4),
             Text(
               label,
+               overflow: TextOverflow.ellipsis,
               style: const TextStyle(
                 fontSize: 14,
                 fontWeight: FontWeight.bold,

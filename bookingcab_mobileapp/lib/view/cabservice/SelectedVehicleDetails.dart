@@ -24,77 +24,80 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
     return Scaffold(
       backgroundColor: const Color.fromARGB(255, 208, 207, 207),
       appBar: simpleHeaderBar(context, "Airport Transfer"),
-      body: Column(
-        children: [
-          const _headerDetails(),
-          Stack(
-            children: [
-              SingleChildScrollView(
-                child: Column(
-                  children: [
-                    ColoredBox(
-                      color: const Color.fromARGB(255, 208, 207, 207),
-                      child: Column(
-                        children: [
-                          _carDetailCard(),
-                          _otherFairDetailCard(
-                            "Sightseeings",
-                            "Red Fort, Lotus Temple",
-                          ),
-                          _driverDetailCard(),
-                          _otherFairDetailCard(
-                            "Guide",
-                            "Hindi UnderStanding...",
-                          ),
-                          _otherFairDetailCard(
-                            "Attraction",
-                            "Light and Sound Show..",
-                          ),
-                          Padding(
-                            padding: const EdgeInsets.only(top: 30),
-                            child: SizedBox(
-                              height: 40,
-                              child: ElevatedButton(
-                                style: ElevatedButton.styleFrom(
-                                  padding:
-                                      const EdgeInsets.fromLTRB(50, 0, 50, 0),
-                                  backgroundColor:
-                                      buttonPrimaryColor, // buttonSecondaryColor, // Adjust according to your theme
-                                  shape: const RoundedRectangleBorder(),
-                                ),
-                                onPressed: () {
-                                  // Test
-                                  Navigator.push(
-                                   context,
-                                    MaterialPageRoute(builder: (context) => BookingRequest()),
-                                   );
-                                },
-                                child: const Text(
-                                  "Next",
-                                  style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
+      body: Expanded(
+        child: Column(
+          children: [
+            const _headerDetails(),
+            Stack(
+              children: [
+                SingleChildScrollView(
+                  child: Column(
+                    children: [
+                      ColoredBox(
+                        color: const Color.fromARGB(255, 208, 207, 207),
+                        child: Column(
+                          children: [
+                            _carDetailCard(),
+                            _otherFairDetailCard(
+                              "Sightseeings",
+                              "Red Fort, Lotus Temple",
+                            ),
+                            _driverDetailCard(),
+                            _otherFairDetailCard(
+                              "Guide",
+                              "Hindi UnderStanding...",
+                            ),
+                            _otherFairDetailCard(
+                              "Attraction",
+                              "Light and Sound Show..",
+                            ),
+                            Padding(
+                              padding: const EdgeInsets.only(top: 30),
+                              child: SizedBox(
+                                height: 40,
+                                child: ElevatedButton(
+                                  style: ElevatedButton.styleFrom(
+                                    padding:
+                                        const EdgeInsets.fromLTRB(50, 0, 50, 0),
+                                    backgroundColor:
+                                        buttonPrimaryColor, // buttonSecondaryColor, // Adjust according to your theme
+                                    shape: const RoundedRectangleBorder(),
+                                  ),
+                                  onPressed: () {
+                                    // Test
+                                    Navigator.push(
+                                      context,
+                                      MaterialPageRoute(
+                                          builder: (context) => BookingRequest()),
+                                    );
+                                  },
+                                  child: const Text(
+                                    "Next",
+                                    style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                    ),
                                   ),
                                 ),
                               ),
                             ),
-                          ),
-                        ],
-                      ),
-                    )
-                  ],
+                          ],
+                        ),
+                      )
+                    ],
+                  ),
                 ),
-              ),
-              if (_showCard)
-                Positioned.fill(
-                  //top: MediaQuery.of(context).size.height * 0.01,
-                  child: _InfoCard(
-                    toggleCard: _toggleCardVisibility,
-                  ), //infoCard(),
-                ),
-            ],
-          ),
-        ],
+                if (_showCard)
+                  Positioned.fill(
+                    //top: MediaQuery.of(context).size.height * 0.01,
+                    child: _InfoCard(
+                      toggleCard: _toggleCardVisibility,
+                    ), //infoCard(),
+                  ),
+              ],
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -103,7 +106,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
     return Padding(
       padding: const EdgeInsets.only(top: 8),
       child: SizedBox(
-        height: 70,
+        height: 75,
         child: Card(
           surfaceTintColor: Colors.white,
           elevation: 3,
@@ -184,7 +187,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
 
   Widget _otherFairDetailCard(String value1, String value2) {
     return SizedBox(
-      height: 70,
+      height: 75,
       child: Card(
         surfaceTintColor: Colors.white,
         elevation: 3,
@@ -254,7 +257,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
 
   Widget _driverDetailCard() {
     return SizedBox(
-      height: 135,
+      height: 150,
       child: Card(
         surfaceTintColor: Colors.white,
         elevation: 3,
@@ -339,22 +342,22 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                       Text(
                         "- Hindi UnderStanding & Speaking Driver",
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
                         "- Night Charge Extra",
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                       Text(
                         "- Meal Extra",
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          fontWeight: FontWeight.w400,
                         ),
                       ),
                     ],
@@ -369,6 +372,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
   }
 }
 
+/*
 class _headerDetails extends StatelessWidget {
   const _headerDetails({
     super.key,
@@ -539,6 +543,182 @@ class _headerDetails extends StatelessWidget {
           //header(),
           ),
     );
+  }
+}
+
+*/
+
+class _headerDetails extends StatelessWidget {
+  const _headerDetails({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+        color: whiteColor,
+        padding: EdgeInsets.all(5),
+       // margin: EdgeInsets.all(5),
+        child: const Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.calendar_month_rounded,
+                          color: buttonPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          "Time: ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "27 Min",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                      Text(
+                        "24 KM",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.speed,
+                          color: buttonPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          "Duraction: ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Text(
+                        "24 Aug",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                      Text(
+                        "11:AM",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
+                      ),
+                    ],
+                  ),
+                  SizedBox(
+                    width: 5,
+                  ),
+                ],
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_pin,
+                color: Colors.green,
+                size: 18,
+              ),
+              Text("Pickup: ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  )),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                "DB Gobta Road KarolBag, New Delhi ",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_pin,
+                color: Colors.red,
+                size: 18,
+              ),
+              Text("Drop: ",
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 14,
+                    fontWeight: FontWeight.bold,
+                  )),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                "New Delhi Railway Station, Delhi",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+            ],
+          ),
+        ]));
   }
 }
 

@@ -80,7 +80,7 @@ class _TransferVehiclesState extends State<TransferVehicles> {
                 itemCount: 10,
                 itemBuilder: (context, index) {
                   return Padding(
-                    padding: const EdgeInsets.all(8.0),
+                    padding: const EdgeInsets.all(4.0),
                     child: _VehicleDetailCard(
                       updateParentMessage: updateMessage,
                       currentIndex: index,
@@ -136,7 +136,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                 child: Row(
                   children: [
                     Expanded(
-                      flex: 4,
+                      flex: 3,
                       child: Row(
                         children: [
                           Expanded(
@@ -146,22 +146,27 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                             ),
                           ),
                           const VerticalDivider(
-                            color: Color.fromARGB(255, 230, 227, 227),
+                            //color: Color.fromARGB(255, 230, 227, 227),
+                            color: Color.fromARGB(255, 242, 236, 236),
                             thickness: 1,
                           ),
                         ],
                       ),
                     ),
                     Expanded(
-                      flex: 6,
+                      flex: 7,
                       child: Padding(
                         padding: const EdgeInsets.only(right: 0),
                         child: Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
                             Column(
-                              mainAxisAlignment: MainAxisAlignment.center,
+                              //mainAxisAlignment: MainAxisAlignment.center,
+
                               children: [
+                                const SizedBox(
+                                  height: 10,
+                                ),
                                 Row(
                                   children: [
                                     _circleWithText(Icons.person, "5"),
@@ -172,36 +177,44 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                 ),
                               ],
                             ),
-                            const Padding(
-                              padding: EdgeInsets.only(right: 6),
+                            const Expanded(
+                              flex: 4,
+
+                              //padding: EdgeInsets.only(right: 6),
                               child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.end,
+                                crossAxisAlignment: CrossAxisAlignment.center,
+                                mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
+                                  SizedBox(
+                                    height: 10,
+                                  ),
                                   Column(
-                                    crossAxisAlignment: CrossAxisAlignment.end,
+                                    crossAxisAlignment:
+                                        CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '\u{20B9} 5000',
+                                        '\u{20B9} 5,000',
                                         style: TextStyle(
                                           color: Colors.black,
-                                          fontSize: 18,
-                                          fontWeight: FontWeight.bold,
+                                          fontSize: 22,
+                                          fontWeight: FontWeight.w800,
                                         ),
                                       ),
                                       Text(
-                                        'inc of Taxes',
+                                        'Inc of Taxes',
                                         style: TextStyle(
-                                          color: Colors.grey,
-                                          fontSize: 14,
-                                          fontWeight: FontWeight.w500,
+                                          color: Color.fromARGB(
+                                              255, 203, 201, 201),
+                                          fontSize: 12,
+                                          fontWeight: FontWeight.w400,
                                         ),
                                       ),
                                     ],
                                   ),
                                   SizedBox(
-                                    height: 5,
+                                    height: 15,
                                   ),
-                                  Column(
+                                  Row(
                                     crossAxisAlignment: CrossAxisAlignment.end,
                                     children: [
                                       Row(
@@ -209,6 +222,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                           Icon(
                                             Icons.timer,
                                             color: buttonPrimaryColor,
+                                            size: 16,
                                           ),
                                           SizedBox(
                                             width: 2,
@@ -216,18 +230,22 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                           Text(
                                             "27 MIN",
                                             style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontSize: 10,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
                                         ],
+                                      ),
+                                      SizedBox(
+                                        width: 5,
                                       ),
                                       Row(
                                         children: [
                                           Icon(
                                             Icons.speed,
                                             color: buttonPrimaryColor,
+                                            size: 16,
                                           ),
                                           SizedBox(
                                             width: 3,
@@ -235,8 +253,8 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                           Text(
                                             "14 KM",
                                             style: TextStyle(
-                                              color: Colors.grey,
-                                              fontSize: 14,
+                                              color: Colors.black,
+                                              fontSize: 10,
                                               fontWeight: FontWeight.w500,
                                             ),
                                           ),
@@ -255,16 +273,16 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                 ),
               ),
               const Divider(
-                color: Color.fromARGB(255, 230, 227, 227),
+                color: Color.fromARGB(255, 242, 236, 236),
               ),
               Padding(
-                padding: const EdgeInsets.only(left: 4, right: 4),
+                padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
                 child: Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     _bottomDataOfVehicleCard(
                       Icons.currency_rupee,
-                      "Fare Rules",
+                      "Fare",
                     ),
                     _bottomDataOfVehicleCard(
                       Icons.my_location,
@@ -272,7 +290,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                     ),
                     _bottomDataOfVehicleCard(
                       Icons.policy,
-                      "Cancellation Policy",
+                      "Cancellation",
                     ),
                     _bottomDataOfVehicleCard(
                       Icons.wine_bar,
@@ -281,9 +299,6 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                   ],
                 ),
               ),
-              // const Divider(
-              //   color: Colors.grey,
-              // ),
             ],
           ),
         ),
@@ -300,10 +315,10 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
         children: [
           CircleAvatar(
             backgroundColor: Colors.red,
-            maxRadius: 10,
+            maxRadius: 8,
             child: Icon(
               icon,
-              size: 12,
+              size: 10,
               color: Colors.white,
             ),
           ),
@@ -331,6 +346,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
               Icon(
                 icon,
                 color: Colors.grey,
+                size: 15,
               ),
             ),
           ],
@@ -340,7 +356,8 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
         ),
         Text(
           text,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ],
     );
@@ -356,6 +373,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
               Image.asset(
                 imagePath,
                 color: Colors.grey,
+                height: 15,
               ),
             ),
           ],
@@ -365,7 +383,8 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
         ),
         Text(
           text,
-          style: const TextStyle(color: Colors.grey),
+          style: const TextStyle(
+              color: Colors.black, fontWeight: FontWeight.bold, fontSize: 12),
         ),
       ],
     );
@@ -390,7 +409,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
       ),
       child: CircleAvatar(
         backgroundColor: Colors.white,
-        maxRadius: 12,
+        maxRadius: 10,
         child: _widget,
       ),
     );
@@ -404,145 +423,167 @@ class _headerDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-        padding: const EdgeInsets.all(8.0),
-        child: Row(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          children: [
-            const Expanded(
-              child: Column(
+    return const Padding(
+        padding: EdgeInsets.all(10),
+        child: Column(children: [
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Row(
                 mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    "New Delhi",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.calendar_month_rounded,
+                          color: buttonPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          "Time: ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
                     ),
                   ),
-                  SizedBox(
-                    height: 5,
-                  ),
-                  Row(
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Icon(
-                        Icons.calendar_month_rounded,
-                        color: buttonPrimaryColor,
+                      Text(
+                        "27 Min",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                       ),
-                      SizedBox(
-                        width: 3,
+                      Text(
+                        "24 KM",
+                        style: TextStyle(
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                       ),
+                    ],
+                  )
+                ],
+              ),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Icon(
+                          Icons.speed,
+                          color: buttonPrimaryColor,
+                          size: 20,
+                        ),
+                        Text(
+                          "Duraction: ",
+                          style: TextStyle(
+                            color: Colors.black,
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
                       Text(
                         "24 Aug",
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ],
-                  ),
-                  SizedBox(
-                    height: 2,
-                  ),
-                  Row(
-                    children: [
-                      Icon(
-                        Icons.timer,
-                        color: buttonPrimaryColor,
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                       ),
                       Text(
                         "11:AM",
                         style: TextStyle(
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
+                            fontSize: 13,
+                            fontWeight: FontWeight.w500,
+                            color: Colors.grey),
                       ),
                     ],
                   ),
-                ],
-              ),
-            ),
-            const Expanded(
-              child: Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    "Pickup Address",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "Pickup Address1, Add,Pickup Address1, Add",
-                    overflow: TextOverflow.fade,
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
+                  SizedBox(
+                    width: 5,
                   ),
                 ],
               ),
-            ),
-            const Expanded(
-              child: Column(
-                children: [
-                  Text(
-                    "Duration",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.bold,
-                    ),
-                  ),
-                  Text(
-                    "1 Days",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                  Text(
-                    "15 KM",
-                    style: TextStyle(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w500,
-                    ),
-                  ),
-                ],
+            ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_pin,
+                color: Colors.green,
+                size: 18,
               ),
-            ),
-            Column(
-              children: [
-                const Text(
-                  "",
+              Text("Pickup: ",
                   style: TextStyle(
+                    color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                const Text(
-                  "",
+                  )),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                "DB Gobta Road KarolBag, New Delhi ",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+            ],
+          ),
+          SizedBox(
+            height: 3,
+          ),
+          Row(
+            children: [
+              Icon(
+                Icons.location_pin,
+                color: Colors.red,
+                size: 18,
+              ),
+              Text("Drop: ",
                   style: TextStyle(
+                    color: Colors.black,
                     fontSize: 14,
                     fontWeight: FontWeight.bold,
-                  ),
-                ),
-                GestureDetector(
-                  onTap: () {
-                    Navigator.pop(context);
-                  },
-                  child: const Icon(
-                    Icons.edit_document,
-                    color: buttonPrimaryColor,
-                  ),
-                )
-              ],
-            ),
-          ],
-        )
-        //header(),
-        );
+                  )),
+              SizedBox(
+                width: 3,
+              ),
+              Text(
+                "New Delhi Railway Station, Delhi",
+                style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.w500,
+                    color: Colors.grey),
+              ),
+            ],
+          ),
+        ]));
   }
 }
