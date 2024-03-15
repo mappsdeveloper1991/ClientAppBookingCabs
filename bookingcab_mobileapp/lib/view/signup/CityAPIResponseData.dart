@@ -1,6 +1,6 @@
 class CityAPIResponseData {
-   String status;
-   List<City> data;
+  String status;
+  List<City> data;
 
   CityAPIResponseData({
     required this.status,
@@ -70,11 +70,8 @@ class City {
     );
   }
 
-
-   @override
+  @override
   String toString() {
     return cityStateCountry;
   }
 }
-
-

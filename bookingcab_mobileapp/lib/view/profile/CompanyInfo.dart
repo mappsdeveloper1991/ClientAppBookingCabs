@@ -155,15 +155,15 @@ class _CompanyInfoState extends State<CompanyInfo> {
       showErrorTost(context, INVALID_COMAPNY_Office_Address_MSG);
     } else if (panCardNo.isEmpty) {
       showErrorTost(context, INVALID_COMAPNY_PAN_MSG);
-    }else if (contactPersonName.isEmpty) {
+    } else if (contactPersonName.isEmpty) {
       showErrorTost(context, INVALID_COMAPNY_CONTACT_PERSONAL_NAME_MSG);
     } else if (mobileNo.isEmpty) {
       showErrorTost(context, INVALID_ALT_PHONE_NO_MSG);
     } else if (landlineNo.isEmpty) {
       showErrorTost(context, INVALID_LANDINE_NO_MSG);
-    }else if (companyEmail.isEmpty) {
+    } else if (companyEmail.isEmpty) {
       showErrorTost(context, INVALID_EMAIL_ID_MSG);
-    }else if (websiteURL.isEmpty) {
+    } else if (websiteURL.isEmpty) {
       showErrorTost(context, INVALID_COMAPNY_URL_MSG);
     } else {
       showCustomeLoader(context);
@@ -196,8 +196,8 @@ class _CompanyInfoState extends State<CompanyInfo> {
 
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData =
-              UpdateProfileInfoAPIResponseData.fromJson(jsonData['responsedata']);
+          var responseData = UpdateProfileInfoAPIResponseData.fromJson(
+              jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
             showErrorTost(context, responseData.message);
@@ -447,8 +447,8 @@ class _CompanyInfoState extends State<CompanyInfo> {
                               borderRadius: BorderRadius.circular(8)),
                           elevation: 5.0),
                       onPressed: () {
-                          signUpAPICall(context);
-                            },
+                        signUpAPICall(context);
+                      },
                       child: const Text(
                         'Submit',
                         style: TextStyle(

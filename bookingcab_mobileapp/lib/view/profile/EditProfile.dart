@@ -9,7 +9,6 @@ import 'package:bookingcab_mobileapp/view/profile/CompanyInfo.dart';
 import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
 import 'package:bookingcab_mobileapp/view/profile/Personalnfo.dart';
 import 'package:bookingcab_mobileapp/view/profile/UpdateProfileInfoAPIResponseData.dart';
-import 'package:bookingcab_mobileapp/view/signup/SignupResponseData.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 
@@ -376,7 +375,8 @@ class _EditProfileState extends State<EditProfile> {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (context) => CompanyInfo(userProfileData)),
+                              builder: (context) =>
+                                  CompanyInfo(userProfileData)),
                         );
                       },
                       style: ElevatedButton.styleFrom(

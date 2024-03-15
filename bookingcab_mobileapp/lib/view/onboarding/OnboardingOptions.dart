@@ -86,7 +86,7 @@ class OnboardingOptionsState extends State<OnboardingOptions> {
           child: ElevatedButton(
             style: primaryButtonStyle(context, buttonPrimaryColor),
             onPressed: () {
-              Navigator.pushReplacement(
+              Navigator.push(
                 context,
                 MaterialPageRoute(builder: (context) => LoginPage()),
               );
@@ -113,10 +113,10 @@ class OnboardingOptionsState extends State<OnboardingOptions> {
             child: OutlinedButton(
               style: secondaryButtonStyle(context, buttonSecondaryColor),
               onPressed: () {
-                Navigator.pushReplacement(
+                Navigator.push(
                     context,
                     MaterialPageRoute(
-                        builder: (context) => SignupPersonalDetails()));
+                        builder: (context) => const SignupPersonalDetails()));
               },
               child: RichText(
                 text: TextSpan(children: [

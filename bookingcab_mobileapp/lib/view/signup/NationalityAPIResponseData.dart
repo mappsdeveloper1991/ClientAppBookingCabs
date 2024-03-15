@@ -10,7 +10,8 @@ class NationalityAPIResponseData {
   factory NationalityAPIResponseData.fromJson(Map<String, dynamic> json) {
     return NationalityAPIResponseData(
       status: json['status'],
-      data: List<NationalityList>.from(json['data'].map((x) => NationalityList.fromJson(x))),
+      data: List<NationalityList>.from(
+          json['data'].map((x) => NationalityList.fromJson(x))),
     );
   }
 }
@@ -31,7 +32,7 @@ class NationalityList {
     );
   }
 
-   @override
+  @override
   String toString() {
     return nationality;
   }

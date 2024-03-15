@@ -61,6 +61,14 @@ List<PackageDetail> packageList = [
   PackageDetail(from: 'Jaipur', to: "Agra", amount: 6000),
 ];
 
+List<Map> thingTodoList = [
+  {"image": "assets/images/package_img1.jpeg", "title": "70991"},
+  {"image": "assets/images/package_img2.jpeg", "title": "5600"},
+  {"image": "assets/images/package_img3.jpeg", "title": "70000"},
+  {"image": "assets/images/package_img1.jpeg", "title": "70991"},
+  {"image": "assets/images/package_img1.jpeg", "title": "70991"}
+];
+
 List<Map> offerList = [
   {"image": "assets/images/car.jpeg", "title": "Luxary Car"},
   {
@@ -81,12 +89,4 @@ List<Map> hotelofferList = [
   {"image": "assets/images/hotel_img3.jpg", "title": "15"},
   {"image": "assets/images/hotel_img2.jpg", "title": "20"},
   {"image": "assets/images/hotel_img3.jpg", "title": "15"}
-];
-
-List<Map> thingTodoList = [
-  {"image": "assets/images/package_img1.jpeg", "title": "70991"},
-  {"image": "assets/images/package_img2.jpeg", "title": "5600"},
-  {"image": "assets/images/package_img3.jpeg", "title": "70000"},
-  {"image": "assets/images/package_img1.jpeg", "title": "70991"},
-  {"image": "assets/images/package_img1.jpeg", "title": "70991"}
 ];

@@ -4,8 +4,6 @@ import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
-import 'package:bookingcab_mobileapp/view/language/LanguageResponseData.dart';
-import 'package:bookingcab_mobileapp/view/profile/EditProfile.dart';
 import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
 import 'package:bookingcab_mobileapp/view/profile/UpdateProfileInfoAPIResponseData.dart';
 import 'package:flutter/material.dart';
@@ -14,7 +12,7 @@ import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 
 class PersonalInfo extends StatefulWidget {
-   final UserProfileData userProfileData;
+  final UserProfileData userProfileData;
 
   const PersonalInfo(this.userProfileData, {super.key});
 
@@ -23,7 +21,6 @@ class PersonalInfo extends StatefulWidget {
 }
 
 class _PersonalInfoState extends State<PersonalInfo> {
-
   TextEditingController _aadharCardController = TextEditingController();
   TextEditingController _firstNameController = TextEditingController();
   TextEditingController _lastNameController = TextEditingController();
@@ -36,7 +33,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
 
   TextEditingController _cityController = TextEditingController();
   TextEditingController _pinCodeController = TextEditingController();
-
 
   String _selectedCountry = 'Country';
 
@@ -58,11 +54,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
     'Female',
   ];
 
-
-
-
-
-
   DateTime selectedDate = DateTime.now();
   TextEditingController dateInput = TextEditingController();
   Future<void> _selectDate(BuildContext context) async {
@@ -83,13 +74,9 @@ class _PersonalInfoState extends State<PersonalInfo> {
     }
   }
 
-
-
-
-
   bool acceptTerms = true;
   bool subscribeNewsletter = true;
-  late UserProfileData userProfileData  =  widget.userProfileData;
+  late UserProfileData userProfileData = widget.userProfileData;
   late String firstName = "",
       lastName = "",
       emailID = "",
@@ -264,9 +251,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
       print('Exception occurred: $e');
     }
   }
-  
-  
-
 
   @override
   Widget build(BuildContext context) {
@@ -319,7 +303,8 @@ class _PersonalInfoState extends State<PersonalInfo> {
                   _buildCountryDropdown(),
                   const SizedBox(width: 10.0),
                   Expanded(
-                    child: _buildTextFieldDisable('Mobile Number', _mobileController),
+                    child: _buildTextFieldDisable(
+                        'Mobile Number', _mobileController),
                   ),
                 ],
               ),
@@ -454,7 +439,6 @@ class _PersonalInfoState extends State<PersonalInfo> {
       ),
     );
   }
-
 
   Widget _buildTextFieldDisable(
       String labelText, TextEditingController controller) {

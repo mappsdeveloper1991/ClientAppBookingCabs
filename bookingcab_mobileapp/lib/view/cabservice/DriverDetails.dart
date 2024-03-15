@@ -40,12 +40,11 @@ class _DriverDetailsState extends State<DriverDetails> {
 
   Widget _driverDetailCard() {
     return SizedBox(
-      
       height: 335,
       child: Card(
         surfaceTintColor: Colors.white,
         elevation: 1,
-       // margin: EdgeInsets.all(5),
+        // margin: EdgeInsets.all(5),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(5.0),
         ),
@@ -54,11 +53,10 @@ class _DriverDetailsState extends State<DriverDetails> {
             const SizedBox(
               height: 5,
             ),
-
             Padding(
               padding: EdgeInsets.all(3),
               child: Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   const Image(
                     image: AssetImage("assets/images/driver-icon-27013.png"),
@@ -88,7 +86,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                     ],
                   ),
                   Column(
-                     crossAxisAlignment: CrossAxisAlignment.end,
+                    crossAxisAlignment: CrossAxisAlignment.end,
                     children: [
                       const Text(
                         "Tyota Etios",
@@ -97,7 +95,7 @@ class _DriverDetailsState extends State<DriverDetails> {
                           fontWeight: FontWeight.w500,
                         ),
                       ),
-                       const Text(
+                      const Text(
                         "DL 04 4465",
                         style: TextStyle(
                           fontSize: 16,
@@ -105,9 +103,8 @@ class _DriverDetailsState extends State<DriverDetails> {
                         ),
                       ),
                       Container(
-                      
                         width: 130,
-                       // height: 100,
+                        // height: 100,
                         //height: MediaQuery.of(context).size.height * .10,
                         child: Image.asset(
                           "assets/images/dsire_car.jpg",
@@ -119,72 +116,68 @@ class _DriverDetailsState extends State<DriverDetails> {
                 ],
               ),
             ),
-          
-             const SizedBox(
-                        height: 10,
-                      ),
-                      const Divider(
-                        height: 0.5,
-                        color: Colors.grey,
-                      ),
-          
-           const SizedBox(
-                        height: 20,
-                      ),
+            const SizedBox(
+              height: 10,
+            ),
+            const Divider(
+              height: 0.5,
+              color: Colors.grey,
+            ),
+            const SizedBox(
+              height: 20,
+            ),
             Container(
-              height: 150,
-              padding: EdgeInsets.all(5),
-              child:  const Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: <Widget>[
-              
-                  Column(
+                height: 150,
+                padding: EdgeInsets.all(5),
+                child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: <Widget>[
-                      Icon(Icons.call, size: 48,),
-                       Text(
-                        "Call Driver",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red
-                        ),
-                      ),
-                    ],
-                  ),
-
                       Column(
-                    children: <Widget>[
-                      Icon(Icons.star, size: 48,),
-                       Text(
-                        "Rate Driver",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red
-                        ),
+                        children: <Widget>[
+                          Icon(
+                            Icons.call,
+                            size: 48,
+                          ),
+                          Text(
+                            "Call Driver",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                        ],
                       ),
-                    ],
-                  ),
-
-
                       Column(
-                    children: <Widget>[
-                      Icon(Icons.share, size: 48,),
-                       Text(
-                        "Share Details",
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.red
-                        ),
+                        children: <Widget>[
+                          Icon(
+                            Icons.star,
+                            size: 48,
+                          ),
+                          Text(
+                            "Rate Driver",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                        ],
                       ),
-                    ],
-                  )
-
-              ])
-              
-            )
-
+                      Column(
+                        children: <Widget>[
+                          Icon(
+                            Icons.share,
+                            size: 48,
+                          ),
+                          Text(
+                            "Share Details",
+                            style: TextStyle(
+                                fontSize: 16,
+                                fontWeight: FontWeight.bold,
+                                color: Colors.red),
+                          ),
+                        ],
+                      )
+                    ]))
           ],
         ),
       ),

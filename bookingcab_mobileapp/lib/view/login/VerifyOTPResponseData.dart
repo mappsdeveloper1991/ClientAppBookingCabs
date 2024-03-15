@@ -1,16 +1,18 @@
 class VerifyOTPResponseData {
-   String? status = "";
-   String? message = "";
-   UserData? data;
+  String? status = "";
+  String? message = "";
+  UserData? data;
 
-  VerifyOTPResponseData({required this.status, required this.data, required this.message});
+  VerifyOTPResponseData(
+      {required this.status, required this.data, required this.message});
 
   factory VerifyOTPResponseData.fromJson(Map<String, dynamic> json) {
     return VerifyOTPResponseData(
-      status: json['status'] as String? ?? '',
-      message: json['message'] as String? ?? '',
-      data: json['data'] != null ? UserData.fromJson(json['data'] as Map<String, dynamic>) : null 
-    );
+        status: json['status'] as String? ?? '',
+        message: json['message'] as String? ?? '',
+        data: json['data'] != null
+            ? UserData.fromJson(json['data'] as Map<String, dynamic>)
+            : null);
   }
 }
 

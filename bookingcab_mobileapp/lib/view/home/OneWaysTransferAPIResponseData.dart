@@ -1,57 +1,59 @@
 class OneWaysTransferAPIResponseData {
-   String status;
-   List<OneWayPackageList> packageList;
+  String status;
+  List<OneWayPackageList> packageList;
 
-  OneWaysTransferAPIResponseData({required this.status, required this.packageList});
+  OneWaysTransferAPIResponseData(
+      {required this.status, required this.packageList});
 
   factory OneWaysTransferAPIResponseData.fromJson(Map<String, dynamic> json) {
     return OneWaysTransferAPIResponseData(
       status: json['status'],
-      packageList: List<OneWayPackageList>.from(json['data'].map((x) => OneWayPackageList.fromJson(x))),
+      packageList: List<OneWayPackageList>.from(
+          json['data'].map((x) => OneWayPackageList.fromJson(x))),
     );
   }
 }
 
 class OneWayPackageList {
-   int baseCombId = 0;
-   String fareType = '';
-   String dateFrom = '';
-   String dateTo = '';
-   int minimumCharge = 0;
-   String currency = '';
-   String currencySymbol = '';
-   int minimumDistance = 0;
-   int perKmCharge = 0;
-   int masterPackageModeId = 0;
-   String packageMode = '';
-   int masterPackageId = 0;
-   String packageName = '';
+  int baseCombId = 0;
+  String fareType = '';
+  String dateFrom = '';
+  String dateTo = '';
+  int minimumCharge = 0;
+  String currency = '';
+  String currencySymbol = '';
+  int minimumDistance = 0;
+  int perKmCharge = 0;
+  int masterPackageModeId = 0;
+  String packageMode = '';
+  int masterPackageId = 0;
+  String packageName = '';
   // String image;
-   int baseVehicleId = 0;
-   int masterVehicleTypeId = 0;
-   String vehicleType = '';
-   String vehicleImage = '';
-   String seatingCapacity = '';
-   int luggage = 0;
-   String startTime = '';
-   String endTime = '';
-   String vendorName = '';
-   String vendorEmail = '';
-   String vendorMobile = '';
-   int cityDistanceId = 0;
-   String sourceCityId = '';
-   String destinationCityId = '';
-   String sourceCityName  = '';
-   String sourceStateName = '';
-   String sourceCountryCode = '';
-   String destinationCityName = '';
-   String destinationStateName = '';
-   String destinationCountryCode = '';
-   String driverAllowance = '';
-   int tollTax = 0;
-   int parkingCharge = 0;
-   int cityTax = 0;
-   int totalCharge = 0;
+  int baseVehicleId = 0;
+  int masterVehicleTypeId = 0;
+  String vehicleType = '';
+  String vehicleImage = '';
+  String seatingCapacity = '';
+  int luggage = 0;
+  String startTime = '';
+  String endTime = '';
+  String vendorName = '';
+  String vendorEmail = '';
+  String vendorMobile = '';
+  int cityDistanceId = 0;
+  String sourceCityId = '';
+  String destinationCityId = '';
+  String sourceCityName = '';
+  String sourceStateName = '';
+  String sourceCountryCode = '';
+  String destinationCityName = '';
+  String destinationStateName = '';
+  String destinationCountryCode = '';
+  String driverAllowance = '';
+  int tollTax = 0;
+  int parkingCharge = 0;
+  int cityTax = 0;
+  int totalCharge = 0;
 
   OneWayPackageList({
     required this.baseCombId,

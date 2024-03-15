@@ -1,6 +1,6 @@
 class ThingToDoAPIResponseData {
-   String status;
-   List<ThingToDoList> data;
+  String status;
+  List<ThingToDoList> data;
 
   ThingToDoAPIResponseData({
     required this.status,
@@ -18,84 +18,84 @@ class ThingToDoAPIResponseData {
 }
 
 class ThingToDoList {
-   String? vendorName;
-   String? vendorEmail;
-   String? vendorMobile;
-   int sId;
-   int createdBy;
-   int cityId;
-   String sightseeingName;
-   String cityName;
-   String sightseeingCover;
-   String sightseeingLatitude;
-   //String sightseeingLogitude;
-   String sightseeingAddress;
-   String coverageKm;
-   String coverageHrs;
-   String difficultyLevel;
-   int isUnique;
-   String popularity;
-   String youtubeUrl;
-   String description;
-   String meetingPoint;
-   String highlights;
-   int status;
-   int vendorId;
-   int tourType;
-   String passenger;
-   String fromDate;
-   String toDate;
-   int rateType;
-   int ratePerFixed;
-   int rateValue;
-   int taxType;
-   int taxPerFixed;
-   int taxValue;
-   String weekOff;
-   String openingTime;
-   String closingTime;
-   String estimatedTime;
-   int ageFrom;
-   int ageTo;
-   int transfer;
-   String pickupPoint;
-   String allocation;
-   String cutOffDays;
-   String pricePlanName;
-   int stayMoreStatus;
-   int seasonalDiscountStatus;
-   int lastMinBookingStatus;
-   int earlyBookingStatus;
-   int daywiseDiscountStatus;
-   String relatedTours;
-   String brochureTitle;
-   String brochureDesc;
-   String metaKeywords;
-   String metaTitle;
-   String metaDesc;
-   String paymentStructure;
-   String paymentDocumentation;
-   String cancellationPolicy;
-   String refundPolicy;
-   String termsConditionPolicy;
-   String paymentStructureContent;
-   String documentationContent;
-   String cancellationPolicyContent;
-   String refundPolicyContent;
-   String termPolicyContent;
-   String costInclusive;
-   String costExclusive;
-   String tourfaredata;
-   String sightseingtype;
-   String sightseeingcategory;
-   String sightseeinglanguage;
-   String season;
-   String thingstocarry;
-   String meal;
-   String mainimages;
-   String galleryimages;
-   String seasonDiscount;
-   String seasonDiscountLabel;
+  String? vendorName;
+  String? vendorEmail;
+  String? vendorMobile;
+  int sId;
+  int createdBy;
+  int cityId;
+  String sightseeingName;
+  String cityName;
+  String sightseeingCover;
+  String sightseeingLatitude;
+  //String sightseeingLogitude;
+  String sightseeingAddress;
+  String coverageKm;
+  String coverageHrs;
+  String difficultyLevel;
+  int isUnique;
+  String popularity;
+  String youtubeUrl;
+  String description;
+  String meetingPoint;
+  String highlights;
+  int status;
+  int vendorId;
+  int tourType;
+  String passenger;
+  String fromDate;
+  String toDate;
+  int rateType;
+  int ratePerFixed;
+  int rateValue;
+  int taxType;
+  int taxPerFixed;
+  int taxValue;
+  String weekOff;
+  String openingTime;
+  String closingTime;
+  String estimatedTime;
+  int ageFrom;
+  int ageTo;
+  int transfer;
+  String pickupPoint;
+  String allocation;
+  String cutOffDays;
+  String pricePlanName;
+  int stayMoreStatus;
+  int seasonalDiscountStatus;
+  int lastMinBookingStatus;
+  int earlyBookingStatus;
+  int daywiseDiscountStatus;
+  String relatedTours;
+  String brochureTitle;
+  String brochureDesc;
+  String metaKeywords;
+  String metaTitle;
+  String metaDesc;
+  String paymentStructure;
+  String paymentDocumentation;
+  String cancellationPolicy;
+  String refundPolicy;
+  String termsConditionPolicy;
+  String paymentStructureContent;
+  String documentationContent;
+  String cancellationPolicyContent;
+  String refundPolicyContent;
+  String termPolicyContent;
+  String costInclusive;
+  String costExclusive;
+  String tourfaredata;
+  String sightseingtype;
+  String sightseeingcategory;
+  String sightseeinglanguage;
+  String season;
+  String thingstocarry;
+  String meal;
+  String mainimages;
+  String galleryimages;
+  String seasonDiscount;
+  String seasonDiscountLabel;
 
   ThingToDoList({
     required this.vendorName,
@@ -134,7 +134,6 @@ class ThingToDoList {
     required this.weekOff,
     required this.openingTime,
     required this.closingTime,
-
     required this.estimatedTime,
     required this.ageFrom,
     required this.ageTo,
@@ -180,7 +179,7 @@ class ThingToDoList {
   });
 
   factory ThingToDoList.fromJson(Map<String, dynamic> json) {
-  return ThingToDoList(
+    return ThingToDoList(
       vendorName: json['vendor_name'],
       vendorEmail: json['vendor_email'],
       vendorMobile: json['vendor_mobile'],
@@ -216,48 +215,48 @@ class ThingToDoList {
       weekOff: json['week_off'],
       openingTime: json['opening_time'],
       closingTime: json['closing_time'],
-    estimatedTime: json['estimated_time'] ?? '',
-    ageFrom: json['age_from'] ?? 0,
-    ageTo: json['age_to'] ?? 0,
-    transfer: json['transfer'] ?? 0,
-    pickupPoint: json['pickup_point'] ?? '',
-    allocation: json['allocation'] ?? '',
-    cutOffDays: json['cut_off_days'] ?? '',
-    pricePlanName: json['price_plan_name'] ?? '',
-    stayMoreStatus: json['stay_more_status'] ?? 0,
-    seasonalDiscountStatus: json['seasonal_discount_status'] ?? 0,
-    lastMinBookingStatus: json['last_min_booking_status'] ?? 0,
-    earlyBookingStatus: json['early_booking_status'] ?? 0,
-    daywiseDiscountStatus: json['daywise_discount_status'] ?? 0,
-    relatedTours: json['related_tours'] ?? '',
-    brochureTitle: json['brochure_title'] ?? '',
-    brochureDesc: json['brochure_desc'] ?? '',
-    metaKeywords: json['meta_keywords'] ?? '',
-    metaTitle: json['meta_title'] ?? '',
-    metaDesc: json['meta_desc'] ?? '',
-    paymentStructure: json['payment_structure'] ?? '',
-    paymentDocumentation: json['payment_documentation'] ?? '',
-    cancellationPolicy: json['cancellation_policy'] ?? '',
-    refundPolicy: json['refund_policy'] ?? '',
-    termsConditionPolicy: json['terms_condition_policy'] ?? '',
-    paymentStructureContent: json['payment_structure_content'] ?? '',
-    documentationContent: json['documentation_content'] ?? '',
-    cancellationPolicyContent: json['cancellation_policy_content'] ?? '',
-    refundPolicyContent: json['refund_policy_content'] ?? '',
-    termPolicyContent: json['term_policy_content'] ?? '',
-    costInclusive: json['cost_inclusive'] ?? '',
-    costExclusive: json['cost_exclusive'] ?? '',
-    tourfaredata: json['tourfaredata'] ?? '',
-    sightseingtype: json['sightseingtype'] ?? '',
-    sightseeingcategory: json['sightseeingcategory'] ?? '',
-    sightseeinglanguage: json['sightseeinglanguage'] ?? '',
-    season: json['season'] ?? '',
-    thingstocarry: json['thingstocarry'] ?? '',
-    meal: json['meal'] ?? '',
-    mainimages: json['mainimages'] ?? '',
-    galleryimages: json['galleryimages'] ?? '',
-    seasonDiscount: json['seasonDiscount'] ?? '',
-    seasonDiscountLabel: json['seasonDiscountLabel'] ?? '', 
-  );
-}
+      estimatedTime: json['estimated_time'] ?? '',
+      ageFrom: json['age_from'] ?? 0,
+      ageTo: json['age_to'] ?? 0,
+      transfer: json['transfer'] ?? 0,
+      pickupPoint: json['pickup_point'] ?? '',
+      allocation: json['allocation'] ?? '',
+      cutOffDays: json['cut_off_days'] ?? '',
+      pricePlanName: json['price_plan_name'] ?? '',
+      stayMoreStatus: json['stay_more_status'] ?? 0,
+      seasonalDiscountStatus: json['seasonal_discount_status'] ?? 0,
+      lastMinBookingStatus: json['last_min_booking_status'] ?? 0,
+      earlyBookingStatus: json['early_booking_status'] ?? 0,
+      daywiseDiscountStatus: json['daywise_discount_status'] ?? 0,
+      relatedTours: json['related_tours'] ?? '',
+      brochureTitle: json['brochure_title'] ?? '',
+      brochureDesc: json['brochure_desc'] ?? '',
+      metaKeywords: json['meta_keywords'] ?? '',
+      metaTitle: json['meta_title'] ?? '',
+      metaDesc: json['meta_desc'] ?? '',
+      paymentStructure: json['payment_structure'] ?? '',
+      paymentDocumentation: json['payment_documentation'] ?? '',
+      cancellationPolicy: json['cancellation_policy'] ?? '',
+      refundPolicy: json['refund_policy'] ?? '',
+      termsConditionPolicy: json['terms_condition_policy'] ?? '',
+      paymentStructureContent: json['payment_structure_content'] ?? '',
+      documentationContent: json['documentation_content'] ?? '',
+      cancellationPolicyContent: json['cancellation_policy_content'] ?? '',
+      refundPolicyContent: json['refund_policy_content'] ?? '',
+      termPolicyContent: json['term_policy_content'] ?? '',
+      costInclusive: json['cost_inclusive'] ?? '',
+      costExclusive: json['cost_exclusive'] ?? '',
+      tourfaredata: json['tourfaredata'] ?? '',
+      sightseingtype: json['sightseingtype'] ?? '',
+      sightseeingcategory: json['sightseeingcategory'] ?? '',
+      sightseeinglanguage: json['sightseeinglanguage'] ?? '',
+      season: json['season'] ?? '',
+      thingstocarry: json['thingstocarry'] ?? '',
+      meal: json['meal'] ?? '',
+      mainimages: json['mainimages'] ?? '',
+      galleryimages: json['galleryimages'] ?? '',
+      seasonDiscount: json['seasonDiscount'] ?? '',
+      seasonDiscountLabel: json['seasonDiscountLabel'] ?? '',
+    );
+  }
 }

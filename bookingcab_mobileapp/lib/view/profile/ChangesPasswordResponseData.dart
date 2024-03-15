@@ -1,7 +1,7 @@
 class ChangesPasswordResponseData {
-   String? status;
-   String? message;
-   String? errorCode;
+  String? status;
+  String? message;
+  String? errorCode;
 
   ChangesPasswordResponseData({
     required this.status,

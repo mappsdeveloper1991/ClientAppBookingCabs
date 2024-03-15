@@ -34,7 +34,7 @@ class _HomeScreenState extends State<HomeScreen>
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: homePageHeaderBar(context),
+      appBar: homePageHeaderBar(context, selectedLocation),
       body: SafeArea(
         child: Column(
           children: [
@@ -59,27 +59,44 @@ class _HomeScreenState extends State<HomeScreen>
     );
   }
 
-  AppBar homePageHeaderBar(BuildContext context) {
+  AppBar homePageHeaderBar(BuildContext context, String? selectedLocation) {
     return AppBar(
+        // toolbarHeight: 65,
         automaticallyImplyLeading: false,
         backgroundColor: primaryColor,
-        elevation: 2,
-        title: //Text("Home Page"),
-            const Row(
+        shadowColor:primaryColor,
+        elevation: 5,
+        toolbarOpacity: 1,
+        // elevation: 2,
+        title:   Column(
           mainAxisAlignment: MainAxisAlignment.start,
+          crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             // bookingCabsTextLogo(context)
-            Image(
-              image: AssetImage("assets/images/bookingcbas_logo.png"),
-            )
+               SizedBox(height: 5,),
+             SizedBox(
+              //height: 40,
+              //child: Text("Ok"),
+               child: Image(
+                image: AssetImage("assets/images/bookingcbas_logo.png"),
+               fit: BoxFit.fitHeight,
+                ),
+             ),
+           // SizedBox(height: 5,),
+            Text(selectedLocation ?? "", style: TextStyle( fontSize: 10, color: blackColor, fontWeight: FontWeight.bold, ),),
+            SizedBox(height: 5,)
+
           ],
         ),
+
+      
         //centerTitle: true,
         actions: <Widget>[
           Row(
             children: [
               const Icon(
                 Icons.notifications,
+                size: 30,
               ),
               const SizedBox(width: 10), // Added SizedBox for spacing
               GestureDetector(
@@ -91,10 +108,11 @@ class _HomeScreenState extends State<HomeScreen>
                 },
                 child: const Icon(
                   Icons.person,
+                  size: 30,
                 ),
               ),
               const SizedBox(width: 10), // Added SizedBox for spacing
-              Container(
+              /* Container(
                 height: 30,
                 padding: const EdgeInsets.only(
                   left: 5,
@@ -129,7 +147,7 @@ class _HomeScreenState extends State<HomeScreen>
                     iconEnabledColor: Colors.white,
                   ),
                 ),
-              ),
+              ), */
             ],
           ),
         ]);
@@ -155,7 +173,7 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: EdgeInsets.only(
+      padding: const EdgeInsets.only(
         // left: 10,
         // right: 10,
         // bottom: Platform.isIOS ? 24 : 10,
@@ -172,12 +190,17 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
         },
         showUnselectedLabels: true,
         type: BottomNavigationBarType.fixed,
-        selectedItemColor: Colors.red,
+        selectedItemColor: Colors.grey,
         unselectedItemColor: Colors.red,
+        backgroundColor: whiteColor,
+        selectedFontSize: 14,
+        unselectedFontSize: 12,
+        selectedLabelStyle: TextStyle(fontWeight: FontWeight.bold),
         items: const [
           BottomNavigationBarItem(
             icon: Icon(
               Icons.format_list_bulleted,
+              size: 25,
             ),
             label: "My Trips",
             backgroundColor: Colors.white,
@@ -185,24 +208,28 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
           BottomNavigationBarItem(
             icon: Icon(
               Icons.currency_rupee_rounded,
+              size: 25,
             ),
             label: "Wallet",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.house,
+              size: 25,
             ),
             label: "Home",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.sell,
+              size: 25,
             ),
             label: "Refer & Earn",
           ),
           BottomNavigationBarItem(
             icon: Icon(
               Icons.headset_mic,
+              size: 25,
             ),
             label: "Support",
           ),

@@ -21,7 +21,6 @@ class _SliderCaroselState extends State<SliderCarosel> {
 
   @override
   Widget build(BuildContext context) {
-    var width = MediaQuery.of(context).size.width * 1;
     return Column(
       children: [
         SizedBox(
@@ -40,18 +39,6 @@ class _SliderCaroselState extends State<SliderCarosel> {
             },
           ),
         ),
-        // const SizedBox(
-        //   height: 10,
-        // ),
-        // SmoothPageIndicator(
-        //   controller: pageController,
-        //   count: offerImages.length,
-        //   effect: const WormEffect(
-        //       activeDotColor: Colors.blue,
-        //       dotColor: Colors.lightBlueAccent,
-        //       dotHeight: 9,
-        //       dotWidth: 9),
-        // )
       ],
     );
   }

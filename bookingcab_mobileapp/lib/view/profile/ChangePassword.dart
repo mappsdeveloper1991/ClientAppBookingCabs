@@ -4,7 +4,6 @@ import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
-import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/profile/ChangesPasswordResponseData.dart';
 import 'package:flutter/material.dart';
 

@@ -34,9 +34,10 @@ class _DualImageCaroselState extends State<DualImageCarosel> {
           child: PageView.builder(
             controller: pageController,
             scrollDirection: Axis.horizontal,
-            itemCount: widget.dataList.length,
+            itemCount: (widget.dataList.length / 2)
+                .round(), //widget.dataList.length / 2,
             itemBuilder: (context, index) {
-              final item = widget.dataList[index];
+              // final item = widget.dataList[index];
               final startIndex = index * 2;
               final endIndex = startIndex + 1;
               return Row(

@@ -1,9 +1,9 @@
 class ForgotPasswordGetOTPResponseData {
-   String? status = "";
-   String? msg = "";
-   UserData? data = null;
+  String? status = "";
+  String? msg = "";
+  UserData? data = null;
 
-  ForgotPasswordGetOTPResponseData({required this.status, this.msg,  this.data});
+  ForgotPasswordGetOTPResponseData({required this.status, this.msg, this.data});
 
   factory ForgotPasswordGetOTPResponseData.fromJson(Map<String, dynamic> json) {
     return ForgotPasswordGetOTPResponseData(
@@ -15,20 +15,20 @@ class ForgotPasswordGetOTPResponseData {
 }
 
 class UserData {
-   int? userId;
-   String? userGrade;
-   int? acceptFare;
-   int? userTypeId;
-   int? companyId;
-   String? firstName;
-   String? lastName;
-   String? email;
-   String? mobilePrefix;
-   String? mobile;
-   int? isActive;
-   int? signupStatus;
-   int? loginOtpStatus;
-   int? countryId;
+  int? userId;
+  String? userGrade;
+  int? acceptFare;
+  int? userTypeId;
+  int? companyId;
+  String? firstName;
+  String? lastName;
+  String? email;
+  String? mobilePrefix;
+  String? mobile;
+  int? isActive;
+  int? signupStatus;
+  int? loginOtpStatus;
+  int? countryId;
 
   UserData({
     this.userId,
@@ -51,7 +51,7 @@ class UserData {
     return UserData(
       userId: json['user_id'] as int? ?? 0,
       userGrade: json['user_grade'] as String? ?? '',
-      acceptFare: json['accept_fare'] as int?  ?? 0,
+      acceptFare: json['accept_fare'] as int? ?? 0,
       userTypeId: json['user_type_id'] as int? ?? 0,
       companyId: json['company_id'] as int? ?? 0,
       firstName: json['first_name'] as String? ?? '',

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
@@ -15,67 +17,55 @@ import '../../AppStyle/AppHeadreApp.dart';
 class MyAccount extends StatefulWidget {
   const MyAccount({super.key});
 
-
   @override
   State<MyAccount> createState() => _MyAccountState();
 }
 
 class _MyAccountState extends State<MyAccount> {
 
-/*
+  UserProfileData? userProfileData = null;
   @override
   void initState() {
     super.initState();
     getProfileInfoAPICall();
   }
-*/
-   UserProfileData? userProfileData = null;
-@override
-  void initState() {
-    super.initState();
-    /*if(userProfileInfoData != null){
-      userProfileData = userProfileInfoData ;
-    }else{
-      
-    } */
-    getProfileInfoAPICall();
-  }
 
-Future<void> getProfileInfoAPICall() async {
-      //showCustomeLoader(context);
-      try {
-        final response = await getRequest(userProfileInforEndPOint);
-        if (response.statusCode == 200) {
-          print('Response: ${response.body}');
-          final jsonData = jsonDecode(response.body);
-          var responseData = MyAccountResponseData.fromJson(jsonData['responsedata']);
-         // hideCustomeLoader(context);
-          if (responseData.status == SUCCESS_STATUS) {
-              setState(() {
-                userProfileData = responseData.data!;
-                userProfileInfoData = userProfileData;
-              });
-          }else{
-               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
-          }
+  Future<void> getProfileInfoAPICall() async {
+    //showCustomeLoader(context);
+    try {
+      final response = await getRequest(userProfileInforEndPOint);
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData =
+            MyAccountResponseData.fromJson(jsonData['responsedata']);
+        // hideCustomeLoader(context);
+        if (responseData.status == SUCCESS_STATUS) {
+          setState(() {
+            userProfileData = responseData.data!;
+            userProfileInfoData = userProfileData;
+          });
         } else {
-          // Handle error response
-          //hideCustomeLoader(context);
-          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-          print('Request failed with status: ${response.statusCode}');
+          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
         }
-      } catch (e) {
-        // Handle exceptions
+      } else {
+        // Handle error response
         //hideCustomeLoader(context);
-        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-        print('Exception occurred: $e');
+        //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Request failed with status: ${response.statusCode}');
       }
+    } catch (e) {
+      // Handle exceptions
+      //hideCustomeLoader(context);
+      showErrorTost(context, SOMETHING_WENT_WRONG_MSG);
+      print('Exception occurred: $e');
+    }
   }
 
   @override
   Widget build(BuildContext context) {
     //getProfileInfoAPICall();
-    
+
     return Scaffold(
       appBar: simpleHeaderBar(context, "My Account"),
       body: SingleChildScrollView(
@@ -112,23 +102,22 @@ Future<void> getProfileInfoAPICall() async {
                 const SizedBox(
                   height: 10,
                 ),
-                 Text(
-                
-                  '${userProfileData?.firstName ?? 'N/A'}',
+                Text(
+                  userProfileData?.firstName ?? 'N/A',
                   style: const TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                 Text(
-                  '${userProfileData?.email ?? 'N/A'}',
+                Text(
+                  userProfileData?.email ?? 'N/A',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
                 ),
-                 Text(
-                  '${userProfileData?.mobile ?? 'N/A'}',
+                Text(
+                  userProfileData?.mobile ?? 'N/A',
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
@@ -176,7 +165,8 @@ Future<void> getProfileInfoAPICall() async {
                             Navigator.push(
                               context,
                               MaterialPageRoute(
-                                  builder: (context) => EditProfile(userProfileData!)),
+                                  builder: (context) =>
+                                      EditProfile(userProfileData!)),
                             );
                           },
                           style: ElevatedButton.styleFrom(
@@ -353,7 +343,7 @@ class _advantageWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return Row(
       children: [
-        CircleAvatar(
+        const CircleAvatar(
           backgroundColor: buttonPrimaryColor,
           radius: 8,
           child: Icon(
@@ -362,12 +352,12 @@ class _advantageWidget extends StatelessWidget {
             color: Colors.white,
           ),
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         Text(
-          '$label',
-          style: TextStyle(
+          label,
+          style: const TextStyle(
             fontSize: 12,
             fontWeight: FontWeight.w500,
           ),

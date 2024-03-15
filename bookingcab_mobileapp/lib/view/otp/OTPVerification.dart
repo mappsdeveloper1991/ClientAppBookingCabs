@@ -15,17 +15,16 @@ import '../../AppStyle/AppUIComponent.dart';
 import '../dashboard/DashBoardPage.dart';
 
 class OTPVerification extends StatefulWidget {
-    /*
+  /*
     String email = "", userID = "", strOTP = "";
 
   const OTPVerification(this.email, this.userID, {Key? key}) : super(key: key);
 */
   final String emailID;
   final String userID;
-  
 
-  const OTPVerification(this.emailID, this.userID, {Key? key}) : super(key: key);
-
+  const OTPVerification(this.emailID, this.userID, {Key? key})
+      : super(key: key);
 
   @override
   // ignore: library_private_types_in_public_api
@@ -33,21 +32,19 @@ class OTPVerification extends StatefulWidget {
 }
 
 class _OTPVerificationState extends State<OTPVerification> {
-    late String emailID = widget.emailID;
-    late String userID = widget.userID;
-    late String strOTP = "";
+  late String emailID = widget.emailID;
+  late String userID = widget.userID;
+  late String strOTP = "";
 
   @override
   void initState() {
     super.initState();
   }
 
-
-
- Future<void> loginGetOTP() async {
-     if(emailID.isEmpty || emailID.length <= 5){
+  Future<void> loginGetOTP() async {
+    if (emailID.isEmpty || emailID.length <= 5) {
       showErrorTost(context, INVALID_EMAIL_MSG);
-    }else{
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": emailID,
@@ -55,41 +52,42 @@ class _OTPVerificationState extends State<OTPVerification> {
         "user_type_id": "1"
       };
       try {
-        final response = await postRequest(loginByEmailAPINameGetOTP, queryParams);
+        final response =
+            await postRequest(loginByEmailAPINameGetOTP, queryParams);
         if (response.statusCode == 200) {
-         print('Response: ${response.body}');
+          print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = GetOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              GetOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-             userID = (responseData.data![0].userId).toString();
-              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
-          }else{
-               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+            userID = (responseData.data![0].userId).toString();
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showErrorTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           print('Request failed with status: ${response.statusCode}');
-           hideCustomeLoader(context);
+          hideCustomeLoader(context);
           showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
         }
       } catch (e) {
         // Handle exceptions
         showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-         hideCustomeLoader(context);
+        hideCustomeLoader(context);
         print('Exception occurred: $e');
       }
     }
   }
 
-
   Future<void> loginWithVerifyOTP(String otp) async {
-     if(userID.isEmpty){
+    if (userID.isEmpty) {
       showErrorTost(context, "Invalid user id");
-    }
-    else if(otp.isEmpty || otp.length <=4){
-        showErrorTost(context, INVALID_OTP_MSG);
-    }
-    else{
+    } else if (otp.isEmpty || otp.length <= 4) {
+      showErrorTost(context, INVALID_OTP_MSG);
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "user_id": userID,
@@ -101,16 +99,19 @@ class _OTPVerificationState extends State<OTPVerification> {
         if (response.statusCode == 200) {
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = VerifyOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              VerifyOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-              showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
-               Navigator.pushReplacement(
+            showSuccessTost(
+                context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
-          }else{
-               showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showSuccessTost(
+                context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           // Handle error response
@@ -127,11 +128,8 @@ class _OTPVerificationState extends State<OTPVerification> {
     }
   }
 
-
   @override
   Widget build(BuildContext context) {
-
-   
     return Scaffold(
         appBar: simpleHeaderBar(context, "OTP Verification"),
         backgroundColor: whiteColor,
@@ -212,7 +210,7 @@ class _OTPVerificationState extends State<OTPVerification> {
               }
           );*/
 
-      /*  Navigator.pushReplacement(
+        /*  Navigator.pushReplacement(
           context,
           MaterialPageRoute(builder: (context) => HomeScreen()),
         ); */
@@ -261,7 +259,7 @@ class _OTPVerificationState extends State<OTPVerification> {
             onPressed: () {
               //loginAPICall();
               loginGetOTP();
-            /*  Navigator.pushReplacement(
+              /*  Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => HomeScreen()),
               );

@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
@@ -20,19 +22,14 @@ class ForgotPasswordGetOTP extends StatefulWidget {
 }
 
 class _ForgotPasswordGetOTPState extends State<ForgotPasswordGetOTP> {
-  TextEditingController _oldPasswordController = TextEditingController();
-  TextEditingController _newPasswordController = TextEditingController();
-  TextEditingController _confirmPasswordController = TextEditingController();
 
-late String email = "";
-late String userID = "";
+  late String email = "";
+  late String userID = "";
 
-
-
-Future<void> forgotPasswordGetOTP() async {
-     if(email.isEmpty || email.length <= 5){
+  Future<void> forgotPasswordGetOTP() async {
+    if (email.isEmpty || email.length <= 5) {
       showErrorTost(context, INVALID_EMAIL_MSG);
-    }else{
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": email,
@@ -40,22 +37,27 @@ Future<void> forgotPasswordGetOTP() async {
         "user_type_id": "1"
       };
       try {
-        final response = await postRequest(forGotPasswordEndPointGetOTP, queryParams);
+        final response =
+            await postRequest(forGotPasswordEndPointGetOTP, queryParams);
         if (response.statusCode == 200) {
-         print('Response: ${response.body}');
+          print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = ForgotPasswordGetOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData = ForgotPasswordGetOTPResponseData.fromJson(
+              jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-             userID = (responseData.data!.userId).toString();
-              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
-                    Navigator.pushReplacement(
+            userID = (responseData.data!.userId).toString();
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+            Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => ForgotPasswordVerityOTPChangePassword(email, userID)),
+              MaterialPageRoute(
+                  builder: (context) =>
+                      ForgotPasswordVerityOTPChangePassword(email, userID)),
             );
-
-          }else{
-               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showErrorTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           print('Request failed with status: ${response.statusCode}');
@@ -69,7 +71,7 @@ Future<void> forgotPasswordGetOTP() async {
       }
     }
   }
-  
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -90,9 +92,7 @@ Future<void> forgotPasswordGetOTP() async {
                   right: 30, left: 30, top: 20, bottom: 20),
               child: Column(
                 children: [
-                  
                   _buildEmailRow(),
-                  
                   const SizedBox(
                     height: 10,
                   ),
@@ -112,7 +112,7 @@ Future<void> forgotPasswordGetOTP() async {
                         elevation: 5.0,
                       ),
                       onPressed: () {
-                            forgotPasswordGetOTP();
+                        forgotPasswordGetOTP();
                       },
                       child: const Text(
                         'Get OTP',
@@ -132,7 +132,6 @@ Future<void> forgotPasswordGetOTP() async {
     );
   }
 
-
   Widget _buildEmailRow() {
     return Padding(
       padding: const EdgeInsets.all(5),
@@ -142,7 +141,7 @@ Future<void> forgotPasswordGetOTP() async {
           keyboardType: TextInputType.emailAddress,
           onChanged: (value) {
             setState(() {
-               email = value;
+              email = value;
             });
           },
           style: textFormFieldStyle(),
@@ -152,5 +151,4 @@ Future<void> forgotPasswordGetOTP() async {
       ),
     );
   }
-  
 }

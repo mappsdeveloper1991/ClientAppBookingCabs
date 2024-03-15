@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:convert';
 
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
@@ -16,31 +18,31 @@ import '../../AppStyle/AppHeadreApp.dart';
 class ForgotPasswordVerityOTPChangePassword extends StatefulWidget {
   final String emailID;
   final String userID;
-  
 
-  const ForgotPasswordVerityOTPChangePassword(this.emailID, this.userID, {Key? key}) : super(key: key);
-
-
+  const ForgotPasswordVerityOTPChangePassword(this.emailID, this.userID,
+      {Key? key})
+      : super(key: key);
 
   @override
-  State<ForgotPasswordVerityOTPChangePassword> createState() => _ForgotPasswordVerityOTPChangePasswordState();
+  State<ForgotPasswordVerityOTPChangePassword> createState() =>
+      _ForgotPasswordVerityOTPChangePasswordState();
 }
 
-class _ForgotPasswordVerityOTPChangePasswordState extends State<ForgotPasswordVerityOTPChangePassword> {
+class _ForgotPasswordVerityOTPChangePasswordState
+    extends State<ForgotPasswordVerityOTPChangePassword> {
   TextEditingController _newPasswordController = TextEditingController();
   TextEditingController _confirmPasswordController = TextEditingController();
 
-    late String emailID = widget.emailID;
-    late String userID = widget.userID;
-     String strOTP = "";
-     String passowrd = "";
-     String confirmPassword = "";
+  late String emailID = widget.emailID;
+  late String userID = widget.userID;
+  String strOTP = "";
+  String passowrd = "";
+  String confirmPassword = "";
 
-
-Future<void> forgotPasswordGetOTP() async {
-     if(emailID.isEmpty || emailID.length <= 5){
+  Future<void> forgotPasswordGetOTP() async {
+    if (emailID.isEmpty || emailID.length <= 5) {
       showErrorTost(context, INVALID_EMAIL_MSG);
-    }else{
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": emailID,
@@ -48,20 +50,21 @@ Future<void> forgotPasswordGetOTP() async {
         "user_type_id": "1"
       };
       try {
-        final response = await postRequest(forGotPasswordEndPointGetOTP, queryParams);
+        final response =
+            await postRequest(forGotPasswordEndPointGetOTP, queryParams);
         if (response.statusCode == 200) {
-         print('Response: ${response.body}');
+          print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = ForgotPasswordGetOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData = ForgotPasswordGetOTPResponseData.fromJson(
+              jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-             userID = (responseData.data!.userId).toString();
-              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
-                  
-        
-
-          }else{
-               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+            userID = (responseData.data!.userId).toString();
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showErrorTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           print('Request failed with status: ${response.statusCode}');
@@ -76,7 +79,6 @@ Future<void> forgotPasswordGetOTP() async {
     }
   }
 
-
   Future<void> forgotPasswordWithVerifyOTP(String otp) async {
     passowrd = _newPasswordController.text.toString();
     confirmPassword = _confirmPasswordController.text.toString();
@@ -86,11 +88,9 @@ Future<void> forgotPasswordGetOTP() async {
       showErrorTost(context, INVALID_CONFIRM_PASSORD_MSG);
     } else if (passowrd != confirmPassword) {
       showErrorTost(context, INVALID_PASSWORD_CONFIRM_PASSWORD_MSG);
-    }
-    else if(otp.isEmpty || otp.length <=4){
-        showErrorTost(context, INVALID_OTP_MSG);
-    }
-    else{
+    } else if (otp.isEmpty || otp.length <= 4) {
+      showErrorTost(context, INVALID_OTP_MSG);
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "user_id": userID,
@@ -100,20 +100,24 @@ Future<void> forgotPasswordGetOTP() async {
         "callfrom": "MobileApp",
       };
       try {
-        final response = await postRequest(forGotPasswordEndPointVerifyOTP, queryParams);
+        final response =
+            await postRequest(forGotPasswordEndPointVerifyOTP, queryParams);
         if (response.statusCode == 200) {
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = ForgotPasswordGetOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData = ForgotPasswordGetOTPResponseData.fromJson(
+              jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
-               Navigator.pushReplacement(
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const LoginPage()),
             );
-          }else{
-               showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           // Handle error response
@@ -159,7 +163,7 @@ Future<void> forgotPasswordGetOTP() async {
                   const SizedBox(
                     height: 15,
                   ),
-                   _otpView(context),
+                  _otpView(context),
                 ],
               ),
             ),
@@ -196,16 +200,13 @@ Future<void> forgotPasswordGetOTP() async {
     );
   }
 
-
-
-  
   Widget _buildTextField(String labelText, TextEditingController controller) {
     return SizedBox(
       height: 45,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          suffixIcon: Icon(
+          suffixIcon: const Icon(
             Icons.visibility,
             color: Colors.grey,
           ),
@@ -215,13 +216,10 @@ Future<void> forgotPasswordGetOTP() async {
             Radius.circular(10),
           )),
         ),
-        onChanged: (value) => {
-
-        },
+        onChanged: (value) => {},
       ),
     );
   }
-
 
   OtpTextField _otpView(BuildContext context) {
     return OtpTextField(
@@ -238,11 +236,9 @@ Future<void> forgotPasswordGetOTP() async {
       },
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
-         strOTP = verificationCode;
-         forgotPasswordWithVerifyOTP(strOTP);
+        strOTP = verificationCode;
+        forgotPasswordWithVerifyOTP(strOTP);
       }, // end onSubmit
     );
   }
-
 }
-

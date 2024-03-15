@@ -21,7 +21,6 @@ class _TransferServiceState extends State<TransferService> {
   TextEditingController _LandmarkController = TextEditingController();
   TextEditingController _PickupAddressController = TextEditingController();
 
-
   bool _isSearchFocused = false;
   bool _isPickup = true;
   bool _isDrop = false;
@@ -131,7 +130,6 @@ class _TransferServiceState extends State<TransferService> {
               height: 1,
               color: Color.fromARGB(255, 197, 195, 195),
             ),
-            
             Padding(
               padding: const EdgeInsets.all(8.0),
               child: Column(
@@ -157,8 +155,8 @@ class _TransferServiceState extends State<TransferService> {
                       ),
                       Expanded(
                         flex: 2,
-                        child:
-                            _buildTextField("", "Flight Time", _FlightTrainTimeController),
+                        child: _buildTextField(
+                            "", "Flight Time", _FlightTrainTimeController),
                       ),
                     ],
                   ),
@@ -176,7 +174,8 @@ class _TransferServiceState extends State<TransferService> {
                   const SizedBox(
                     height: 5,
                   ),
-                  _buildTextField("", "Pickup Address", _PickupAddressController),
+                  _buildTextField(
+                      "", "Pickup Address", _PickupAddressController),
                   const SizedBox(
                     height: 5,
                   ),
@@ -601,14 +600,12 @@ class _TransferServiceState extends State<TransferService> {
           // contentPadding: const EdgeInsets.all(10),
           // hintStyle: const TextStyle(fontSize: 16.0, color: Colors.grey),
           // const InputDecoration(hintText: 'Default hint text color')
-          
-              border: UnderlineInputBorder(),
-              labelText: hindTerxt,
-                hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
-                 labelStyle: TextStyle(fontSize: 13, color: Colors.grey),
-          
-            ),
-       
+
+          border: UnderlineInputBorder(),
+          labelText: hindTerxt,
+          hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
+          labelStyle: TextStyle(fontSize: 13, color: Colors.grey),
+        ),
       ),
     );
   }

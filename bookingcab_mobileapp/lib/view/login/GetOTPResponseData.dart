@@ -1,13 +1,13 @@
 class GetOTPResponseData {
-   String? status = "";
-   List<UserData>? data;
-   String? msg = "";
+  String? status = "";
+  List<UserData>? data;
+  String? msg = "";
 
-  GetOTPResponseData({required this.status, required this.data, required this.msg});
+  GetOTPResponseData(
+      {required this.status, required this.data, required this.msg});
 
   factory GetOTPResponseData.fromJson(Map<String, dynamic> json) {
-
-var dataList = json['data'] as List?;
+    var dataList = json['data'] as List?;
     List<UserData>? userDataList;
     if (dataList != null) {
       userDataList = dataList.map((data) => UserData.fromJson(data)).toList();
@@ -23,20 +23,20 @@ var dataList = json['data'] as List?;
 }
 
 class UserData {
-   int userId;
-   String userGrade;
-   int acceptFare;
-   int userTypeId;
-   int companyId;
-   String firstName;
-   String lastName;
-   String email;
-   String mobilePrefix;
-   String mobile;
-   int isActive;
-   int signupStatus;
-   int loginOtpStatus;
-   int countryId;
+  int userId;
+  String userGrade;
+  int acceptFare;
+  int userTypeId;
+  int companyId;
+  String firstName;
+  String lastName;
+  String email;
+  String mobilePrefix;
+  String mobile;
+  int isActive;
+  int signupStatus;
+  int loginOtpStatus;
+  int countryId;
 
   UserData({
     required this.userId,

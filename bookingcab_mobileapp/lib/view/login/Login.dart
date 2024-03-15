@@ -9,11 +9,9 @@ import 'package:bookingcab_mobileapp/data/localDB/SharedPreferencesUtil.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTP.dart';
-import 'package:bookingcab_mobileapp/view/forgotpassword/ForgotPasswordGetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/GetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/VerifyOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/loginResponseData.dart';
-import 'package:bookingcab_mobileapp/view/otp/OTPVerification.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 import '../../AppStyle/AppColors.dart';
@@ -30,24 +28,20 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   late String verificationType = "Password";
-   String email = "", password = "", strOTP = "";
-   String userID = "";
-
-
+  String email = "", password = "", strOTP = "";
+  String userID = "";
 
   @override
   void initState() {
     super.initState();
   }
 
-
-
   Future<void> loginwithEmailOrPhoneWithPassword(BuildContext context) async {
-    if(email.isEmpty || email.length <= 5){
+    if (email.isEmpty || email.length <= 5) {
       showErrorTost(context, INVALID_EMAIL_MSG);
-    }else if(password.isEmpty || password.length <=4){
-        showErrorTost(context, INVALID_PASSWORD_MSG);
-    }else{
+    } else if (password.isEmpty || password.length <= 4) {
+      showErrorTost(context, INVALID_PASSWORD_MSG);
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": email,
@@ -61,23 +55,24 @@ class _LoginPageState extends State<LoginPage> {
         "user_type_id": "1,2,6,7,8"
       };
       try {
-        var  response =
-            await postRequest(API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD, queryParams);
+        var response = await postRequest(
+            API_LOGIN_EMAIL_MOBILE_WITH_PASSWORD, queryParams);
         if (response.statusCode == 200) {
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = LoginResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              LoginResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-            var data = responseData.data!; 
+            var data = responseData.data!;
             userID = data.userId.toString();
             USER_ID = userID;
             USER_FIRST_NAME = data.firstName;
             USER_LAST_NAME = data.lastName;
             USER_EMAIL_ID = data.email;
             USER_MOBILE_PREFIX = data.mobilePrefix;
-            USER_MOBILE_NO= data.mobile;
-            USER_IS_ACTIVE= data.isActive.toString();
+            USER_MOBILE_NO = data.mobile;
+            USER_IS_ACTIVE = data.isActive.toString();
             USER_SIGNUP_STATUS = data.signupStatus.toString();
             COUNTRY_ID = data.companyId.toString();
             USER_TOCKEN = data.token;
@@ -85,16 +80,22 @@ class _LoginPageState extends State<LoginPage> {
             USER_TYPE_ID = data.userTypeId.toString();
             COMPANY_ID = data.companyId.toString();
 
-            SharedPreferencesUtil.saveUserProfileData(USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL_ID, USER_MOBILE_PREFIX, USER_MOBILE_NO);
+            SharedPreferencesUtil.saveUserProfileData(
+                USER_ID,
+                USER_FIRST_NAME,
+                USER_LAST_NAME,
+                USER_EMAIL_ID,
+                USER_MOBILE_PREFIX,
+                USER_MOBILE_NO);
 
             Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
           } else {
-            showSuccessTost(context, responseData.error ?? "$SOMETHING_WENT_WRONG_MSG");
+            showSuccessTost(
+                context, responseData.error ?? "$SOMETHING_WENT_WRONG_MSG");
           }
-          
         } else {
           print('Request failed with status: ${response.statusCode}');
           hideCustomeLoader(context);
@@ -108,12 +109,12 @@ class _LoginPageState extends State<LoginPage> {
     }
   }
 
-late dynamic userDta  ;
+  late dynamic userDta;
 
   Future<void> loginGetOTP() async {
-     if(email.isEmpty || email.length <= 5){
+    if (email.isEmpty || email.length <= 5) {
       showErrorTost(context, INVALID_EMAIL_MSG);
-    }else{
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "username": email,
@@ -121,18 +122,22 @@ late dynamic userDta  ;
         "user_type_id": "1"
       };
       try {
-        final response = await postRequest(loginByEmailAPINameGetOTP, queryParams);
+        final response =
+            await postRequest(loginByEmailAPINameGetOTP, queryParams);
         if (response.statusCode == 200) {
-         print('Response: ${response.body}');
+          print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = GetOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              GetOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
-             userDta = responseData.data![0];
-             userID = (responseData.data![0].userId).toString();
-              showSuccessTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
-          }else{
-               showErrorTost(context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+            userDta = responseData.data![0];
+            userID = (responseData.data![0].userId).toString();
+            showSuccessTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showErrorTost(
+                context, responseData.msg ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           print('Request failed with status: ${response.statusCode}');
@@ -147,15 +152,12 @@ late dynamic userDta  ;
     }
   }
 
-
   Future<void> loginWithVerifyOTP(String otp) async {
-     if(userID.isEmpty){
+    if (userID.isEmpty) {
       showErrorTost(context, "Invalid user id");
-    }
-    else if(otp.isEmpty || otp.length <=4){
-        showErrorTost(context, INVALID_OTP_MSG);
-    }
-    else{
+    } else if (otp.isEmpty || otp.length <= 4) {
+      showErrorTost(context, INVALID_OTP_MSG);
+    } else {
       showCustomeLoader(context);
       Map<String, Object> queryParams = {
         "user_id": userID,
@@ -167,7 +169,8 @@ late dynamic userDta  ;
         if (response.statusCode == 200) {
           print('Response: ${response.body}');
           final jsonData = jsonDecode(response.body);
-          var responseData = VerifyOTPResponseData.fromJson(jsonData['responsedata']);
+          var responseData =
+              VerifyOTPResponseData.fromJson(jsonData['responsedata']);
           hideCustomeLoader(context);
           if (responseData.status == SUCCESS_STATUS) {
             //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
@@ -178,22 +181,29 @@ late dynamic userDta  ;
             USER_LAST_NAME = userDta.lastName;
             USER_EMAIL_ID = userDta.email;
             USER_MOBILE_PREFIX = userDta.mobilePrefix;
-            USER_MOBILE_NO= userDta.mobile;
-            USER_IS_ACTIVE= userDta.isActive.toString();
+            USER_MOBILE_NO = userDta.mobile;
+            USER_IS_ACTIVE = userDta.isActive.toString();
             USER_SIGNUP_STATUS = userDta.signupStatus.toString();
             COUNTRY_ID = userDta.companyId.toString();
             USER_TOCKEN = userDta.token;
             USER_GRADE = userDta.userGrade;
             USER_TYPE_ID = userDta.userTypeId.toString();
             COMPANY_ID = userDta.companyId.toString();
-            SharedPreferencesUtil.saveUserProfileData(USER_ID, USER_FIRST_NAME, USER_LAST_NAME, USER_EMAIL_ID, USER_MOBILE_PREFIX, USER_MOBILE_NO);
+            SharedPreferencesUtil.saveUserProfileData(
+                USER_ID,
+                USER_FIRST_NAME,
+                USER_LAST_NAME,
+                USER_EMAIL_ID,
+                USER_MOBILE_PREFIX,
+                USER_MOBILE_NO);
 
-               Navigator.pushReplacement(
+            Navigator.pushReplacement(
               context,
               MaterialPageRoute(builder: (context) => const HomeScreen()),
             );
-          }else{
-               showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
+          } else {
+            showSuccessTost(
+                context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
           }
         } else {
           // Handle error response
@@ -392,16 +402,16 @@ late dynamic userDta  ;
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                              if(verificationType == "Password"){
-                                 Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        SignupPersonalDetails()));
-                              }else{
-                                    loginGetOTP();
-                              }
-                           
+                            if (verificationType == "Password") {
+                              Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                      builder: (context) =>
+                                          SignupPersonalDetails()));
+                            } else {
+                              loginGetOTP();
+                            }
+
                             // Add your action for the yellow button
                           },
                           style: ElevatedButton.styleFrom(
@@ -410,7 +420,9 @@ late dynamic userDta  ;
                             elevation: 5.0,
                           ),
                           child: Text(
-                             verificationType == "Password"? 'NEW USER?' : "RE-SEND OTP",
+                            verificationType == "Password"
+                                ? 'NEW USER?'
+                                : "RE-SEND OTP",
                             style: TextStyle(
                               color: verificationType == "Password"
                                   ? whiteColor
@@ -424,9 +436,9 @@ late dynamic userDta  ;
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
-                            if(verificationType == "Password"){
+                            if (verificationType == "Password") {
                               loginwithEmailOrPhoneWithPassword(context);
-                            }else{
+                            } else {
                               loginWithVerifyOTP(strOTP);
                             }
                           },
@@ -434,8 +446,10 @@ late dynamic userDta  ;
                               backgroundColor: buttonPrimaryColor,
                               shape: RoundedRectangleBorder(),
                               elevation: 5.0),
-                          child:  Text(
-                            verificationType == "Password" ? 'LOGIN' : "VERIFY OTP",
+                          child: Text(
+                            verificationType == "Password"
+                                ? 'LOGIN'
+                                : "VERIFY OTP",
                             style: TextStyle(
                               color: whiteColor,
                               fontSize: 16,
@@ -514,9 +528,9 @@ late dynamic userDta  ;
       },
       //runs when every textfield is filled
       onSubmit: (String verificationCode) {
-         strOTP = verificationCode;
-          loginWithVerifyOTP(strOTP);
-      /*  
+        strOTP = verificationCode;
+        loginWithVerifyOTP(strOTP);
+        /*  
         Navigator.pushReplacement(
             context,
             MaterialPageRoute(builder: (context) => HomeScreen()),
@@ -534,7 +548,10 @@ late dynamic userDta  ;
         //FlatButton(
         TextButton(
           onPressed: () {
-            Navigator.push(context, MaterialPageRoute(builder: (context) => new ForgotPasswordGetOTP()));
+            Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) => new ForgotPasswordGetOTP()));
           },
           child: Text(
             "Forgot Password?",
@@ -558,7 +575,7 @@ late dynamic userDta  ;
             style: primaryButtonStyle(context, buttonPrimaryColor),
             onPressed: () {
               //loginAPICall();
-             /* Navigator.pushReplacement(
+              /* Navigator.pushReplacement(
                 context,
                 MaterialPageRoute(builder: (context) => OTPVerification()),
               ); */

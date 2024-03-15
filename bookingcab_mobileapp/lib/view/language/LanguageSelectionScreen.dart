@@ -2,18 +2,13 @@
 
 import 'dart:convert';
 
-import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
-import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
-import 'package:bookingcab_mobileapp/view/dashboard/DashBoardPage.dart';
 import 'package:bookingcab_mobileapp/view/language/LanguageResponseData.dart';
-import 'package:bookingcab_mobileapp/view/login/Login.dart';
 import 'package:bookingcab_mobileapp/view/onboarding/OnboardingOptions.dart';
 import 'package:flutter/material.dart';
 import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 import '../../AppStyle/AppUIComponent.dart';
-import '../../comman/Constant.dart';
 
 class LanguageSelectScreen extends StatefulWidget {
   const LanguageSelectScreen({Key? key}) : super(key: key);
@@ -24,51 +19,47 @@ class LanguageSelectScreen extends StatefulWidget {
 
 class _LanguageSelectScreenState extends State<LanguageSelectScreen> {
   String? selectedLanguage;
- late List<Language>?  languageListData = [];
+  late List<Language>? languageListData = [];
 
-
-@override
+  @override
   void initState() {
     super.initState();
-     // getLanguageListAPICall();
+    // getLanguageListAPICall();
   }
 
-Future<void> getLanguageListAPICall() async {
-  
-      //showCustomeLoader(context);
-      try {
-        final response = await getRequest(LanguageAPI_END_POINT);
-        if (response.statusCode == 200) {
-          print('Response: ${response.body}');
-          final jsonData = jsonDecode(response.body);
-          var responseData = LanguageResponseData.fromJson(jsonData);
-          //hideCustomeLoader(context);
-          if (responseData.status == SUCCESS_STATUS) {
-              setState(() {
-                languageListData = responseData.languageListData;
-              });
-          }else{
-               //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
-          }
+  Future<void> getLanguageListAPICall() async {
+    //showCustomeLoader(context);
+    try {
+      final response = await getRequest(LanguageAPI_END_POINT);
+      if (response.statusCode == 200) {
+        print('Response: ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData = LanguageResponseData.fromJson(jsonData);
+        //hideCustomeLoader(context);
+        if (responseData.status == SUCCESS_STATUS) {
+          setState(() {
+            languageListData = responseData.languageListData;
+          });
         } else {
-          // Handle error response
-          //hideCustomeLoader(context);
-          //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-          print('Request failed with status: ${response.statusCode}');
+          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
         }
-      } catch (e) {
-        // Handle exceptions
+      } else {
+        // Handle error response
         //hideCustomeLoader(context);
         //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-        print('Exception occurred: $e');
+        print('Request failed with status: ${response.statusCode}');
       }
+    } catch (e) {
+      // Handle exceptions
+      //hideCustomeLoader(context);
+      //showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+      print('Exception occurred: $e');
+    }
   }
-
-
 
   @override
   Widget build(BuildContext context) {
-     getLanguageListAPICall();
+    getLanguageListAPICall();
 
     return Scaffold(
       appBar: languageSelectionHeaderBar(context),

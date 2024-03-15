@@ -270,37 +270,7 @@ barrierDismissible: false,
                         height: 10,
                       ),
                     ])),
-            /*
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-
-              child: Form(
-                child: Column(
-                  children: <Widget>[
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Name',
-                        icon: Icon(Icons.account_box),
-                      ),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Email',
-                        icon: Icon(Icons.email),
-                      ),
-                    ),
-                    TextFormField(
-                      decoration: InputDecoration(
-                        labelText: 'Message',
-                        icon: Icon(Icons.message),
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-
-*/
+           
 
             actions: [
               MaterialButton(
@@ -316,14 +286,14 @@ barrierDismissible: false,
                               builder: (context) => DriverDetails()),
                         );
                 },
-                child: Text(
+                color: Colors.red,
+                child: const Text(
                   "Ok",
                   style: TextStyle(
                     fontSize: 24,
                     color: Colors.white,
                   ),
                 ),
-                color: Colors.red,
               ),
             ],
           );

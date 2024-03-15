@@ -421,7 +421,7 @@ class BookingDetails {
 
   factory BookingDetails.fromJson(Map<String, dynamic> json) {
     return BookingDetails(
-      bookingTime: json['booking_time'] as String? ??'',
+      bookingTime: json['booking_time'] as String? ?? '',
       bookingDate: json['booking_date'] as String? ?? '',
       pickupArea: json['pickup_area'] as String? ?? '',
       dropArea: json['drop_area'] as String? ?? '',

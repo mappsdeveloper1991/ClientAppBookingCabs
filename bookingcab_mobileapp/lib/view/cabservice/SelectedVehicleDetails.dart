@@ -68,7 +68,8 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                                     Navigator.push(
                                       context,
                                       MaterialPageRoute(
-                                          builder: (context) => BookingRequest()),
+                                          builder: (context) =>
+                                              BookingRequest()),
                                     );
                                   },
                                   child: const Text(
@@ -558,7 +559,7 @@ class _headerDetails extends StatelessWidget {
     return Container(
         color: whiteColor,
         padding: EdgeInsets.all(5),
-       // margin: EdgeInsets.all(5),
+        // margin: EdgeInsets.all(5),
         child: const Column(children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
