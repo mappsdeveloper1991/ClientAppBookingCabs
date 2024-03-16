@@ -1,9 +1,7 @@
 // ignore_for_file: use_build_context_synchronously
 
 import 'dart:convert';
-import 'dart:ffi';
 
-import 'package:animated_custom_dropdown/custom_dropdown.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppUIComponent.dart';
 import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
 import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
@@ -12,9 +10,9 @@ import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferService.dart';
 import 'package:bookingcab_mobileapp/view/home/DualImageCarosel.dart';
 import 'package:bookingcab_mobileapp/view/home/OneWaysTransferAPIResponseData.dart';
+import 'package:bookingcab_mobileapp/view/home/PackageCityListResponse.dart';
 import 'package:bookingcab_mobileapp/view/home/ThingToDoAPIResponseData.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_carousel_widget/flutter_carousel_widget.dart';
 
 import '../../AppStyle/AppColors.dart';
 import '../../comman/Constant.dart';
@@ -473,6 +471,7 @@ class _PackageTableState extends State<PackageTable> {
   void initState() {
     super.initState();
     getOneWayPackageList();
+    getCityListAPICall("");
   }
 
   void toggleTableExpansion() {
@@ -484,54 +483,16 @@ class _PackageTableState extends State<PackageTable> {
   late List<OneWayPackageList> packageList = []; //widget.packageListData;
 
   late List<City> cityList = [];
-  late String fromCityID = "", fromCityName = '';
-  late String toCityID = "", toCityName = '';
+  late String fromCityID = "707", fromCityName = '';
+  late String toCityID = "4536", toCityName = '';
 
-  Future<List<City>> seachCity(String query) async {
-    getCityListAPICall(query);
-    return await Future.delayed(const Duration(seconds: 1), () {
-      return cityList.where((e) {
-        return e.cityStateCountry.toLowerCase().contains(query.toLowerCase());
-      }).toList();
-    });
-  }
-
-  Future<void> getCityListAPICall(String query) async {
-    String cityName = query;
-    showCustomeLoader(context);
-    try {
-      final response = await getRequest('$CITY_API_END_POINT$cityName');
-      if (response.statusCode == 200) {
-        print('Response: ${response.body}');
-        final jsonData = jsonDecode(response.body);
-        var responseData = CityAPIResponseData.fromJson(jsonData['response']);
-        hideCustomeLoader(context);
-        if (responseData.status == SUCCESS_STATUS) {
-          setState(() {
-            cityList = responseData.data;
-          });
-        } else {
-          //showSuccessTost(context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
-        }
-      } else {
-        // Handle error response
-        hideCustomeLoader(context);
-        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-        print('Request failed with status: ${response.statusCode}');
-      }
-    } catch (e) {
-      // Handle exceptions
-      hideCustomeLoader(context);
-      showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
-      print('Exception occurred: $e');
-    }
-  }
+ 
 
   Future<void> getOneWayPackageList() async {
     //showCustomeLoader(context);
     Map<String, Object> queryParams = {
-      "source_city_id": "707",
-      "destination_city_id": "4536",
+      "source_city_id": fromCityID,
+      "destination_city_id": toCityID,
       "user_grade": "5",
       "user_id": USER_ID,
       "callfrom": "MobileApp",
@@ -568,18 +529,55 @@ class _PackageTableState extends State<PackageTable> {
     }
   }
 
-  // suggesstion list
-  static const List<String> _fruitOptions = <String>[
-    'Noida',
-    'Delhi',
-    'Gugagon',
-    'Dehradun',
-    'Durgapur',
-    'Gwaliwar',
-    'Noa',
-    'Ahmdabad',
-    'Agra',
-  ];
+  String? _searchingWithQuery;
+  // The most recent options received from the API.
+  late Iterable<String> _lastOptions = <String>[];
+  static List<String> _kOptions = <String>[];
+  static List<CityList> cityListx  = [];
+
+  // Searches the options, but injects a fake "network" delay.
+  static Future<Iterable<String>> search(String query) async {
+    // await Future<void>.delayed(const Duration(seconds: 0)); // Fake 1 second delay.
+    try{
+   cityListx = (await getCityListAPICall(query))!;
+    }catch(e){
+       print('Exception occurred: $e');
+    }
+
+    if (query == '') {
+      return _kOptions;
+    }
+    return _kOptions.where((String option) {
+      return option.toLowerCase().startsWith(query.toLowerCase());
+    });
+  }
+
+  static Future<List<CityList>?> getCityListAPICall(String query) async {
+    try {
+      var url = "";
+      if (query.isEmpty) {
+        url = CITY_PACKAGE_LIST_POINT;
+      } else {
+        url = '${CITY_PACKAGE_LIST_POINT}city_name=$query';
+      }
+      final response = await getRequest(url);
+      if (response.statusCode == 200) {
+        print('Response getCityListAPICall : ${response.body}');
+        final jsonData = jsonDecode(response.body);
+        var responseData = PackageCityListResponse.fromJson(jsonData);
+        var citylistx = responseData.cityList;
+        _kOptions.clear();
+        citylistx.forEach((element) {
+          _kOptions.add(element.cityName);
+        });
+        return citylistx;
+      }
+    } catch (e) {
+      print('Exception occurred: $e');
+      return null;
+    }
+    return null;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -587,269 +585,286 @@ class _PackageTableState extends State<PackageTable> {
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Expanded(
         child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-          Container(
-            color: MaterialStateColor.resolveWith((states) => Colors.black),
-            //height: 50,
-            child: Row(
-              children: [
-                Container(
-                  //padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(2),
-                  height: 45,
-                  width: 110,
-                  // color: whiteColor,
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                        // border: OutlineInputBorder(gapPadding: 0.0),
-                        //hintText: "Search..",
-                        hintStyle: TextStyle(color: Colors.grey),
-                        labelStyle: TextStyle(color: whiteColor)),
-                    child: Autocomplete<String>(
-                      optionsBuilder: (TextEditingValue fruitTextEditingValue) {
-                        // if user is input nothing
-                        if (fruitTextEditingValue.text == '') {
-                          return const Iterable<String>.empty();
-                        }
-                        // if user is input something the build
-                        // suggestion based on the user input
-                        return _fruitOptions.where((String option) {
-                          return option.contains(
-                              fruitTextEditingValue.text.toLowerCase());
-                        });
-                      },
-                      fieldViewBuilder: (BuildContext context,
-                          TextEditingController fieldTextEditingController,
-                          FocusNode fieldFocusNode,
-                          VoidCallback onFieldSubmitted) {
-                        // Implement the text field UI
-                        return TextField(
-                          controller: fieldTextEditingController,
-                          focusNode: fieldFocusNode,
-                          cursorColor: Colors.white,
-                          style: TextStyle(color: whiteColor, fontSize: 12),
-                          decoration: const InputDecoration(
-                            //labelText: 'Type Here',
-                            hintText: 'From City',
-                            hintStyle:
-                                TextStyle(color: Colors.grey, fontSize: 10),
-                            // [enabledBorder], displayed when [TextField, InputDecoration.enabled] is true
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            //[focusedBorder], displayed when [TextField, InputDecorator.isFocused] is true
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                          ),
-                          onChanged: (text) {
-                            // Update suggestions based on user input
-                            // Implement the logic to filter and refresh suggestions
-                            debugPrint('You just onChanged text : $text');
-                          },
-                          onSubmitted: (text) {
-                            // Handle the submission of the selected suggestion
-                            // Implement the logic for the selection action
-                            debugPrint('You just onSubmitted text : $text');
-                          },
-                        );
-                      },
-                      optionsViewBuilder: (BuildContext context,
-                          AutocompleteOnSelected<String> onSelected,
-                          Iterable<String> options) {
-                        // Implement the UI for displaying the suggestion options
-                        return Material(
-                          color: whiteColor,
-                          child: //ListTileExample(),
-                              ListView.separated(
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const Divider(
-                              height: 0,
-                            ),
-                            itemCount: _fruitOptions.length,
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                child: ListTile(
-                                  title: Text('${_fruitOptions[index]}'),
-                                  onTap: () {
-                                    // Handle the selection of an option
-                                    onSelected('${_fruitOptions[index]}');
-                                    debugPrint(
-                                        'You just selected option : ${_fruitOptions[index]}');
-                                  },
-                                ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      onSelected: (String value) {
-                        debugPrint('You just selected value : $value');
-                      },
-                    ),
-                  ),
-                ),
+            crossAxisAlignment: CrossAxisAlignment.center,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              Container(
+                color: MaterialStateColor.resolveWith((states) => Colors.black),
+                child: Row(
+                  children: [
 
-                Container(
-                  //padding: EdgeInsets.all(5),
-                  margin: EdgeInsets.all(2),
-                  height: 45,
-                  width: 110,
-                  // color: whiteColor,
-                  child: InputDecorator(
-                    decoration: const InputDecoration(
-                        contentPadding:
-                            EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-                        // border: OutlineInputBorder(gapPadding: 0.0),
-                        //hintText: "Search..",
-                        hintStyle: TextStyle(color: Colors.white),
-                        labelStyle: TextStyle(color: whiteColor)),
-                    child: Autocomplete<String>(
-                      optionsBuilder: (TextEditingValue fruitTextEditingValue) {
-                        // if user is input nothing
-                        if (fruitTextEditingValue.text == '') {
-                          return const Iterable<String>.empty();
-                        }
-                        // if user is input something the build
-                        // suggestion based on the user input
-                        return _fruitOptions.where((String option) {
-                          return option.contains(
-                              fruitTextEditingValue.text.toLowerCase());
-                        });
-                      },
-                      fieldViewBuilder: (BuildContext context,
-                          TextEditingController fieldTextEditingController,
-                          FocusNode fieldFocusNode,
-                          VoidCallback onFieldSubmitted) {
-                        // Implement the text field UI
-                        return TextField(
-                          controller: fieldTextEditingController,
-                          focusNode: fieldFocusNode,
-                          cursorColor: Colors.white,
-                          style: TextStyle(color: whiteColor, fontSize: 12),
-                          decoration: const InputDecoration(
-                            //labelText: 'Type Here',
-                            hintText: 'To City',
-                            hintStyle:
-                                TextStyle(color: Colors.grey, fontSize: 10),
-                            // [enabledBorder], displayed when [TextField, InputDecoration.enabled] is true
-                            enabledBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                            //[focusedBorder], displayed when [TextField, InputDecorator.isFocused] is true
-                            focusedBorder: UnderlineInputBorder(
-                              borderSide: BorderSide(color: Colors.transparent),
-                            ),
-                          ),
-                          onChanged: (text) {
-                            // Update suggestions based on user input
-                            // Implement the logic to filter and refresh suggestions
-                            debugPrint('You just onChanged text : $text');
+                    
+                    Container(
+                      margin: EdgeInsets.all(2),
+                      height: 45,
+                      width: 110,
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 2),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            labelStyle: TextStyle(color: whiteColor)),
+                        child: Autocomplete<String>(
+                          optionsBuilder:
+                              (TextEditingValue textEditingValue) async {
+                            _searchingWithQuery = textEditingValue.text;
+                            final Iterable<String> options =
+                                await search(_searchingWithQuery!);
+                            if (_searchingWithQuery != textEditingValue.text) {
+                              return _lastOptions;
+                            }
+                            _lastOptions = options;
+                            return options;
                           },
-                          onSubmitted: (text) {
-                            // Handle the submission of the selected suggestion
-                            // Implement the logic for the selection action
-                            debugPrint('You just onSubmitted text : $text');
-                          },
-                        );
-                      },
-                      optionsViewBuilder: (BuildContext context,
-                          AutocompleteOnSelected<String> onSelected,
-                          Iterable<String> options) {
-                        // Implement the UI for displaying the suggestion options
-                        return Material(
-                          color: whiteColor,
-                          child: //ListTileExample(),
-                              ListView.separated(
-                            keyboardDismissBehavior:
-                                ScrollViewKeyboardDismissBehavior.onDrag,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const Divider(
-                              height: 0,
-                            ),
-                            itemCount: _fruitOptions.length,
-                            itemBuilder: (context, index) {
-                              return SizedBox(
-                                child: ListTile(
-                                  title: Text('${_fruitOptions[index]}'),
-                                  onTap: () {
-                                    // Handle the selection of an option
-                                    onSelected('${_fruitOptions[index]}');
-                                    debugPrint(
-                                        'You just selected option : ${_fruitOptions[index]}');
-                                  },
+                          fieldViewBuilder: (BuildContext context,
+                              TextEditingController fieldTextEditingController,
+                              FocusNode fieldFocusNode,
+                              VoidCallback onFieldSubmitted) {
+                            return TextField(
+                              controller: fieldTextEditingController,
+                              focusNode: fieldFocusNode,
+                              cursorColor: Colors.white,
+                              style: const TextStyle(
+                                  color: whiteColor, fontSize: 12),
+                              decoration: const InputDecoration(
+                                hintText: 'From City',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 10),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
                                 ),
-                              );
-                            },
-                          ),
-                        );
-                      },
-                      onSelected: (String value) {
-                        debugPrint('You just selected value : $value');
-                      },
-                    ),
-                  ),
-                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                              onChanged: (text) {
+                                debugPrint('You just onChanged text : $text');
+                              },
+                              onSubmitted: (text) {
+                                debugPrint('You just onSubmitted text : $text');
+                              },
+                            );
+                          },
+                          optionsViewBuilder: (BuildContext context,
+                              AutocompleteOnSelected<String> onSelected,
+                              Iterable<String> options) {
+                            return Material(
+                              color: whiteColor,
+                              child: ListView.separated(
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(
+                                  height: 0,
+                                ),
+                                itemCount: _lastOptions.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      onSelected(
+                                          '${_lastOptions.elementAt(index)}');
+                                      debugPrint(
+                                          'You just selected option : ${_lastOptions.elementAt(index)}}');
 
-                
-                _buildSignupButton()
-              ],
-            ),
-          ),
-          DataTable(
-            horizontalMargin: 5,
-            columnSpacing: 35,
-            headingRowHeight: 0, //Add your height for showu table header colum
-            headingRowColor:
-                MaterialStateColor.resolveWith((states) => Colors.black),
-            columns: const [
-              DataColumn(
-                label: Text(
-                  'From',
-                  style: TextStyle(
-                    color: Colors.white,
-                    fontSize: 14,
+                                          fromCityID = '${cityListx[index].cityId}';
+                                          fromCityName = cityListx[index].cityName;
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 5, top: 5, bottom: 5),
+                                          child: Text(
+                                            _lastOptions
+                                                .elementAt(index)
+                                                .capitalize(),
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          onSelected: (String value) {
+                            debugPrint('You just selected value : $value');
+                          },
+                        ),
+                      )),
+
+
+                      Container(
+                      margin: EdgeInsets.all(2),
+                      height: 45,
+                      width: 110,
+                      child: InputDecorator(
+                        decoration: const InputDecoration(
+                            contentPadding: EdgeInsets.symmetric(
+                                vertical: 2, horizontal: 2),
+                            hintStyle: TextStyle(color: Colors.grey),
+                            labelStyle: TextStyle(color: whiteColor)),
+                        child: Autocomplete<String>(
+                          optionsBuilder:
+                              (TextEditingValue textEditingValue) async {
+                            _searchingWithQuery = textEditingValue.text;
+                            final Iterable<String> options =
+                                await search(_searchingWithQuery!);
+                            if (_searchingWithQuery != textEditingValue.text) {
+                              return _lastOptions;
+                            }
+                            _lastOptions = options;
+                            return options;
+                          },
+                          fieldViewBuilder: (BuildContext context,
+                              TextEditingController fieldTextEditingController,
+                              FocusNode fieldFocusNode,
+                              VoidCallback onFieldSubmitted) {
+                            return TextField(
+                              controller: fieldTextEditingController,
+                              focusNode: fieldFocusNode,
+                              cursorColor: Colors.white,
+                              style: const TextStyle(
+                                  color: whiteColor, fontSize: 12),
+                              decoration: const InputDecoration(
+                                hintText: 'To City',
+                                hintStyle:
+                                    TextStyle(color: Colors.grey, fontSize: 10),
+                                enabledBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                                focusedBorder: UnderlineInputBorder(
+                                  borderSide:
+                                      BorderSide(color: Colors.transparent),
+                                ),
+                              ),
+                              onChanged: (text) {
+                                debugPrint('You just onChanged text : $text');
+                              },
+                              onSubmitted: (text) {
+                                debugPrint('You just onSubmitted text : $text');
+                              },
+                            );
+                          },
+                          optionsViewBuilder: (BuildContext context,
+                              AutocompleteOnSelected<String> onSelected,
+                              Iterable<String> options) {
+                            return Material(
+                              color: whiteColor,
+                              child: ListView.separated(
+                                keyboardDismissBehavior:
+                                    ScrollViewKeyboardDismissBehavior.onDrag,
+                                separatorBuilder:
+                                    (BuildContext context, int index) =>
+                                        const Divider(
+                                  height: 0,
+                                ),
+                                itemCount: _lastOptions.length,
+                                itemBuilder: (context, index) {
+                                  return GestureDetector(
+                                    onTap: () {
+                                      onSelected(
+                                          '${_lastOptions.elementAt(index)}');
+                                      debugPrint(
+                                          'You just selected option : ${_lastOptions.elementAt(index)}}');
+
+                                          toCityID = '${cityListx[index].cityId}';
+                                          toCityName = cityListx[index].cityName;
+                                    },
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.start,
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.center,
+                                      children: [
+                                        Container(
+                                          margin: const EdgeInsets.only(
+                                              left: 5, top: 5, bottom: 5),
+                                          child: Text(
+                                            _lastOptions
+                                                .elementAt(index)
+                                                .capitalize(),
+                                            style: const TextStyle(
+                                                fontSize: 14.0,
+                                                fontWeight: FontWeight.w400),
+                                          ),
+                                        )
+                                      ],
+                                    ),
+                                  );
+                                },
+                              ),
+                            );
+                          },
+                          onSelected: (String value) {
+                            debugPrint('You just selected value : $value');
+                          },
+                        ),)),
+
+
+
+                    _buildSignupButton()
+                  ],
+                ),
+              ),
+              DataTable(
+                horizontalMargin: 5,
+                columnSpacing: 35,
+                headingRowHeight:
+                    0, //Add your height for showu table header colum
+                headingRowColor:
+                    MaterialStateColor.resolveWith((states) => Colors.black),
+                columns: const [
+                  DataColumn(
+                    label: Text(
+                      'From',
+                      style: TextStyle(
+                        color: Colors.white,
+                        fontSize: 14,
+                      ),
+                    ),
+                    // numeric: true,
                   ),
-                ),
-                // numeric: true,
-              ),
-              DataColumn(
-                label: Text(
-                  'To',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                // numeric: true,
-              ),
-              DataColumn(
-                label: Text(
-                  'Price',
-                  style: TextStyle(color: Colors.white, fontSize: 14),
-                ),
-                // label: ColoredBox(
-                //   color: Colors.orangeAccent,
-                //   child: Padding(
-                //     padding: EdgeInsets.only(right: 10, left: 10, top: 1, bottom: 1),
-                //     child: Text(
-                //       'Search',
-                //       style: TextStyle(
-                //         fontSize: 14,
-                //         color: Colors.black,
-                //       ),
-                //     ),
-                //   ),
-                // ),
-                // numeric: true,
-              ),
-              DataColumn(label: SizedBox(child: Text(''))
-                  /*IconButton(
+                  DataColumn(
+                    label: Text(
+                      'To',
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                    // numeric: true,
+                  ),
+                  DataColumn(
+                    label: Text(
+                      'Price',
+                      style: TextStyle(color: Colors.white, fontSize: 14),
+                    ),
+                    // label: ColoredBox(
+                    //   color: Colors.orangeAccent,
+                    //   child: Padding(
+                    //     padding: EdgeInsets.only(right: 10, left: 10, top: 1, bottom: 1),
+                    //     child: Text(
+                    //       'Search',
+                    //       style: TextStyle(
+                    //         fontSize: 14,
+                    //         color: Colors.black,
+                    //       ),
+                    //     ),
+                    //   ),
+                    // ),
+                    // numeric: true,
+                  ),
+                  DataColumn(label: SizedBox(child: Text(''))
+                      /*IconButton(
                 icon: Icon(
                   isTableExpanded ? Icons.arrow_drop_up : Icons.arrow_drop_down,
                   color: Colors.white,
@@ -859,69 +874,69 @@ class _PackageTableState extends State<PackageTable> {
                 },
               ),
               numeric: true, */
-                  ),
-            ],
-            rows: [
-              //if (isTableExpanded)
-              for (int i = 0; i < packageList.length; i++)
-                DataRow(
-                  cells: [
-                    DataCell(
-                      Text(
-                        packageList[i].sourceCityName,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
                       ),
-                    ),
-                    DataCell(
-                      Text(
-                        packageList[i].destinationCityName,
-                        maxLines: 1,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    DataCell(
-                      Text(
-                        '\u{20B9} ${packageList[i].totalCharge}',
-                        maxLines: 1,
-                        style: const TextStyle(
-                          overflow: TextOverflow.ellipsis,
-                          fontSize: 14,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                    ),
-                    const DataCell(
-                      ColoredBox(
-                        color: Colors.red,
-                        child: Padding(
-                          padding: EdgeInsets.only(
-                              right: 5, left: 5, top: 1, bottom: 1),
-                          child: Text(
+                ],
+                rows: [
+                  //if (isTableExpanded)
+                  for (int i = 0; i < packageList.length; i++)
+                    DataRow(
+                      cells: [
+                        DataCell(
+                          Text(
+                            packageList[i].sourceCityName,
                             maxLines: 1,
-                            'Book',
-                            style: TextStyle(
-                              fontSize: 16,
+                            style: const TextStyle(
                               overflow: TextOverflow.ellipsis,
-                              color: Colors.white,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
                             ),
                           ),
                         ),
-                      ),
-                    ),
-                  ],
-                ), // Add more rows as needed
-            ],
-          ),
-        ]),
+                        DataCell(
+                          Text(
+                            packageList[i].destinationCityName,
+                            maxLines: 1,
+                            style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        DataCell(
+                          Text(
+                            '\u{20B9} ${packageList[i].totalCharge}',
+                            maxLines: 1,
+                            style: const TextStyle(
+                              overflow: TextOverflow.ellipsis,
+                              fontSize: 14,
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                        const DataCell(
+                          ColoredBox(
+                            color: Colors.red,
+                            child: Padding(
+                              padding: EdgeInsets.only(
+                                  right: 5, left: 5, top: 1, bottom: 1),
+                              child: Text(
+                                maxLines: 1,
+                                'Book',
+                                style: TextStyle(
+                                  fontSize: 16,
+                                  overflow: TextOverflow.ellipsis,
+                                  color: Colors.white,
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ), // Add more rows as needed
+                ],
+              ),
+            ]),
       ),
     );
   }
@@ -1182,5 +1197,11 @@ class ThingsToDoCard extends StatelessWidget {
             ],
           )),
     );
+  }
+}
+
+extension StringExtension on String {
+  String capitalize() {
+    return "${this[0].toUpperCase()}${this.substring(1).toLowerCase()}";
   }
 }

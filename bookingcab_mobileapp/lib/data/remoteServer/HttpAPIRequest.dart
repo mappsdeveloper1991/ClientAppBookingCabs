@@ -36,6 +36,7 @@ const String UPADTE_COMPANY_END_POINT = "company/addcompany";
 const String LanguageAPI_END_POINT = "master-language";
 const String Nationality_API_END_POINT = "city/fetchNationality";
 const String CITY_API_END_POINT = "city/stateCountryByCityName?city_name=";
+const String CITY_PACKAGE_LIST_POINT = "city/packageCity";
 
 const String OneWayPackageList_API_ENDPOINT_NAME =
     "lowest_fare_wrapper/getLowestFareList";
