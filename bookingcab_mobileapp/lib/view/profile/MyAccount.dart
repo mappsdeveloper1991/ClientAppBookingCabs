@@ -22,7 +22,6 @@ class MyAccount extends StatefulWidget {
 }
 
 class _MyAccountState extends State<MyAccount> {
-
   UserProfileData? userProfileData = null;
   @override
   void initState() {
@@ -127,7 +126,7 @@ class _MyAccountState extends State<MyAccount> {
                   height: 5,
                 ),
                 Padding(
-                  padding: const EdgeInsets.all(8.0),
+                  padding: const EdgeInsets.all(2.0),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
@@ -143,7 +142,7 @@ class _MyAccountState extends State<MyAccount> {
                           style: ElevatedButton.styleFrom(
                             backgroundColor: buttonSecondaryColor,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(8.0),
+                              borderRadius: BorderRadius.circular(5.0),
                             ),
                             elevation: 5.0,
                           ),
@@ -151,12 +150,12 @@ class _MyAccountState extends State<MyAccount> {
                             'Change Password',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
                       ),
-                      const SizedBox(width: 7.0), // Adjust spacing as needed
+                      const SizedBox(width: 4.0), // Adjust spacing as needed
                       Expanded(
                         child: ElevatedButton(
                           onPressed: () {
@@ -172,14 +171,14 @@ class _MyAccountState extends State<MyAccount> {
                           style: ElevatedButton.styleFrom(
                               backgroundColor: buttonPrimaryColor,
                               shape: RoundedRectangleBorder(
-                                borderRadius: BorderRadius.circular(8.0),
+                                borderRadius: BorderRadius.circular(5.0),
                               ),
                               elevation: 5.0),
                           child: const Text(
                             'Edit Profile',
                             style: TextStyle(
                               color: Colors.white,
-                              fontSize: 16,
+                              fontSize: 14,
                             ),
                           ),
                         ),
@@ -211,24 +210,27 @@ class _MyAccountState extends State<MyAccount> {
                   SizedBox(
                     height: 10,
                   ),
-                  Row(
-                    children: [
-                      _advantageWidget(
-                        label: "Easy Payment",
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      _advantageWidget(
-                        label: "Track Your Booking",
-                      ),
-                      SizedBox(
-                        width: 8,
-                      ),
-                      _advantageWidget(
-                        label: "Instant Checkout",
-                      ),
-                    ],
+                  SingleChildScrollView(
+                    scrollDirection: Axis.horizontal,
+                    child: Row(
+                      children: [
+                        _advantageWidget(
+                          label: "Easy Payment",
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        _advantageWidget(
+                          label: "Track Your Booking",
+                        ),
+                        SizedBox(
+                          width: 8,
+                        ),
+                        _advantageWidget(
+                          label: "Instant Checkout",
+                        ),
+                      ],
+                    ),
                   ),
                   SizedBox(
                     height: 10,

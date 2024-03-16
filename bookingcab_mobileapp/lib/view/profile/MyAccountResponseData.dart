@@ -48,9 +48,9 @@ class UserProfileData {
   int? parentId = 0;
   String? firstName = '';
   String? lastName = '';
-  String? email = '';
+  String email = '';
   String? mobilePrefix = '';
-  String? mobile = '';
+  String mobile = '';
   String? gender = '';
 
   /*
@@ -136,9 +136,9 @@ class UserProfileData {
     this.parentId,
     this.firstName,
     this.lastName,
-    this.email,
+    required this.email,
     this.mobilePrefix,
-    this.mobile,
+    required this.mobile,
     this.gender,
 
     /*

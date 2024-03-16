@@ -275,28 +275,33 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
               const Divider(
                 color: Color.fromARGB(255, 242, 236, 236),
               ),
-              Padding(
-                padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    _bottomDataOfVehicleCard(
-                      Icons.currency_rupee,
-                      "Fare",
-                    ),
-                    _bottomDataOfVehicleCard(
-                      Icons.my_location,
-                      "Meeting Point",
-                    ),
-                    _bottomDataOfVehicleCard(
-                      Icons.policy,
-                      "Cancellation",
-                    ),
-                    _bottomDataOfVehicleCard(
-                      Icons.wine_bar,
-                      "Amenities",
-                    ),
-                  ],
+              SingleChildScrollView(
+                scrollDirection: Axis.vertical,
+               child: Padding(
+                  padding: const EdgeInsets.only(left: 4, right: 4, bottom: 4),
+                  
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    
+                    children: [
+                      _bottomDataOfVehicleCard(
+                        Icons.currency_rupee,
+                        "Fare  ",
+                      ),
+                      _bottomDataOfVehicleCard(
+                        Icons.my_location,
+                        "Meeting Point",
+                      ),
+                      _bottomDataOfVehicleCard(
+                        Icons.policy,
+                        "Cancellation",
+                      ),
+                      _bottomDataOfVehicleCard(
+                        Icons.wine_bar,
+                        "Amenities",
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ],

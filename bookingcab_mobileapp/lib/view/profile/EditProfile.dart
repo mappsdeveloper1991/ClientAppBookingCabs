@@ -236,7 +236,7 @@ class _EditProfileState extends State<EditProfile> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              Row(
+              Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Container(
@@ -257,16 +257,36 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                   ),
+
+                   const SizedBox(
+                height: 10,
+              ),
+                
+                Text(userProfileData.email ,
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                Text('+91${userProfileData.mobile}',
+                  style: const TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
                 ],
               ),
               const SizedBox(
                 height: 10,
               ),
+                
+             
+
               _buildTextField('First Name', _firstNameController),
               const SizedBox(height: 10.0),
               _buildTextField('Last Name', _lastNameController),
               const SizedBox(height: 10.0),
-              Row(
+            /*  Row(
                 children: [
                   _buildCountryCodeDropdown(),
                   const SizedBox(width: 10.0),
@@ -276,7 +296,7 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ],
               ),
-              const SizedBox(height: 10.0),
+              const SizedBox(height: 10.0), */
               Row(
                 children: [
                   _buildCountryDropdown(),
@@ -290,7 +310,7 @@ class _EditProfileState extends State<EditProfile> {
               const SizedBox(height: 10.0),
               _buildTextField('Landline Number', _landlineontroller),
               const SizedBox(height: 10.0),
-              _buildTextFieldDisable('Email', _emailController),
+             // _buildTextFieldDisable('Email', _emailController),
               const SizedBox(height: 10.0),
               _buildTextField('Alternate Email Id', _compAltEmailController),
               const SizedBox(height: 10.0),
@@ -315,6 +335,9 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ],
               ),
+
+               
+
               Row(
                 mainAxisAlignment: MainAxisAlignment.start,
                 children: [
@@ -334,6 +357,41 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                 ],
               ),
+             
+             
+             Row(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  const Spacer(
+                    flex: 1,
+                  ),
+                  Expanded(
+                    flex: 4,
+                    child: ElevatedButton(
+                      style: ElevatedButton.styleFrom(
+                          backgroundColor: buttonSecondaryColor,
+                          shape: const RoundedRectangleBorder(),
+                          elevation: 5.0),
+                      onPressed: () {
+                        signUpAPICall(context);
+                      },
+                      child: const Text(
+                        'Save',
+                        style: TextStyle(
+                          color: whiteColor,
+                          fontSize: 16,
+                        ),
+                      ),
+                    ),
+                  ),
+                  const Spacer(
+                    flex: 1,
+                  ),
+                ],
+              ),
+
+              SizedBox(height: 10,),
+              
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -363,9 +421,10 @@ class _EditProfileState extends State<EditProfile> {
                       ),
                     ),
                   ),
-                  const Spacer(
-                    flex: 1,
-                  ), // Adjust spacing as needed
+                  // const Spacer(
+                  //   flex: 1,
+                  // ), // Adjust spacing as needed
+                  const SizedBox(width: 5,),
                   Expanded(
                     flex: 3,
                     child: ElevatedButton(
@@ -397,36 +456,7 @@ class _EditProfileState extends State<EditProfile> {
               const SizedBox(
                 height: 5,
               ),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Spacer(
-                    flex: 2,
-                  ),
-                  Expanded(
-                    flex: 3,
-                    child: ElevatedButton(
-                      style: ElevatedButton.styleFrom(
-                          backgroundColor: buttonSecondaryColor,
-                          shape: const RoundedRectangleBorder(),
-                          elevation: 5.0),
-                      onPressed: () {
-                        signUpAPICall(context);
-                      },
-                      child: const Text(
-                        'Save',
-                        style: TextStyle(
-                          color: whiteColor,
-                          fontSize: 16,
-                        ),
-                      ),
-                    ),
-                  ),
-                  const Spacer(
-                    flex: 2,
-                  ),
-                ],
-              )
+             
             ],
           ),
         ),
