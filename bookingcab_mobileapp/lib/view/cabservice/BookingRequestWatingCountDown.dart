@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
-import 'package:bookingcab_mobileapp/view/cabservice/DriverDetails.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/BookingRequestConfirmtionDetails.dart';
 import 'package:circular_countdown_timer/circular_countdown_timer.dart';
 import 'package:circular_countdown_timer/countdown_text_format.dart';
 import 'package:flutter/material.dart';

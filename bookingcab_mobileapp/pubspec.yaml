@@ -51,6 +51,10 @@ dependencies:
   percent_indicator: ^4.0.1
   circular_countdown_timer: ^0.2.3
 
+  #Get X 
+  get: ^4.6.6
+  popover: ^0.3.0
+
 
 
 dev_dependencies:

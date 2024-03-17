@@ -1,7 +1,11 @@
+import 'dart:ffi';
+
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
-import 'package:bookingcab_mobileapp/view/cabservice/BookingRequest.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/BookingRequestWatingCountDown.dart';
 import 'package:flutter/material.dart';
+
+import 'package:popover/popover.dart';
 
 class SelectedVehicleDetails extends StatefulWidget {
   const SelectedVehicleDetails({super.key});
@@ -41,15 +45,21 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                             _otherFairDetailCard(
                               "Sightseeings",
                               "Red Fort, Lotus Temple",
+                              "502",
+                              380.0
                             ),
                             _driverDetailCard(),
                             _otherFairDetailCard(
                               "Guide",
                               "Hindi UnderStanding...",
+                              "504",
+                              400.0
                             ),
                             _otherFairDetailCard(
                               "Attraction",
                               "Light and Sound Show..",
+                              "505",
+                              400
                             ),
                             Padding(
                               padding: const EdgeInsets.only(top: 30),
@@ -148,7 +158,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                 Row(
                   children: [
                     const Text(
-                      '\u{20B9} 5000',
+                      '\u{20B9} 50001',
                       style: TextStyle(
                         color: buttonPrimaryColor,
                         fontSize: 14,
@@ -158,6 +168,8 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                     const SizedBox(
                       width: 3,
                     ),
+                    InforPopupOverView(450.0),
+                    /*
                     GestureDetector(
                       onTap: () {
                         _toggleCardVisibility();
@@ -166,7 +178,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                         Icons.info,
                         color: buttonPrimaryColor,
                       ),
-                    ),
+                    ), */
                   ],
                 ),
                 GestureDetector(
@@ -186,7 +198,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
     );
   }
 
-  Widget _otherFairDetailCard(String value1, String value2) {
+  Widget _otherFairDetailCard(String value1, String value2, String price, double popupheight) {
     return SizedBox(
       height: 75,
       child: Card(
@@ -221,11 +233,11 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                   ),
                 ],
               ),
-              const Row(
+               Row(
                 children: [
                   Text(
-                    '\u{20B9} 5000',
-                    style: TextStyle(
+                    '\u{20B9} $price',
+                    style: const TextStyle(
                       color: buttonPrimaryColor,
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
@@ -234,10 +246,11 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                   SizedBox(
                     width: 3,
                   ),
-                  Icon(
+                  InforPopupOverView(popupheight),
+                  /* Icon(
                     Icons.info,
                     color: buttonPrimaryColor,
-                  ),
+                  ), */
                 ],
               ),
               GestureDetector(
@@ -295,7 +308,7 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                   const Row(
                     children: [
                       Text(
-                        '\u{20B9} 5000',
+                        '\u{20B9} 50003',
                         style: TextStyle(
                           color: buttonPrimaryColor,
                           fontSize: 14,
@@ -305,10 +318,11 @@ class _SelectedVehicleDetailsState extends State<SelectedVehicleDetails> {
                       SizedBox(
                         width: 3,
                       ),
-                      Icon(
+                      /* Icon(
                         Icons.info,
                         color: buttonPrimaryColor,
-                      ),
+                      ), */
+                      InforPopupOverView(350)
                     ],
                   ),
                   GestureDetector(
@@ -924,6 +938,323 @@ class _InfoCard extends StatelessWidget {
           ),
         ),
       ],
+    );
+  }
+}
+
+class InforPopupOverView extends StatelessWidget {
+
+   final double  height;
+    const InforPopupOverView(this.height, {super.key});
+
+  //const InforPopupOverView(this.height, {Key? key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return Container(
+      width: 30,
+      height: 30,
+      decoration: const BoxDecoration(
+        //color: Colors.white,
+        borderRadius: BorderRadius.all(Radius.circular(5)),
+        //boxShadow: [BoxShadow(color: Colors.black26, blurRadius: 5)],
+      ),
+      child: GestureDetector(
+        child: Icon(
+          Icons.info_outline,
+          color: buttonPrimaryColor,
+        ),
+        onTap: () {
+          showPopover(
+            context: context,
+            bodyBuilder: (context) => const ListItems(),
+            onPop: () => print('Popover was popped!'),
+            direction: PopoverDirection.top,
+            width: 340, //MediaQuery.of(context).size.width * 50,
+            height: height,
+            arrowHeight: 15,
+            arrowWidth: 30,
+          );
+        },
+      ),
+    );
+  }
+}
+
+class ListItems extends StatelessWidget {
+  
+  
+  const ListItems({Key? key}) : super(key: key);
+
+  Widget _termsConditionWidget(String value) {
+    return Row(
+      children: [
+        const CircleAvatar(
+          maxRadius: 4,
+          backgroundColor: buttonPrimaryColor,
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Text(
+          value,
+          style: const TextStyle(
+            fontWeight: FontWeight.w400,
+            fontSize: 16,
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _importantInfoWidget(String value) {
+    return Row(
+      children: [
+        Expanded(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            //mainAxisAlignment: MainAxisAlignment.start,
+            children: [
+              const CircleAvatar(
+                backgroundColor: buttonPrimaryColor,
+                maxRadius: 4,
+              ),
+              Flexible(
+                child: Text(
+                  value,
+                ),
+              ),
+            ],
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _importantInfoWidget2(String value) {
+    return Row(
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        const Row(
+          // crossAxisAlignment: CrossAxisAlignment.end,
+          // mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            CircleAvatar(
+              maxRadius: 4,
+              backgroundColor: buttonPrimaryColor,
+            ),
+          ],
+        ),
+        const SizedBox(
+          width: 5,
+        ),
+        Flexible(
+          child: Text(
+            value,
+            softWrap: true,
+            style: const TextStyle(
+              fontWeight: FontWeight.w400,
+              fontSize: 14,
+            ),
+          ),
+        ),
+      ],
+    );
+  }
+
+  Widget _detailsWidget(String value1, String value2) {
+    return Column(
+      children: [
+        Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+          children: [
+            Text(
+              value1,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 14,
+              ),
+            ),
+            Text(
+              value2,
+              style: TextStyle(
+                color: Colors.grey[700],
+                fontSize: 14,
+              ),
+            ),
+          ],
+        ),
+        const Divider(
+          color: Colors.grey,
+        ),
+      ],
+    );
+  }
+
+/*
+  Expanded(
+                          child: SingleChildScrollView(
+                        child: Column(
+                          children: <Widget>[
+                            SizedBox(
+
+*/
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+        padding: const EdgeInsets.symmetric(vertical: 0),
+        child: SizedBox(
+          //height: MediaQuery.of(context).size.height,
+          child: Card(
+            surfaceTintColor: Colors.white,
+            child: Expanded(
+                child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.all(0.0),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          "Terms & conditions ",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                        GestureDetector(
+                          onTap: () {
+                            //toggleCard();
+                          },
+                          child: const Icon(
+                            Icons.close,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 0),
+                    child: Column(
+                      // mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        _termsConditionWidget(
+                            "Incuded km:750 km;Extra fare/km: 12km"),
+                        _termsConditionWidget(
+                            "Toll/State Tax,Parking fee,etc. executed"),
+                        _termsConditionWidget(
+                            "Approximate one way toll price 288"),
+                        _termsConditionWidget(
+                            "Service Provider: Hello42cab Pvt Ltd"),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 6, right: 6),
+                    child: Column(
+                      children: [
+                        _detailsWidget("Included km", "750 km"),
+                        _detailsWidget("Extra Fare/km", "12 km"),
+                        _detailsWidget("Driver Allowance", "Included"),
+                        _detailsWidget("Fuel Charges", "Included"),
+                        _detailsWidget("One pickup & One drop", "Included"),
+                      ],
+                    ),
+                  ),
+                  const SizedBox(
+                    height: 8,
+                  ),
+                  const Padding(
+                    padding: EdgeInsets.only(left: 10),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text(
+                          "Important Info",
+                          style: TextStyle(
+                            fontWeight: FontWeight.bold,
+                            fontSize: 16,
+                          ),
+                        ),
+                      ],
+                    ),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.only(left: 4),
+                    child: Column(
+                      children: [
+                        _importantInfoWidget(
+                            "Guest will have to pay the parking fee, Toll/State Tax & other similar charges directly to the driver at the point of payment"),
+                        _importantInfoWidget(
+                            "Guest will have to pay the parking fee, Toll/State Tax & other similar charges directly to the driver at the point of payment"),
+                      ],
+                    ),
+                  ),
+                ],
+              ),
+            )),
+          ),
+        )
+        /*
+      ListView(
+        padding: const EdgeInsets.all(8),
+        children: [
+          InkWell(
+            onTap: () {
+              Navigator.of(context)
+                ..pop()
+                ..push(
+                  MaterialPageRoute<SecondRoute>(
+                    builder: (context) => SecondRoute(),
+                  ),
+                );
+            },
+            child: Container(
+              height: 50,
+              color: Colors.amber[100],
+              child: const Center(child: Text('Entry A')),
+            ),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[200],
+            child: const Center(child: Text('Entry B')),
+          ),
+          const Divider(),
+          Container(
+            height: 50,
+            color: Colors.amber[300],
+            child: const Center(child: Text('Entry C')),
+          ),
+
+        ],
+      ),
+*/
+
+        );
+  }
+}
+
+class SecondRoute extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('Second Route'),
+        automaticallyImplyLeading: false,
+      ),
+      body: Center(
+        child: ElevatedButton(
+          onPressed: () => Navigator.pop(context),
+          child: const Text('Go back!'),
+        ),
+      ),
     );
   }
 }
