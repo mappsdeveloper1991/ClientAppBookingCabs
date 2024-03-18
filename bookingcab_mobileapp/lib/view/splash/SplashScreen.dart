@@ -4,6 +4,7 @@ import 'dart:convert';
 import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
 import 'package:bookingcab_mobileapp/data/localDB/SharedPreferencesUtil.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/booking_history/MapSample.dart';
 import 'package:bookingcab_mobileapp/view/language/LanguageSelectionScreen.dart';
 import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
 import 'package:flutter/material.dart';
@@ -75,6 +76,7 @@ class SplashScreenState extends State<SplashScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => const LanguageSelectScreen())));
+               // builder: (context) =>  MapScreen())));
   }
 
   void loadNavigateToHomepgae() {

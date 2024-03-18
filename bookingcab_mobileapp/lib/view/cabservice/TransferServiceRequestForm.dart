@@ -1,6 +1,8 @@
 import 'package:bookingcab_mobileapp/view/cabservice/TransferVehiclesList.dart';
 import 'package:flutter/material.dart';
 
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
 import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 
@@ -61,6 +63,130 @@ class _TransferServiceState extends State<TransferService> {
       });
     }
   }
+
+  GoogleMapController? mapController;
+  Set<Marker> markers = {};
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+    setState(() {
+      markers.add(Marker(
+        markerId: MarkerId('marker1'),
+        position: LatLng(12.847810, 77.663190),
+        infoWindow: InfoWindow(title: 'San Francisco'),
+      ));
+    });
+  }
+
+/*
+  StreetViewController? streetViewController;
+
+  void _onStreetViewCreated(StreetViewController controller) {
+    streetViewController = controller;
+    streetViewController!.setPosition(LatLng(37.7749, -122.4194));
+  }
+  */
+
+
+/*
+  Future<void> _requestLocationPermission() async {
+    final status = await location.requestPermission();
+    if (status == PermissionStatus.granted) {
+      // Permission granted, proceed with using location
+    } else {
+      // Permission denied, handle accordingly
+    }
+  }
+*/
+
+/*
+ String? _currentAddress;
+  Position? _currentPosition;
+
+ @override
+  void initState() {
+    super.initState();
+
+    //getXLo();
+  }
+
+//osition position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+//List<Placemark> placemarks = await placemarkFromCoordinates(52.2165157, 6.9437819);
+
+Future<void> getXLo() async {
+Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
+}
+
+
+Future<void> _getCurrentPosition() async {
+  final hasPermission = await _handleLocationPermission();
+  if (!hasPermission) return;
+  await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high)
+      .then((Position position) {
+    setState(() => _currentPosition = position);
+  }).catchError((e) {
+    debugPrint(e);
+  });
+}
+
+Future<bool> _handleLocationPermission() async {
+  bool serviceEnabled;
+  LocationPermission permission;
+  
+  serviceEnabled = await Geolocator.isLocationServiceEnabled();
+  if (!serviceEnabled) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Location services are disabled. Please enable the services')));
+    return false;
+  }
+  permission = await Geolocator.checkPermission();
+  if (permission == LocationPermission.denied) {
+    permission = await Geolocator.requestPermission();
+    if (permission == LocationPermission.denied) {   
+      ScaffoldMessenger.of(context).showSnackBar(
+          const SnackBar(content: Text('Location permissions are denied')));
+      return false;
+    }
+  }
+  if (permission == LocationPermission.deniedForever) {
+    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
+        content: Text('Location permissions are permanently denied, we cannot request permissions.')));
+    return false;
+  }
+  return true;
+}
+
+
+Future<void> _getAddressFromLatLng(Position position) async {
+  await placemarkFromCoordinates(
+          _currentPosition!.latitude, _currentPosition!.longitude)
+      .then((List<Placemark> placemarks) {
+    Placemark place = placemarks[0];
+    setState(() {
+      _currentAddress ='${place.street}, ${place.subLocality},${place.subAdministrativeArea}, ${place.postalCode}';
+    });
+  }).catchError((e) {
+    debugPrint(e);
+  });
+ }
+
+Future<void> _getCurrentPositionX() async {
+  // ...
+  
+  await Geolocator.getCurrentPosition(
+          desiredAccuracy: LocationAccuracy.high)
+      .then((Position position) {
+    setState(() => _currentPosition = position);
+    _getAddressFromLatLng(_currentPosition!);
+  }).catchError((e) {
+    debugPrint(e);
+  });
+}
+*/
+
+
+
 
   @override
   Widget build(BuildContext context) {
@@ -189,13 +315,22 @@ class _TransferServiceState extends State<TransferService> {
                   Expanded(
                     child: SizedBox(
                       height: 200,
-                      child: ClipRRect(
-                        clipBehavior: Clip.hardEdge,
-                        borderRadius: BorderRadius.circular(20.0),
-                        child: Image.asset(
-                          "assets/images/location_image.jpeg",
-                          fit: BoxFit.cover,
+                      child: GoogleMap(
+                        onMapCreated: _onMapCreated,
+                        mapType: MapType.normal, // Change to other map types
+                        myLocationButtonEnabled: true,
+                        myLocationEnabled: true,
+                        compassEnabled: true,
+
+                        // tiltGesturesEnabled: true,
+                        //rotateGesturesEnabled: true,
+                        //scrollGesturesEnabled: true,
+
+                        initialCameraPosition: CameraPosition(
+                          target: LatLng(12.847810, 77.663190),
+                          zoom: 12,
                         ),
+                        markers: markers,
                       ),
                     ),
                   ),
@@ -504,11 +639,8 @@ class _TransferServiceState extends State<TransferService> {
                         elevation: 5.0,
                       ),
                       onPressed: () {
-                        Navigator.push(
-                          context,
-                          MaterialPageRoute(
-                              builder: (context) => TransferVehicles()),
-                        );
+
+                        Navigator.push( context, MaterialPageRoute(builder: (context) => TransferVehicles()), );
                       },
                       child: const Text(
                         'Next >>',
