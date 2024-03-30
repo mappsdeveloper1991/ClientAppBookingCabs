@@ -1,10 +1,43 @@
+import 'dart:convert';
+
+import 'package:bookingcab_mobileapp/AppStyle/Loader.dart';
+import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/AddressSearchAPIresponse.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/AirportRailwayAPIResponse.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/BookingResponse.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/LocationSearchAPIResponse.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferVehiclesList.dart';
+import 'package:bookingcab_mobileapp/view/home/HomeTabScreen.dart';
+import 'package:bookingcab_mobileapp/view/home/PackageCityListResponse.dart';
+import 'package:bookingcab_mobileapp/view/signup/NationalityAPIResponseData.dart';
 import 'package:flutter/material.dart';
 
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
 import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
+
+
+//if isPickup = True => Location & Address will be Pickup location    ||    City and Airport/Railway will be Drop Location
+//if isPickup = fale => Location & Address will be Drop location      ||     City and Airport/Railway will be Pickup Location
+var isPickup = true;
+
+var pickupAddress = '';
+var pickupLat = '';
+var pickupLong = '';
+
+var dropAddress = '';
+var dropLat = '';
+var dropLong = '';
+
+var flightTrainNo = '';
+var flightTrrainTime = '';
+var  rideLatterDate = '';
+var  rideLatterTime = '';
+
+
+
 
 class TransferService extends StatefulWidget {
   const TransferService({super.key});
@@ -15,28 +48,72 @@ class TransferService extends StatefulWidget {
 
 class _TransferServiceState extends State<TransferService> {
   TextEditingController _searchController = TextEditingController();
-  TextEditingController _cityController = TextEditingController();
-  TextEditingController _airportStationController = TextEditingController();
+  //TextEditingController _cityController = TextEditingController();
+  //TextEditingController _airportStationController = TextEditingController();
   TextEditingController _FlightTrainNoController = TextEditingController();
-  TextEditingController _FlightTrainTimeController = TextEditingController();
-  TextEditingController _PickupDropLocationController = TextEditingController();
+  //TextEditingController _FlightTrainTimeController = TextEditingController();
+  //TextEditingController _PickupDropLocationController = TextEditingController();
   TextEditingController _LandmarkController = TextEditingController();
-  TextEditingController _PickupAddressController = TextEditingController();
+  //TextEditingController _PickupAddressController = TextEditingController();
 
   bool _isSearchFocused = false;
+  bool acceptTerms = false;
+
   bool _isPickup = true;
   bool _isDrop = false;
-  bool _isRideNow = true;
-  bool _isRideLater = false;
+
+  List<int> countValues = [1, 2, 3, 4];
   int selectedAdults = 1;
   int selectedChildren = 1;
   int selectedLuggages = 1;
   int selectedVehicles = 1;
-  bool acceptTerms = false;
-  List<int> countValues = [1, 2, 3, 4];
 
+  TimeOfDay _selectedTimeForFlightTrain = TimeOfDay.now();
+  String flightOrTraintNo = '';
+  String flightOrTrainTime = '';
+
+  bool _isRideNow = true;
+  bool _isRideLater = false;
+  String isRideLaterDate = '', isLaterTime = '';
   DateTime _selectedDate = DateTime.now();
   TimeOfDay _selectedTime = TimeOfDay.now();
+
+  List<CityList> cityListItems = [];
+  List<NationalityList> nationalityListItems = [];
+  List<AirportRailwayList> airportRaiwayListItems = [];
+  List<LocationList> locationListItems = [];
+  List<AddressList> addressListItems = [];
+
+  String myCurrentLatitude = '0.0', myCurrentLongitude = '0.0';
+  String cityID = "",
+      cityName = "",
+      cityLatitude = '0.0',
+      cityLongitude = '0.0';
+  String airportRailwayID = '',
+      airportRailwayName = '',
+      airportRailwayLatitude = '0.0',
+      airportRailwayLongitude = '0.0';
+
+  String pickupLocationID = '',
+      pickupLocationName = '',
+      pickupLocationLatitude = '0.0',
+      pickupLocationLongitude = '0.0';
+  String pickupAddressID = '',
+      pickupAddressName = '',
+      pickupAddressLatitude = '0.0',
+      pickupAddressLongitude = '0.0',
+      pickupCountryID = "",
+      pickupStateID = "",
+      pickupcityID = '';
+
+  String nationalityID = '',
+      nationalityName = '',
+      nationalityLatitude = '0.0',
+      nationalityLongitude = '0.0';
+
+  String? _searchingWithQuery;
+  late Iterable<String> _lastOptions = <String>[];
+  static List<String> _kOptions = <String>[];
 
   Future<void> _selectDate(BuildContext context) async {
     final DateTime? pickedDate = await showDatePicker(
@@ -48,18 +125,27 @@ class _TransferServiceState extends State<TransferService> {
     if (pickedDate != null && pickedDate != _selectedDate) {
       setState(() {
         _selectedDate = pickedDate;
+        isRideLaterDate =
+            '${_selectedDate.year}-${_selectedDate.month}-${_selectedDate.day}';
       });
     }
   }
 
-  Future<void> _selectTime(BuildContext context) async {
+  Future<void> _selectTime(BuildContext context, String type) async {
     final TimeOfDay? pickedTime = await showTimePicker(
       context: context,
       initialTime: _selectedTime,
     );
     if (pickedTime != null && pickedTime != _selectedTime) {
       setState(() {
-        _selectedTime = pickedTime;
+        if (type == "flightTrainTime") {
+          _selectedTimeForFlightTrain = pickedTime;
+          flightOrTrainTime =
+              '${_selectedTimeForFlightTrain.hour}:${_selectedTimeForFlightTrain.minute}';
+        } else {
+          _selectedTime = pickedTime;
+          isLaterTime = '${_selectedTime.hour}:${_selectedTime.minute}';
+        }
       });
     }
   }
@@ -77,116 +163,6 @@ class _TransferServiceState extends State<TransferService> {
       ));
     });
   }
-
-/*
-  StreetViewController? streetViewController;
-
-  void _onStreetViewCreated(StreetViewController controller) {
-    streetViewController = controller;
-    streetViewController!.setPosition(LatLng(37.7749, -122.4194));
-  }
-  */
-
-
-/*
-  Future<void> _requestLocationPermission() async {
-    final status = await location.requestPermission();
-    if (status == PermissionStatus.granted) {
-      // Permission granted, proceed with using location
-    } else {
-      // Permission denied, handle accordingly
-    }
-  }
-*/
-
-/*
- String? _currentAddress;
-  Position? _currentPosition;
-
- @override
-  void initState() {
-    super.initState();
-
-    //getXLo();
-  }
-
-//osition position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-//List<Placemark> placemarks = await placemarkFromCoordinates(52.2165157, 6.9437819);
-
-Future<void> getXLo() async {
-Position position = await Geolocator.getCurrentPosition(desiredAccuracy: LocationAccuracy.high);
-}
-
-
-Future<void> _getCurrentPosition() async {
-  final hasPermission = await _handleLocationPermission();
-  if (!hasPermission) return;
-  await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high)
-      .then((Position position) {
-    setState(() => _currentPosition = position);
-  }).catchError((e) {
-    debugPrint(e);
-  });
-}
-
-Future<bool> _handleLocationPermission() async {
-  bool serviceEnabled;
-  LocationPermission permission;
-  
-  serviceEnabled = await Geolocator.isLocationServiceEnabled();
-  if (!serviceEnabled) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Location services are disabled. Please enable the services')));
-    return false;
-  }
-  permission = await Geolocator.checkPermission();
-  if (permission == LocationPermission.denied) {
-    permission = await Geolocator.requestPermission();
-    if (permission == LocationPermission.denied) {   
-      ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Location permissions are denied')));
-      return false;
-    }
-  }
-  if (permission == LocationPermission.deniedForever) {
-    ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-        content: Text('Location permissions are permanently denied, we cannot request permissions.')));
-    return false;
-  }
-  return true;
-}
-
-
-Future<void> _getAddressFromLatLng(Position position) async {
-  await placemarkFromCoordinates(
-          _currentPosition!.latitude, _currentPosition!.longitude)
-      .then((List<Placemark> placemarks) {
-    Placemark place = placemarks[0];
-    setState(() {
-      _currentAddress ='${place.street}, ${place.subLocality},${place.subAdministrativeArea}, ${place.postalCode}';
-    });
-  }).catchError((e) {
-    debugPrint(e);
-  });
- }
-
-Future<void> _getCurrentPositionX() async {
-  // ...
-  
-  await Geolocator.getCurrentPosition(
-          desiredAccuracy: LocationAccuracy.high)
-      .then((Position position) {
-    setState(() => _currentPosition = position);
-    _getAddressFromLatLng(_currentPosition!);
-  }).catchError((e) {
-    debugPrint(e);
-  });
-}
-*/
-
-
-
 
   @override
   Widget build(BuildContext context) {
@@ -260,50 +236,84 @@ Future<void> _getCurrentPositionX() async {
               padding: const EdgeInsets.all(8.0),
               child: Column(
                 children: [
-                  _buildTextField("", "City", _cityController),
+                  //_buildTextField("", "City", _cityController),
+                  _autocompleteWidgit("City", "City *", 1),
                   const SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
-                  _buildTextField(
-                      "", "Airport/Railway Station", _airportStationController),
+                  //_buildTextField("", "Airport/Railway Station", _airportStationController),
+                  _autocompleteWidgit(
+                      "AirportStations", "Airport/Railway Station *", 1),
                   const SizedBox(
-                    height: 5,
+                    height: 6,
                   ),
-                  Row(
-                    children: [
-                      Expanded(
-                        flex: 2,
-                        child: _buildTextField(
-                            "", "Flight/ Train No", _FlightTrainNoController),
-                      ),
-                      const Spacer(
-                        flex: 1,
-                      ),
-                      Expanded(
-                        flex: 2,
-                        child: _buildTextField(
-                            "", "Flight Time", _FlightTrainTimeController),
-                      ),
-                    ],
+
+                  SizedBox(
+                    height: 55,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Expanded(
+                          flex: 2,
+                          child: _buildTextField(
+                              "", "Flight/ Train No", _FlightTrainNoController),
+                        ),
+                        Container(
+                          width: 10,
+                        ),
+                        Expanded(
+                          flex: 2,
+                          child:
+                              //_buildTextField("", "Flight Time", _FlightTrainTimeController),
+                              Column(
+                            crossAxisAlignment: CrossAxisAlignment.center,
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: [
+                              //  Text("Time"),
+
+                              GestureDetector(
+                                  onTap: () =>
+                                      _selectTime(context, "flightTrainTime"),
+                                  child: Container(
+                                    padding: EdgeInsets.all(10),
+                                    margin: EdgeInsets.all(5),
+                                    child: Text(
+                                      "Time: ${_selectedTimeForFlightTrain.hour}:${_selectedTimeForFlightTrain.minute}",
+                                    ),
+                                  )),
+                              const Divider(
+                                color: Colors.grey,
+                                height: 1,
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                   const SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
-                  _buildTextField(
-                      "",
-                      _isDrop ? "Drop Location" : "Pickup Location",
-                      _PickupDropLocationController),
+                  //_buildTextField("", _isDrop ? "Drop Location" : "Pickup Location", _PickupDropLocationController),
+                  _autocompleteWidgit("Location",
+                      _isDrop ? "Drop Location" : "Pickup Location", 1),
                   const SizedBox(
                     height: 5,
                   ),
                   _buildTextField("", "Landmark", _LandmarkController),
                   const SizedBox(
-                    height: 5,
+                    height: 8,
                   ),
-                  _buildTextField(
-                      "", "Pickup Address", _PickupAddressController),
+                  //_buildTextField( "", "Pickup Address", _PickupAddressController),
+                  _autocompleteWidgit("Address",
+                      _isDrop ? "Drop Address" : "Pickup Address", 1),
                   const SizedBox(
-                    height: 5,
+                    height: 8,
+                  ),
+
+                  _autocompleteWidgit("Nationality", "Nationality", 1),
+                  const SizedBox(
+                    height: 8,
                   ),
                 ],
               ),
@@ -438,7 +448,7 @@ Future<void> _getCurrentPositionX() async {
                           ],
                         ),
                         GestureDetector(
-                          onTap: () => _selectTime(context),
+                          onTap: () => _selectTime(context, "RideLatterTime"),
                           child: Text(
                               "${_selectedTime.hour}:${_selectedTime.minute}"),
                         ),
@@ -567,42 +577,6 @@ Future<void> _getCurrentPositionX() async {
                 ],
               ),
             ),
-
-/*
-            Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      const Text('Vehicles:'),
-                      Row(
-                        children: [
-                          const Icon(Icons.directions_car),
-                          DropdownButton<int>(
-                            value: selectedAdults,
-                            onChanged: (newValue) {
-                              setState(() {
-                                selectedAdults = newValue!;
-                              });
-                            },
-                            items: List.generate(2, (index) {
-                              return DropdownMenuItem<int>(
-                                value: index + 1,
-                                child: Text((index + 1).toString()),
-                              );
-                            }),
-                          ),
-                        ],
-                      ),
-                    ],
-                  ),
-                ],
-              ),
-            ),
-          */
-
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
@@ -639,8 +613,9 @@ Future<void> _getCurrentPositionX() async {
                         elevation: 5.0,
                       ),
                       onPressed: () {
+                        getTransferVehicleList(context);
 
-                        Navigator.push( context, MaterialPageRoute(builder: (context) => TransferVehicles()), );
+                        // Navigator.push(context, MaterialPageRoute( builder: (context) => TransferVehicles()), );
                       },
                       child: const Text(
                         'Next >>',
@@ -721,18 +696,10 @@ Future<void> _getCurrentPositionX() async {
   Widget _buildTextField(
       String labelText, String hindTerxt, TextEditingController controller) {
     return SizedBox(
-      //height: 55,
+      height: 56,
       child: TextField(
         controller: controller,
         decoration: InputDecoration(
-          // labelText: labelText,
-          // border: const UnderlineInputBorder(),
-          // labelStyle: const TextStyle(fontSize: 16, color: blackColor),
-          // hintText: hindTerxt,
-          // contentPadding: const EdgeInsets.all(10),
-          // hintStyle: const TextStyle(fontSize: 16.0, color: Colors.grey),
-          // const InputDecoration(hintText: 'Default hint text color')
-
           border: UnderlineInputBorder(),
           labelText: hindTerxt,
           hintStyle: TextStyle(fontSize: 18, fontWeight: FontWeight.w300),
@@ -740,5 +707,393 @@ Future<void> _getCurrentPositionX() async {
         ),
       ),
     );
+  }
+
+  Future<Iterable<String>> search(String query, String searchType) async {
+     //await Future<void>.delayed(const Duration(seconds: 1)); // Fake 1 second delay.
+    List<String>? cityListx = [];
+    try {
+      cityListx = await getCityListAPICall(query, searchType);
+      _kOptions.clear();
+      //setState(() {
+        _kOptions = cityListx!;
+     // });
+    } catch (e) {
+      print('Exception occurred in search api: $e');
+    }
+    if (query == '') {
+      return _kOptions;
+    }
+    return _kOptions.where((String option) {
+      return option.toLowerCase().startsWith(query.toLowerCase());
+    });
+  }
+
+  Future<List<String>?> getCityListAPICall(
+      String query, String searchType) async {
+    late List<String> citylistp = [];
+    _kOptions.clear();
+     Map<String, Object> queryParams = {};
+
+    try {
+      var url = "";
+      if (searchType.contains("City")) {
+        if (query.isEmpty) {
+          url = TRANSFAR_CITY_LIST;
+        } else {
+          url = '$TRANSFAR_CITY_LIST$query';
+        }
+      } else if (searchType.contains("AirportStations")) {
+        queryParams = {"city_id": cityID};
+        url =  TRANSFER_AIRPORT_STATION_LIST;
+      } else if (searchType.contains("Location")) {
+         queryParams = {"city_id": cityID, "area": query};
+        url = TRANSFER_LOCATION_NAME;
+      } else if (searchType.contains("Address")) {
+        queryParams = {"city_id": cityID, "address": query};
+        url = TRANSFER_LOCATION_ADDRESS;
+      } else if (searchType.contains("Nationality")) {
+        queryParams = {"nationality": query};
+        url = Nationality_API_END_POINT;
+      } else {
+        print('Response getCityListAPICall XXXX: Not api call happed');
+      }
+
+
+      if(searchType.contains("City")){
+        final response = await getRequestFullURL(url);
+        if (response.statusCode == 200) {
+          print('Response getCityListAPICall : ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          if (searchType.contains("City")) {
+            var responseData = PackageCityListResponse.fromJson(jsonData);
+            cityListItems = responseData.cityList;
+            for (var element in cityListItems) {
+              citylistp.add(element.cityName);
+            }
+          } else {}
+        }
+      }
+      else {
+        //if (searchType.contains("AirportStations") || searchType.contains("Location") || searchType.contains("address") || searchType.contains("Nationality") ) 
+        var response = await postRequest(url, queryParams);
+        if (response.statusCode == 200) {
+          final jsonData = jsonDecode(response.body);
+          if (searchType.contains("AirportStations") ) {
+             var responseData = AirportRailwayAPIResponse.fromJson(jsonData['responsedata']);
+             airportRaiwayListItems = responseData.airportRailwayList;
+            for (var element in airportRaiwayListItems) {
+              citylistp.add(element.airportRailwayName);
+            }
+          }
+          else if (searchType.contains("Location")) {
+             var responseData = LocationSearchAPIResponse.fromJson(jsonData['responsedata']);
+             locationListItems = responseData.locationList;
+
+            for (var element in locationListItems) {
+              citylistp.add(element.area);
+            }
+          } 
+          else if (searchType.contains("Address")) {
+            var responseData = AddressSearchAPIresponse.fromJson(jsonData['responsedata']);
+            addressListItems = responseData.addressList;
+            for (var element in addressListItems) {
+              citylistp.add(element.address);
+            }
+          }
+          else if (searchType.contains("Nationality") ) {
+            var responseData = NationalityAPIResponseData.fromJson(jsonData['responsedata']);
+            nationalityListItems = responseData.data;
+            for (var element in nationalityListItems) {
+              citylistp.add(element.nationality);
+            }
+          }
+        }
+      } 
+    } catch (e) {
+      print('Exception occurred in api execution getCityListAPICall: $e');
+      return null;
+    }
+    return citylistp;
+  }
+
+  Widget _autocompleteWidgit(
+      String searchType, String hintTextVal, double width) {
+    return Container(
+        width: width == 1 ? MediaQuery.of(context).size.width * 0.95 : 110,
+        child: InputDecorator(
+          decoration: const InputDecoration(
+              contentPadding: EdgeInsets.symmetric(vertical: 0, horizontal: 0),
+              hintStyle: TextStyle(color: Colors.grey),
+              labelStyle: TextStyle(color: whiteColor)),
+          child: Autocomplete<String>(
+            optionsBuilder: (TextEditingValue textEditingValue) async {
+              _searchingWithQuery = textEditingValue.text;
+              final Iterable<String> options =
+                  await search(_searchingWithQuery!, searchType);
+              if (_searchingWithQuery != textEditingValue.text) {
+                return _lastOptions;
+              }
+              _lastOptions = options;
+              return options;
+            },
+            fieldViewBuilder: (BuildContext context,
+                TextEditingController fieldTextEditingController,
+                FocusNode fieldFocusNode,
+                VoidCallback onFieldSubmitted) {
+              return Container(
+                margin: EdgeInsets.only(bottom: 0),
+                alignment: Alignment
+                    .bottomCenter, // Align the TextField to the bottom center
+                constraints: BoxConstraints.tightFor(height: 35),
+                child: TextField(
+                  controller: fieldTextEditingController,
+                  focusNode: fieldFocusNode,
+                  cursorColor: blackColor,
+                  showCursor: true,
+                  style: TextStyle(color: blackColor, fontSize: 14),
+                  decoration: InputDecoration(
+                    contentPadding: EdgeInsets.zero, // Remove content padding
+                    isCollapsed: false,
+                    labelText: fieldFocusNode.hasFocus ||
+                            fieldTextEditingController.text.isNotEmpty
+                        ? hintTextVal // Show label when focused or has value
+                        : hintTextVal, //null, // Hide label otherwise
+                    hintText: hintTextVal, // Set the hint text
+                    hintStyle: const TextStyle(
+                        color: lighGray2,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                    labelStyle: const TextStyle(
+                        color: lighGray2,
+                        fontSize: 14,
+                        fontWeight: FontWeight.normal),
+                    enabledBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                    focusedBorder: const UnderlineInputBorder(
+                      borderSide: BorderSide.none,
+                    ),
+                  ),
+                  onChanged: (text) {
+                    debugPrint('You just onChanged text : $text');
+                  },
+                  onSubmitted: (text) {
+                    debugPrint('You just onSubmitted text : $text');
+                  },
+                ),
+              );
+            },
+            optionsViewBuilder: (BuildContext context,
+                AutocompleteOnSelected<String> onSelected,
+                Iterable<String> options) {
+              return Material(
+                color: whiteColor,
+                child: ListView.separated(
+                  padding: EdgeInsets.all(5),
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const Divider(
+                    height: 0,
+                  ),
+                  itemCount: _lastOptions.length,
+                  itemBuilder: (context, index) {
+                    return GestureDetector(
+                      onTap: () {
+                        var slectedVal = _lastOptions.elementAt(index);
+                        debugPrint(
+                            'You just selected option seach type P:$searchType Elemt At Index: ${_lastOptions.elementAt(index)}} | searchType:$searchType');
+                        setState(() {
+                          if (searchType.contains("City")) {
+                            cityID = '${cityListItems[index].cityId}';
+                            cityName = cityListItems[index].cityName;
+                            search("", "AirportStations");
+                          } else if (searchType.contains("AirportStations")) {
+                            airportRailwayID = '${airportRaiwayListItems[index].id}';
+                            airportRailwayName = airportRaiwayListItems[index].airportRailwayName;
+                            airportRailwayLatitude = airportRaiwayListItems[index].latitude;
+                            airportRailwayLongitude = airportRaiwayListItems[index].longitude;
+                            search("", "Location");
+                          } else if (searchType.contains("Location")) {
+                            pickupLocationID = '${locationListItems[index].id}';
+                            pickupLocationName = '${locationListItems[index].area}';
+                            search("", "Address");
+                          } else if (searchType.contains("Address")) {
+                            pickupAddressID = '${addressListItems[index].id}';
+                            pickupAddressName = addressListItems[index].address;
+                            pickupAddressLatitude =
+                                addressListItems[index].latitude;
+                            pickupAddressLongitude =
+                                addressListItems[index].longitude;
+                            pickupCountryID =
+                                '${addressListItems[index].countryId}';
+                            pickupStateID =
+                                '${addressListItems[index].stateId}';
+                            pickupcityID = '${addressListItems[index].cityId}';
+                            debugPrint(
+                                'You just selected option XXX searchType:$searchType  pickupAddressID: $pickupAddressID pickupAddressName:$pickupAddressName  pickupcityID:$pickupcityID');
+                            search("", "Nationality");
+                          } else if (searchType.contains("Nationality")) {
+                            nationalityID =  '${nationalityListItems[index].countryId}';
+                          } else {}
+                        });
+                        onSelected(slectedVal);
+                      },
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        crossAxisAlignment: CrossAxisAlignment.center,
+                        children: [
+                          Container(
+                            margin: const EdgeInsets.only(
+                              left: 5,
+                              top: 5,
+                              bottom: 5,
+                            ),
+                            child: Text(
+                              _lastOptions.elementAt(index).capitalize(),
+                              style: const TextStyle(
+                                  fontSize: 14.0, fontWeight: FontWeight.w400),
+                            ),
+                          )
+                        ],
+                      ),
+                    );
+                  },
+                ),
+              );
+            },
+            onSelected: (String value) {
+              debugPrint('You just selected value index : $value');
+            },
+          ),
+        ));
+  }
+
+
+  Future<void> getTransferVehicleList(BuildContext context) async {
+   flightTrainNo = _FlightTrainNoController.text.toString();
+    var landMarkName = _LandmarkController.text.toString();
+
+    flightTrrainTime = flightOrTrainTime;
+    rideLatterDate = rideLatterDate;
+    rideLatterTime =rideLatterTime;
+
+    if(_isPickup){
+      isPickup = true;
+
+      pickupAddress = pickupAddressName;
+      pickupLat = pickupAddressLatitude;
+      pickupLong = pickupAddressLongitude;
+
+      dropAddress = airportRailwayName;
+      dropLat = airportRailwayLatitude;
+      dropLong = airportRailwayLongitude;
+    }else{
+      isPickup = false;
+
+      pickupAddress = airportRailwayName ;
+      pickupLat = airportRailwayLatitude ;
+      pickupLong = airportRailwayLongitude ;
+
+      dropAddress = pickupAddressName;
+      dropLat = pickupAddressLatitude;
+      dropLong = pickupAddressLongitude;
+    }
+
+/*
+    if (cityID.isEmpty) {
+      showErrorTost(context, SELECET_CITY_NAME);
+    } else if (airportRailwayID.isEmpty) {
+      showErrorTost(context, SELECT_AIRPORT_RAILWAY);
+    } else if (flightTrainO.isEmpty) {
+      showErrorTost(context, FLIGHT_TRAIN_NO);
+    } else if (pickupLocationID.isEmpty) {
+      showErrorTost(context, SELECT_PICKUP_LOCATION);
+    } else if (landMarkName.isEmpty) {
+      showErrorTost(context, SELECT_PICKUP_LANDMARK);
+    } else if (pickupAddressID.isEmpty) {
+      showErrorTost(context, SELECT_PICKUP_Address);
+    } else { */
+      showCustomeLoader(context);
+      Map<String, Object> queryParams = {
+    "city_id": "707",
+    "state_id": "10",
+    "country_id": "101",
+    "master_package_id": "1",
+    "local_package_id": "14",
+    "pickup_time": "11:07:45",
+    "company_id": "1",
+    "user_id": "859",
+    "user_grade": "2",
+    "user_type": "1",
+    "company_gstno": "07AAACR0769G2ZE",
+    "user_gstno": "",
+    "parent_id": "0",
+    "seating_capacity": "1",
+    "luggage": "0",
+    "pickup_date": "2024-03-27",
+    "currency_id": "1",
+    "vehicle_type": "1",
+    "temp_id": "TMXC01414",
+    "master_booking_type_id": "Transport",
+    "total_days": "3",
+    "drop_date": "28-3-2024",
+    "drop_time": "",
+    "no_of_vehicles": 1
+        /*
+        "city_id": pickupcityID, //"707",
+        "state_id": pickupStateID, //"10",
+        "country_id": pickupCountryID, //"101",
+        "master_package_id": "1",
+        "local_package_id": "14",
+        "company_id": COMPANY_ID, //"1",
+        "user_id": USER_ID,
+        "user_grade": USER_GRADE, //"2",
+        "user_type": USER_TYPE_ID, //"1",
+        "company_gstno": "07AAACR0769G2ZE",
+        "user_gstno": "",
+        "parent_id": "0",
+        "seating_capacity": "1",
+        "luggage": "0",
+        "currency_id": "1",
+        "vehicle_type": "1",
+        "temp_id": "TMXC01414",
+        "master_booking_type_id": "Transport",
+        "total_days": "1",
+        "pickup_time": _isPickup ? flightOrTrainTime : "", // "11:07",
+        "pickup_date": isRideLaterDate,
+        "drop_date": isRideLaterDate,
+        "drop_time": _isDrop ? flightOrTrainTime : "",
+        "no_of_vehicles": 1
+        */
+      };
+
+      try {
+        final response =
+            await postRequest(GET_TRANSFER_VEHICEL_LIST, queryParams);
+        if (response.statusCode == 200) {
+          print('Response: ${response.body}');
+          final jsonData = jsonDecode(response.body);
+          var responseData = BookingResponse.fromJson(jsonData['responsedata']);
+          hideCustomeLoader(context);
+          if (responseData.status == SUCCESS_STATUS) {
+          print('Vehicle List Data: ${responseData.data.vehicleList}');
+            Navigator.push(context, MaterialPageRoute( builder: (context) => TransferVehicles(responseData)), );
+
+          } else {
+            showErrorTost(context, responseData.message);
+          }
+        } else {
+          hideCustomeLoader(context);
+          showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+          print('Request failed with status: ${response.statusCode}');
+        }
+      } catch (e) {
+        hideCustomeLoader(context);
+        showErrorTost(context, "$SOMETHING_WENT_WRONG_MSG");
+        print('Exception occurred: $e');
+      }
+   // }
   }
 }

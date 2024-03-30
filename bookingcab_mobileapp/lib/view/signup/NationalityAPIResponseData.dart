@@ -1,6 +1,6 @@
 class NationalityAPIResponseData {
-  final String status;
-  final List<NationalityList> data;
+   String status = '';
+   List<NationalityList> data = [];
 
   NationalityAPIResponseData({
     required this.status,
@@ -10,15 +10,16 @@ class NationalityAPIResponseData {
   factory NationalityAPIResponseData.fromJson(Map<String, dynamic> json) {
     return NationalityAPIResponseData(
       status: json['status'],
-      data: List<NationalityList>.from(
-          json['data'].map((x) => NationalityList.fromJson(x))),
+     // data: List<NationalityList>.from( json['data'].map((x) => NationalityList.fromJson(x))),
+      // data: json['data'] != null ? Data.fromJson(json['data'] as Map<String, dynamic>) : null,
+      data: json['data'] != null ? List<NationalityList>.from( json['data'].map((x) => NationalityList.fromJson(x))) : []
     );
   }
 }
 
 class NationalityList {
-  final String nationality;
-  final int countryId;
+   String nationality = '';
+   int countryId = 0;
 
   NationalityList({
     required this.nationality,
@@ -27,9 +28,8 @@ class NationalityList {
 
   factory NationalityList.fromJson(Map<String, dynamic> json) {
     return NationalityList(
-      nationality: json['nationality'],
-      countryId: json['country_id'],
-    );
+      nationality: json['nationality'] as String? ?? '',
+      countryId: json['country_id'] as int? ?? 0);
   }
 
   @override

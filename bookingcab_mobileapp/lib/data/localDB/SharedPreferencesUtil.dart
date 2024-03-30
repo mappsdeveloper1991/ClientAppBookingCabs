@@ -5,20 +5,20 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesUtil {
   // static late SharedPreferences _prefs;
 
-  static late String KEY_USER_LOGIN = "isLogin";
-  static late String KEY_USER_ID = "user_id";
-  static late String KEY_USER_FIRST_NAME = "first_name";
-  static late String KEY_USER_LAST_NAME = "last_name";
-  static late String KEY_USER_EMAIL_ID = "email";
-  static late String KEY_USER_MOBILE_PREFIX = "mobile_prefix";
-  static late String KEY_USER_MOBILE_NO = "mobile";
-  static late String KEY_USER_IS_ACTIVE = "is_active";
-  static late String KEY_USER_SIGNUP_STATUS = "signup_status";
-  static late String KEY_COUNTRY_ID = "country_id";
-  static late String KEY_USER_TOCKEN = "token";
-  static late String KEY_USER_GRADE = "user_grade";
-  static late String KEY_USER_TYPE_ID = "user_type_id";
-  static late String KEY_COMPANY_ID = "company_id";
+  static  String KEY_USER_LOGIN = "isLogin";
+  static  String KEY_USER_ID = "user_id";
+  static  String KEY_USER_FIRST_NAME = "first_name";
+  static  String KEY_USER_LAST_NAME = "last_name";
+  static  String KEY_USER_EMAIL_ID = "email";
+  static  String KEY_USER_MOBILE_PREFIX = "mobile_prefix";
+  static  String KEY_USER_MOBILE_NO = "mobile";
+  static  String KEY_USER_IS_ACTIVE = "is_active";
+  static  String KEY_USER_SIGNUP_STATUS = "signup_status";
+  static  String KEY_COUNTRY_ID = "country_id";
+  static  String KEY_USER_TOCKEN = "token";
+  static  String KEY_USER_GRADE = "user_grade";
+  static  String KEY_USER_TYPE_ID = "user_type_id";
+  static  String KEY_COMPANY_ID = "company_id";
 
 
   // Load data from shared preferences

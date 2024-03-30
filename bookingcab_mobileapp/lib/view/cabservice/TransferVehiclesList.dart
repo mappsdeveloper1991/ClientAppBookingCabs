@@ -1,18 +1,33 @@
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/BookingResponse.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/TransferServiceRequestForm.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferVehiclesDetails.dart';
 import 'package:flutter/material.dart';
 
+late BookingResponse bookingResponseDataGlobal;
+List<Vehicle> vehicleListData = [];
+
 class TransferVehicles extends StatefulWidget {
-  const TransferVehicles({super.key});
+  final BookingResponse bookingResponseData;
+
+  const TransferVehicles(this.bookingResponseData, {super.key});
 
   @override
   State<TransferVehicles> createState() => _TransferVehiclesState();
 }
 
 class _TransferVehiclesState extends State<TransferVehicles> {
-  int selectedIndex = -1;
+  @override
+  void initState() {
+    super.initState();
+    setState(() {
+      bookingResponseDataGlobal = widget.bookingResponseData;
+      vehicleListData = bookingResponseDataGlobal.data.vehicleList;
+    });
+  }
 
+  int selectedIndex = -1;
   void updateMessage(int selectedIndex) {
     setState(() {
       this.selectedIndex = selectedIndex;
@@ -20,7 +35,6 @@ class _TransferVehiclesState extends State<TransferVehicles> {
   }
 
   var _dataFromChild = '';
-  // Callback function to receive data from child widget
   void _handleCallback(String data) {
     setState(() {
       _dataFromChild = data;
@@ -43,9 +57,9 @@ class _TransferVehiclesState extends State<TransferVehicles> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  "No of Results: 12",
-                  style: TextStyle(
+                Text(
+                  'No of Results: ${vehicleListData.length}',
+                  style: const TextStyle(
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
                   ),
@@ -101,7 +115,7 @@ class _TransferVehiclesState extends State<TransferVehicles> {
               color: const Color.fromARGB(255, 231, 234, 246),
               child: ListView.builder(
                 scrollDirection: Axis.vertical,
-                itemCount: 10,
+                itemCount: vehicleListData.length,
                 itemBuilder: (context, index) {
                   return Padding(
                     padding: const EdgeInsets.all(4.0),
@@ -119,132 +133,6 @@ class _TransferVehiclesState extends State<TransferVehicles> {
       ),
     );
   }
-
-/*
-
-  void openPopup() {
-    showDialog(
-        context: context,
-        // barrierColor: lighGray2,
-        barrierDismissible: false,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            alignment: Alignment.centerRight,
-            //insetPadding: EdgeInsets.all(20),
-            //contentPadding: EdgeInsets.all(20),
-            clipBehavior: Clip.antiAliasWithSaveLayer,
-            //  backgroundColor: whiteColor, // Color.fromARGB(0, 8, 203, 99),
-            scrollable: false,
-            title: Container(
-              margin: EdgeInsets.only(top:5),
-                //color: whiteColor,
-                child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Text(
-                        'Fliter',
-                        style: TextStyle(
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Divider(
-                        height: 1,
-                        color: Colors.grey,
-                      ),
-                    ])
-             ),
-            content: Container(
-                width: MediaQuery.of(context).size.width * 90,
-                height: MediaQuery.of(context).size.height * 90,
-                //color: whiteColor,
-                child: const Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      SizedBox(
-                        height: 20,
-                      ),
-                      Text(
-                        'Booking Refren No: FGTE543521D ',
-                        style: TextStyle(
-                          fontSize: 16,
-                          fontWeight: FontWeight.w500,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('Your Booking has been confirmed'),
-                      SizedBox(
-                        height: 1,
-                      ),
-                      Text('Driver will pickup in 30 minutes'),
-                      SizedBox(
-                        height: 10,
-                      ),
-                      Text('Note: 10 times peak charges will applicable'),
-                      SizedBox(
-                        height: 10,
-                      ),
-                    ])),
-            actions: [
-              Row(
-                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-              MaterialButton(
-                
-                height: 45,
-                minWidth: 120,
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(12)),
-                onPressed: () {
-                  Navigator.pop(context);
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) => DriverDetails()), );
-                },
-                color: Colors.red,
-                child: const Text(
-                  "Reset",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-               MaterialButton(
-                height: 45,
-                minWidth: 120,
-                shape: RoundedRectangleBorder(
-                    borderRadius: new BorderRadius.circular(12)),
-                onPressed: () {
-                  RenderBox renderBox = context.findRenderObject() as RenderBox;
-                  //Navigator.pop(context);
-                  //Navigator.push(context, MaterialPageRoute(builder: (context) => DriverDetails()), );
-           var _tapPosition = renderBox.localToGlobal(Offset.zero);
-            showDialog(
-              context: context,
-              builder: (BuildContext context) {
-                return PopupPageX(_tapPosition); // Show the popup when button is pressed
-              },
-            );
-                },
-                color: Colors.red,
-                child: const Text(
-                  "Apply",
-                  style: TextStyle(
-                    fontSize: 24,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-              ],
-              )
-            ],
-          );
-        });
-  }*/
 }
 
 List<Map<String, dynamic>> sortedByFilterItemsList = [];
@@ -298,23 +186,28 @@ class _PoupPageX extends State<PopupPageX> {
     fuleByFilterItemsList.add({"title": "Hybrid", "isChecked": false});
     fuleByFilterItemsList.add({"title": "Any", "isChecked": false});
 
-    cancellaionByFilterItemsList.add({"title": "Free Cancellation", "isChecked": false});
-    cancellaionByFilterItemsList.add({"title": "10% Cancellation", "isChecked": false});
-    cancellaionByFilterItemsList.add({"title": "25% Cancellation", "isChecked": false});
-    cancellaionByFilterItemsList.add({"title": "50% Cancellation", "isChecked": false});
-    cancellaionByFilterItemsList.add({"title": "100% Cancellation", "isChecked": false});
+    cancellaionByFilterItemsList
+        .add({"title": "Free Cancellation", "isChecked": false});
+    cancellaionByFilterItemsList
+        .add({"title": "10% Cancellation", "isChecked": false});
+    cancellaionByFilterItemsList
+        .add({"title": "25% Cancellation", "isChecked": false});
+    cancellaionByFilterItemsList
+        .add({"title": "50% Cancellation", "isChecked": false});
+    cancellaionByFilterItemsList
+        .add({"title": "100% Cancellation", "isChecked": false});
 
     paymentByFilterItemsList.add({"title": "Pay on Trip", "isChecked": false});
     paymentByFilterItemsList.add({"title": "10% Advance", "isChecked": false});
-     paymentByFilterItemsList.add({"title": "20% Advance", "isChecked": false});
-      paymentByFilterItemsList.add({"title": "50% Advance", "isChecked": false});
-       paymentByFilterItemsList.add({"title": "100% Advance", "isChecked": false});
-
+    paymentByFilterItemsList.add({"title": "20% Advance", "isChecked": false});
+    paymentByFilterItemsList.add({"title": "50% Advance", "isChecked": false});
+    paymentByFilterItemsList.add({"title": "100% Advance", "isChecked": false});
   }
 
   @override
   void initState() {
     super.initState();
+
     getFilterList();
   }
 
@@ -329,7 +222,8 @@ class _PoupPageX extends State<PopupPageX> {
               Navigator.pop(context); // Dismiss the popup when tapping outside
             },
             child: Container(
-              color: Colors .black54, // Semi-transparent black color for shadow effect
+              color: Colors
+                  .black54, // Semi-transparent black color for shadow effect
             ),
           ),
           Positioned(
@@ -341,7 +235,7 @@ class _PoupPageX extends State<PopupPageX> {
                   height: MediaQuery.of(context)
                       .size
                       .height, // Adjust height as needed
-                  color:  Colors.grey[900], // Popup background color
+                  color: Colors.grey[900], // Popup background color
                   child: Column(
                     children: [
                       //          crossAxisAlignment: CrossAxisAlignment.start,
@@ -425,8 +319,10 @@ class _PoupPageX extends State<PopupPageX> {
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            sortedByFilterItemsList[index]["isChecked"] =
-                                                !sortedByFilterItemsList[index]["isChecked"];
+                                            sortedByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !sortedByFilterItemsList[index]
+                                                    ["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -437,12 +333,13 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                sortedByFilterItemsList[index]["isChecked"]
+                                                sortedByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: sortedByFilterItemsList[index]
-                                                        ["isChecked"]
+                                                color: sortedByFilterItemsList[
+                                                        index]["isChecked"]
                                                     ? Colors.red
                                                     : Colors.grey,
                                                 size: 20,
@@ -451,7 +348,8 @@ class _PoupPageX extends State<PopupPageX> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                sortedByFilterItemsList[index]["title"],
+                                                sortedByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -466,8 +364,6 @@ class _PoupPageX extends State<PopupPageX> {
                             SizedBox(
                               height: 25,
                             ),
-
-                            
                             SizedBox(
                               //height: 300, // Example height
                               child: Column(
@@ -490,13 +386,16 @@ class _PoupPageX extends State<PopupPageX> {
                                       physics:
                                           ScrollPhysics(), // Allow ListView to scroll
                                       shrinkWrap: true,
-                                      itemCount: categoryByFilterItemsList.length,
+                                      itemCount:
+                                          categoryByFilterItemsList.length,
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            categoryByFilterItemsList[index]["isChecked"] =
-                                                !categoryByFilterItemsList[index]["isChecked"];
+                                            categoryByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !categoryByFilterItemsList[
+                                                    index]["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -507,21 +406,24 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                categoryByFilterItemsList[index]["isChecked"]
+                                                categoryByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: categoryByFilterItemsList[index]
-                                                        ["isChecked"]
-                                                    ? Colors.red
-                                                    : Colors.grey,
+                                                color:
+                                                    categoryByFilterItemsList[
+                                                            index]["isChecked"]
+                                                        ? Colors.red
+                                                        : Colors.grey,
                                                 size: 20,
                                               ),
                                               SizedBox(
                                                 width: 5,
                                               ),
                                               Text(
-                                                categoryByFilterItemsList[index]["title"],
+                                                categoryByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -554,7 +456,7 @@ class _PoupPageX extends State<PopupPageX> {
                                         ),
                                       ),
                                     ),
-                                     ListView.builder(
+                                    ListView.builder(
                                       physics:
                                           ScrollPhysics(), // Allow ListView to scroll
                                       shrinkWrap: true,
@@ -563,8 +465,10 @@ class _PoupPageX extends State<PopupPageX> {
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            modelByFilterItemsList[index]["isChecked"] =
-                                                !modelByFilterItemsList[index]["isChecked"];
+                                            modelByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !modelByFilterItemsList[index]
+                                                    ["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -575,12 +479,13 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                modelByFilterItemsList[index]["isChecked"]
+                                                modelByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: modelByFilterItemsList[index]
-                                                        ["isChecked"]
+                                                color: modelByFilterItemsList[
+                                                        index]["isChecked"]
                                                     ? Colors.red
                                                     : Colors.grey,
                                                 size: 20,
@@ -589,7 +494,8 @@ class _PoupPageX extends State<PopupPageX> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                modelByFilterItemsList[index]["title"],
+                                                modelByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -622,7 +528,7 @@ class _PoupPageX extends State<PopupPageX> {
                                         ),
                                       ),
                                     ),
-                                     ListView.builder(
+                                    ListView.builder(
                                       physics:
                                           ScrollPhysics(), // Allow ListView to scroll
                                       shrinkWrap: true,
@@ -631,8 +537,10 @@ class _PoupPageX extends State<PopupPageX> {
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            colorByFilterItemsList[index]["isChecked"] =
-                                                !colorByFilterItemsList[index]["isChecked"];
+                                            colorByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !colorByFilterItemsList[index]
+                                                    ["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -643,12 +551,13 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                colorByFilterItemsList[index]["isChecked"]
+                                                colorByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: colorByFilterItemsList[index]
-                                                        ["isChecked"]
+                                                color: colorByFilterItemsList[
+                                                        index]["isChecked"]
                                                     ? Colors.red
                                                     : Colors.grey,
                                                 size: 20,
@@ -657,7 +566,8 @@ class _PoupPageX extends State<PopupPageX> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                colorByFilterItemsList[index]["title"],
+                                                colorByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -699,8 +609,10 @@ class _PoupPageX extends State<PopupPageX> {
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            fuleByFilterItemsList[index]["isChecked"] =
-                                                !fuleByFilterItemsList[index]["isChecked"];
+                                            fuleByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !fuleByFilterItemsList[index]
+                                                    ["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -711,21 +623,24 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                fuleByFilterItemsList[index]["isChecked"]
+                                                fuleByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: fuleByFilterItemsList[index]
-                                                        ["isChecked"]
-                                                    ? Colors.red
-                                                    : Colors.grey,
+                                                color:
+                                                    fuleByFilterItemsList[index]
+                                                            ["isChecked"]
+                                                        ? Colors.red
+                                                        : Colors.grey,
                                                 size: 20,
                                               ),
                                               SizedBox(
                                                 width: 5,
                                               ),
                                               Text(
-                                                fuleByFilterItemsList[index]["title"],
+                                                fuleByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -762,13 +677,16 @@ class _PoupPageX extends State<PopupPageX> {
                                       physics:
                                           ScrollPhysics(), // Allow ListView to scroll
                                       shrinkWrap: true,
-                                      itemCount: cancellaionByFilterItemsList.length,
+                                      itemCount:
+                                          cancellaionByFilterItemsList.length,
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            cancellaionByFilterItemsList[index]["isChecked"] =
-                                                !cancellaionByFilterItemsList[index]["isChecked"];
+                                            cancellaionByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !cancellaionByFilterItemsList[
+                                                    index]["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -779,21 +697,24 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                cancellaionByFilterItemsList[index]["isChecked"]
+                                                cancellaionByFilterItemsList[
+                                                        index]["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: cancellaionByFilterItemsList[index]
-                                                        ["isChecked"]
-                                                    ? Colors.red
-                                                    : Colors.grey,
+                                                color:
+                                                    cancellaionByFilterItemsList[
+                                                            index]["isChecked"]
+                                                        ? Colors.red
+                                                        : Colors.grey,
                                                 size: 20,
                                               ),
                                               SizedBox(
                                                 width: 5,
                                               ),
                                               Text(
-                                                cancellaionByFilterItemsList[index]["title"],
+                                                cancellaionByFilterItemsList[
+                                                    index]["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -826,17 +747,20 @@ class _PoupPageX extends State<PopupPageX> {
                                         ),
                                       ),
                                     ),
-                                   ListView.builder(
+                                    ListView.builder(
                                       physics:
                                           ScrollPhysics(), // Allow ListView to scroll
                                       shrinkWrap: true,
-                                      itemCount: paymentByFilterItemsList.length,
+                                      itemCount:
+                                          paymentByFilterItemsList.length,
                                       itemBuilder: (context, index) =>
                                           GestureDetector(
                                         onTap: () {
                                           setState(() {
-                                            paymentByFilterItemsList[index]["isChecked"] =
-                                                !paymentByFilterItemsList[index]["isChecked"];
+                                            paymentByFilterItemsList[index]
+                                                    ["isChecked"] =
+                                                !paymentByFilterItemsList[index]
+                                                    ["isChecked"];
                                           });
                                         },
                                         child: Container(
@@ -847,12 +771,13 @@ class _PoupPageX extends State<PopupPageX> {
                                           child: Row(
                                             children: [
                                               Icon(
-                                                paymentByFilterItemsList[index]["isChecked"]
+                                                paymentByFilterItemsList[index]
+                                                        ["isChecked"]
                                                     ? Icons.check_box
                                                     : Icons
                                                         .check_box_outline_blank,
-                                                color: paymentByFilterItemsList[index]
-                                                        ["isChecked"]
+                                                color: paymentByFilterItemsList[
+                                                        index]["isChecked"]
                                                     ? Colors.red
                                                     : Colors.grey,
                                                 size: 20,
@@ -861,7 +786,8 @@ class _PoupPageX extends State<PopupPageX> {
                                                 width: 5,
                                               ),
                                               Text(
-                                                paymentByFilterItemsList[index]["title"],
+                                                paymentByFilterItemsList[index]
+                                                    ["title"],
                                                 style: const TextStyle(
                                                   color: Colors.white,
                                                 ),
@@ -877,36 +803,7 @@ class _PoupPageX extends State<PopupPageX> {
                         ),
                       ))
                     ],
-                  ))
-              /*
-              Container(
-                width: 250,
-                height: MediaQuery.of(context)
-                    .size
-                    .height, // Adjust height as needed
-                color: Colors.white, // Popup background color
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Text(
-                      'Popup Content',
-                      style: TextStyle(fontSize: 18),
-                    ),
-                    ElevatedButton(
-                      onPressed: () {
-                        Navigator.pop(
-                            context); // Dismiss the popup when button is pressed
-
-                        widget.callback('Data from child');
-                      },
-                      child: Text('Close'),
-                    ),
-                  ],
-                ),
-              ),
-            */
-
-              ),
+                  ))),
         ],
       ),
     );
@@ -919,9 +816,11 @@ class _VehicleDetailCard extends StatefulWidget {
       required this.updateParentMessage,
       required this.selectedIndex,
       required this.currentIndex});
+
   final Function(int) updateParentMessage;
   final int selectedIndex;
   final int currentIndex;
+
   @override
   State<_VehicleDetailCard> createState() => _VehicleDetailCardState();
 }
@@ -953,19 +852,44 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                   children: [
                     Expanded(
                       flex: 3,
-                      child: Row(
-                        children: [
-                          Expanded(
-                            child: Image.asset(
-                              "assets/images/economy.png",
-                              fit: BoxFit.cover,
-                            ),
+                      child: Stack(
+                        children: <Widget>[
+                          Column(
+                            children: [
+                              Expanded(
+                                child:
+                                    //Image.asset("assets/images/economy.png",
+                                    Image.network(
+                                  '${vehicleListData[widget.currentIndex].basePath}${vehicleListData[widget.currentIndex].vehicleImage}',
+                                  fit: BoxFit.contain,
+                                ),
+                              ),
+                              const VerticalDivider(
+                                //color: Color.fromARGB(255, 230, 227, 227),
+                                color: Color.fromARGB(255, 242, 236, 236),
+                                thickness: 1,
+                              ),
+                            ],
                           ),
-                          const VerticalDivider(
-                            //color: Color.fromARGB(255, 230, 227, 227),
-                            color: Color.fromARGB(255, 242, 236, 236),
-                            thickness: 1,
-                          ),
+                          Positioned(
+                              bottom: 6,
+                              width: 120,
+                              child: Column(
+                                  mainAxisAlignment: MainAxisAlignment.center,
+                                  crossAxisAlignment: CrossAxisAlignment.center,
+                                  children: [
+                                    Center(
+                                      child: Text(
+                                        '${vehicleListData[widget.currentIndex].vehicleName} - ${vehicleListData[widget.currentIndex].ignitionType}',
+                                        textAlign: TextAlign.center,
+                                        style: TextStyle(
+                                          color: Colors.black,
+                                          fontSize: 10,
+                                          fontWeight: FontWeight.w500,
+                                        ),
+                                      ),
+                                    ),
+                                  ])),
                         ],
                       ),
                     ),
@@ -985,15 +909,17 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                 ),
                                 Row(
                                   children: [
-                                    _circleWithText(Icons.person, "5"),
-                                    _circleWithText(Icons.business_center, "1"),
-                                    _circleWithTextImage(
-                                        "assets/images/AC.png", "AC"),
+                                    _circleWithText(Icons.person,
+                                        '${vehicleListData[widget.currentIndex].seatingCapacity}'),
+                                    _circleWithText(Icons.business_center,
+                                        '${vehicleListData[widget.currentIndex].vehicleBaggage}'),
+                                    _circleWithTextImage("assets/images/AC.png",
+                                        '${vehicleListData[widget.currentIndex].vehicleIgnitionType}'),
                                   ],
                                 ),
                               ],
                             ),
-                            const Expanded(
+                            Expanded(
                               flex: 4,
 
                               //padding: EdgeInsets.only(right: 6),
@@ -1001,7 +927,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                 crossAxisAlignment: CrossAxisAlignment.center,
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  SizedBox(
+                                  const SizedBox(
                                     height: 10,
                                   ),
                                   Column(
@@ -1009,8 +935,8 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                         CrossAxisAlignment.center,
                                     children: [
                                       Text(
-                                        '\u{20B9} 5,000',
-                                        style: TextStyle(
+                                        '\u{20B9} ${vehicleListData[widget.currentIndex].totalPrice}',
+                                        style: const TextStyle(
                                           color: Colors.black,
                                           fontSize: 22,
                                           fontWeight: FontWeight.w800,
@@ -1044,7 +970,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                             width: 2,
                                           ),
                                           Text(
-                                            "27 MIN",
+                                            '${vehicleListData[widget.currentIndex].duration} MIN',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 10,
@@ -1058,7 +984,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                       ),
                                       Row(
                                         children: [
-                                          Icon(
+                                          const Icon(
                                             Icons.speed,
                                             color: buttonPrimaryColor,
                                             size: 16,
@@ -1067,7 +993,7 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
                                             width: 3,
                                           ),
                                           Text(
-                                            "14 KM",
+                                            '${vehicleListData[widget.currentIndex].estimatedDistance} KM',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontSize: 10,
@@ -1242,7 +1168,7 @@ class _headerDetails extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return const Padding(
+    return Padding(
         padding: EdgeInsets.all(10),
         child: Column(children: [
           Row(
@@ -1325,14 +1251,14 @@ class _headerDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        "24 Aug",
+                        rideLatterDate,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey),
                       ),
                       Text(
-                        "11:AM",
+                        rideLatterTime,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -1350,30 +1276,34 @@ class _headerDetails extends StatelessWidget {
           SizedBox(
             height: 3,
           ),
-          Row(
-            children: [
-              Icon(
-                Icons.location_pin,
-                color: Colors.green,
-                size: 18,
-              ),
-              Text("Pickup: ",
+          Container(
+            child: Row(
+              children: [
+                Icon(
+                  Icons.location_pin,
+                  color: Colors.green,
+                  size: 18,
+                ),
+                Text("Pickup: ",
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 14,
+                      fontWeight: FontWeight.bold,
+                    )),
+                SizedBox(
+                  width: 3,
+                ),
+                Text(
+                  pickupAddress,
+                  maxLines: 3,
+                  overflow: TextOverflow.ellipsis,
                   style: TextStyle(
-                    color: Colors.black,
-                    fontSize: 14,
-                    fontWeight: FontWeight.bold,
-                  )),
-              SizedBox(
-                width: 3,
-              ),
-              Text(
-                "DB Gobta Road KarolBag, New Delhi ",
-                style: TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w500,
-                    color: Colors.grey),
-              ),
-            ],
+                      fontSize: 12,
+                      fontWeight: FontWeight.w500,
+                      color: Colors.grey),
+                ),
+              ],
+            ),
           ),
           SizedBox(
             height: 3,
@@ -1395,7 +1325,7 @@ class _headerDetails extends StatelessWidget {
                 width: 3,
               ),
               Text(
-                "New Delhi Railway Station, Delhi",
+                dropAddress,
                 style: TextStyle(
                     fontSize: 13,
                     fontWeight: FontWeight.w500,
