@@ -1,6 +1,10 @@
+import 'dart:convert';
+
 import 'package:bookingcab_mobileapp/AppStyle/AppColors.dart';
 import 'package:bookingcab_mobileapp/AppStyle/AppHeadreApp.dart';
+import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/BookingResponse.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/RouteDistanceAndTimeResponse.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferServiceRequestForm.dart';
 import 'package:bookingcab_mobileapp/view/cabservice/TransferVehiclesDetails.dart';
 import 'package:flutter/material.dart';
@@ -48,7 +52,7 @@ class _TransferVehiclesState extends State<TransferVehicles> {
       appBar: simpleHeaderBar(context, "Airport Transfer"),
       body: Column(
         children: [
-          const _headerDetails(),
+          const HeaderDetails(),
           const Divider(
             color: buttonPrimaryColor,
           ),
@@ -1159,12 +1163,53 @@ class _VehicleDetailCardState extends State<_VehicleDetailCard> {
       ),
     );
   }
+
+
+
+
+
+ 
+
 }
 
-class _headerDetails extends StatelessWidget {
-  const _headerDetails({
-    super.key,
-  });
+class HeaderDetails extends StatefulWidget {
+  const HeaderDetails({super.key,});
+
+@override
+State<HeaderDetails> createState() => _headerDetailsState();
+
+}
+
+
+
+class _headerDetailsState extends State<HeaderDetails>{
+
+@override
+  void initState() {
+    // TODO: implement initState
+    getTimeDistanceBetweenPoint();
+  }
+
+   String estimatedDistnace = '0.0 KM';
+  String estimatedTime = '0.0 Mint';
+
+  Future<void> getTimeDistanceBetweenPoint() async {
+    String url =
+        'https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=$pickupLat,$pickupLong&destinations=$dropLat,$dropLong&key=AIzaSyAQgoHAq85_LZavL0SFS9sHuMVv3NpCfW8';
+    final response = await getRequestFullURL(url);
+    if (response.statusCode == 200) {
+      print('Response getCityListAPICall : ${response.body}');
+      final jsonData = jsonDecode(response.body);
+      var responseData = RouteDistanceAndTimeResponse.fromJson(jsonData);
+
+        setState(() {
+        estimatedDistnace = responseData.rows[0].elements[0].distance.text;
+        estimatedTime = responseData.rows[0].elements[0].duration.text;
+
+        });
+    }
+  }
+  
 
   @override
   Widget build(BuildContext context) {
@@ -1203,15 +1248,14 @@ class _headerDetails extends StatelessWidget {
                     mainAxisAlignment: MainAxisAlignment.start,
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        "27 Min",
+                      Text(rideLatterDate,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey),
                       ),
                       Text(
-                        "24 KM",
+                        rideLatterTime,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -1251,14 +1295,14 @@ class _headerDetails extends StatelessWidget {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        rideLatterDate,
+                        estimatedTime,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
                             color: Colors.grey),
                       ),
                       Text(
-                        rideLatterTime,
+                        estimatedDistnace,
                         style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -1335,4 +1379,9 @@ class _headerDetails extends StatelessWidget {
           ),
         ]));
   }
+
+
+  
 }
+
+//https://maps.googleapis.com/maps/api/distancematrix/json?units=imperial&origins=12.847810,77.663190&destinations=12.842410,77.668820&key=AIzaSyAQgoHAq85_LZavL0SFS9sHuMVv3NpCfW8

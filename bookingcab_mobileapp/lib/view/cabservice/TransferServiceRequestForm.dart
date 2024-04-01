@@ -18,6 +18,10 @@ import 'package:google_maps_flutter/google_maps_flutter.dart';
 import '../../AppStyle/AppColors.dart';
 import '../../AppStyle/AppHeadreApp.dart';
 
+import 'package:flutter_polyline_points/flutter_polyline_points.dart';
+import 'package:google_maps_flutter/google_maps_flutter.dart';
+
+
 
 //if isPickup = True => Location & Address will be Pickup location    ||    City and Airport/Railway will be Drop Location
 //if isPickup = fale => Location & Address will be Drop location      ||     City and Airport/Railway will be Pickup Location
@@ -150,19 +154,7 @@ class _TransferServiceState extends State<TransferService> {
     }
   }
 
-  GoogleMapController? mapController;
-  Set<Marker> markers = {};
 
-  void _onMapCreated(GoogleMapController controller) {
-    mapController = controller;
-    setState(() {
-      markers.add(Marker(
-        markerId: MarkerId('marker1'),
-        position: LatLng(12.847810, 77.663190),
-        infoWindow: InfoWindow(title: 'San Francisco'),
-      ));
-    });
-  }
 
   @override
   Widget build(BuildContext context) {
@@ -331,16 +323,12 @@ class _TransferServiceState extends State<TransferService> {
                         myLocationButtonEnabled: true,
                         myLocationEnabled: true,
                         compassEnabled: true,
-
-                        // tiltGesturesEnabled: true,
-                        //rotateGesturesEnabled: true,
-                        //scrollGesturesEnabled: true,
-
-                        initialCameraPosition: CameraPosition(
-                          target: LatLng(12.847810, 77.663190),
-                          zoom: 12,
-                        ),
-                        markers: markers,
+                        initialCameraPosition:  CameraPosition(target: LatLng(myCurrentLat, myCurrentLong), zoom: 12,),
+                        //markers: markers,
+                        scrollGesturesEnabled: true,
+                        zoomGesturesEnabled: true,
+                        markers: Set<Marker>.of(markers.values),
+                        polylines: Set<Polyline>.of(polylines.values),
                       ),
                     ),
                   ),
@@ -914,7 +902,11 @@ class _TransferServiceState extends State<TransferService> {
                             airportRailwayName = airportRaiwayListItems[index].airportRailwayName;
                             airportRailwayLatitude = airportRaiwayListItems[index].latitude;
                             airportRailwayLongitude = airportRaiwayListItems[index].longitude;
-                            search("", "Location");
+
+                             print('Latlong: pickupAddress: airportRailwayName:$airportRailwayName  airportRailwayLatitude:$airportRailwayLatitude  airportRailwayLongitude:$airportRailwayLongitude');
+    
+
+                            //search("", "Location");
                           } else if (searchType.contains("Location")) {
                             pickupLocationID = '${locationListItems[index].id}';
                             pickupLocationName = '${locationListItems[index].area}';
@@ -933,7 +925,10 @@ class _TransferServiceState extends State<TransferService> {
                             pickupcityID = '${addressListItems[index].cityId}';
                             debugPrint(
                                 'You just selected option XXX searchType:$searchType  pickupAddressID: $pickupAddressID pickupAddressName:$pickupAddressName  pickupcityID:$pickupcityID');
-                            search("", "Nationality");
+                            //search("", "Nationality");
+                             print('Latlong: dropAddress: pickupAddressName:$pickupAddressName  pickupAddressLatitude:$pickupAddressLatitude  pickupAddressLongitude:$pickupAddressLongitude');
+
+                            _getPolyline();
                           } else if (searchType.contains("Nationality")) {
                             nationalityID =  '${nationalityListItems[index].countryId}';
                           } else {}
@@ -975,9 +970,9 @@ class _TransferServiceState extends State<TransferService> {
    flightTrainNo = _FlightTrainNoController.text.toString();
     var landMarkName = _LandmarkController.text.toString();
 
-    flightTrrainTime = flightOrTrainTime;
-    rideLatterDate = rideLatterDate;
-    rideLatterTime =rideLatterTime;
+    flightTrrainTime = '${_selectedTimeForFlightTrain.hour}:${_selectedTimeForFlightTrain.minute}}';
+    rideLatterDate = '${_selectedDate.day}:${_selectedDate.month}:${_selectedDate.year}';
+    rideLatterTime ='${_selectedTime.hour}:${_selectedTime.minute}';
 
     if(_isPickup){
       isPickup = true;
@@ -989,6 +984,7 @@ class _TransferServiceState extends State<TransferService> {
       dropAddress = airportRailwayName;
       dropLat = airportRailwayLatitude;
       dropLong = airportRailwayLongitude;
+
     }else{
       isPickup = false;
 
@@ -1000,6 +996,9 @@ class _TransferServiceState extends State<TransferService> {
       dropLat = pickupAddressLatitude;
       dropLong = pickupAddressLongitude;
     }
+
+    print('Latlong: pickupAddress: pickupAddress:$pickupAddress  pickupLat:$pickupLat  pickupLong:$pickupLong');
+     print('Latlong: dropAddress: dropAddress:$dropAddress  dropLat:$dropLat  dropLong:$dropLong');
 
 /*
     if (cityID.isEmpty) {
@@ -1096,4 +1095,97 @@ class _TransferServiceState extends State<TransferService> {
       }
    // }
   }
+
+
+  GoogleMapController? mapController;
+  //Set<Marker> markers = {};
+ // double _originLatitude = 6.5212402, _originLongitude = 3.3679965;
+ // double _destLatitude = 6.849660, _destLongitude = 3.648190;
+  // double _originLatitude = 26.48424, _originLongitude = 50.04551;
+  // double _destLatitude = 26.46423, _destLongitude = 50.06358;
+  Map<MarkerId, Marker> markers = {};
+  Map<PolylineId, Polyline> polylines = {};
+  List<LatLng> polylineCoordinates = [];
+  PolylinePoints polylinePoints = PolylinePoints();
+  String googleAPiKey = "AIzaSyAQgoHAq85_LZavL0SFS9sHuMVv3NpCfW8";
+
+ double myCurrentLat = 28.5891734 , myCurrentLong = 77.3020327;
+
+  void _onMapCreated(GoogleMapController controller) {
+    mapController = controller;
+
+    setState(() {
+     /* markers.add(const Marker(
+        markerId: MarkerId('Current'),
+        position: LatLng(12.847810, 77.663190),
+        infoWindow: InfoWindow(title: 'San Francisco'),
+      )); */
+      MarkerId markerId = MarkerId("Current");
+    Marker marker =
+        Marker(markerId: markerId, position: LatLng(myCurrentLat, myCurrentLong));
+
+      markers[markerId] = marker;
+    });
+  }
+
+void addPickupMarker(){
+  /// origin marker
+        setState(() {
+          /*
+      markers.add(Marker(
+        markerId: MarkerId("Pckup"),
+        position: LatLng(double.parse(pickupAddressLatitude), double.parse(pickupAddressLongitude)),
+        infoWindow: InfoWindow(title: pickupAddressName),
+      ));
+    }); */
+    MarkerId markerId = MarkerId("Pckup");
+    Marker marker = Marker(markerId: markerId, position: LatLng(double.parse(pickupAddressLatitude), double.parse(pickupAddressLongitude)));
+    markers[markerId] = marker;
+});
+}
+
+void addDropMarker(){
+   setState(() {
+/*
+      markers.add(Marker(
+        markerId: MarkerId("Drop"),
+        position: LatLng(double.parse(airportRailwayLatitude), double.parse(airportRailwayLongitude)),
+        infoWindow: InfoWindow(title: airportRailwayName),
+      ));
+*/
+    MarkerId markerId = MarkerId("Drop");
+    Marker marker = Marker(markerId: markerId, position: LatLng(double.parse(airportRailwayLatitude), double.parse(airportRailwayLongitude)));
+    markers[markerId] = marker;
+
+    });
+}
+
+_addPolyLine() {
+  setState(() {
+    PolylineId id = PolylineId("poly");
+    Polyline polyline = Polyline(
+        polylineId: id, color: Colors.red, points: polylineCoordinates);
+    polylines[id] = polyline;
+    });
+  }
+
+  _getPolyline() async {
+
+addPickupMarker();
+addDropMarker();
+
+    PolylineResult result = await polylinePoints.getRouteBetweenCoordinates(
+        googleAPiKey,
+        PointLatLng(double.parse(pickupAddressLatitude), double.parse(pickupAddressLongitude)),
+        PointLatLng(double.parse(airportRailwayLatitude), double.parse(airportRailwayLongitude)),
+        travelMode: TravelMode.driving,
+        wayPoints: [PolylineWayPoint(location: "Sabo, Yaba Lagos Nigeria")]);
+    if (result.points.isNotEmpty) {
+      result.points.forEach((PointLatLng point) {
+        polylineCoordinates.add(LatLng(point.latitude, point.longitude));
+      });
+    }
+    _addPolyLine();
+  }
+
 }

@@ -5,7 +5,7 @@ import 'package:bookingcab_mobileapp/comman/ShowToast.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/login/GetOTPResponseData.dart';
 import 'package:bookingcab_mobileapp/view/login/VerifyOTPResponseData.dart';
-import 'package:flutter/cupertino.dart';
+import 'package:bookingcab_mobileapp/view/signup/ThankyouScreen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_otp_text_field/flutter_otp_text_field.dart';
 
@@ -83,6 +83,8 @@ class _OTPVerificationState extends State<OTPVerification> {
   }
 
   Future<void> loginWithVerifyOTP(String otp) async {
+
+              
     if (userID.isEmpty) {
       showErrorTost(context, "Invalid user id");
     } else if (otp.isEmpty || otp.length <= 4) {
@@ -107,7 +109,7 @@ class _OTPVerificationState extends State<OTPVerification> {
                 context, responseData.message ?? "$SOMETHING_WENT_WRONG_MSG");
             Navigator.pushReplacement(
               context,
-              MaterialPageRoute(builder: (context) => const HomeScreen()),
+              MaterialPageRoute(builder: (context) => const ThankyouScreen()),
             );
           } else {
             showSuccessTost(
@@ -126,6 +128,7 @@ class _OTPVerificationState extends State<OTPVerification> {
         print('Exception occurred: $e');
       }
     }
+   
   }
 
   @override

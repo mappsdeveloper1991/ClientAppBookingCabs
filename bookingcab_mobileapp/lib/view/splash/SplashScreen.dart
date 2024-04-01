@@ -5,8 +5,10 @@ import 'package:bookingcab_mobileapp/data/localDB/GlobalValue.dart';
 import 'package:bookingcab_mobileapp/data/localDB/SharedPreferencesUtil.dart';
 import 'package:bookingcab_mobileapp/data/remoteServer/HttpAPIRequest.dart';
 import 'package:bookingcab_mobileapp/view/booking_history/MapSample.dart';
+import 'package:bookingcab_mobileapp/view/cabservice/TransferPaymentPage.dart';
 import 'package:bookingcab_mobileapp/view/language/LanguageSelectionScreen.dart';
 import 'package:bookingcab_mobileapp/view/profile/MyAccountResponseData.dart';
+import 'package:bookingcab_mobileapp/view/signup/ThankyouScreen.dart';
 import 'package:flutter/material.dart';
 
 import '../dashboard/DashBoardPage.dart';
@@ -22,6 +24,9 @@ class SplashScreenState extends State<SplashScreen> {
     super.initState();
 
     isLanguageSelctedOrNot();
+
+ 
+
   }
 
   @override
@@ -80,13 +85,9 @@ class SplashScreenState extends State<SplashScreen> {
   }
 
   void loadNavigateToHomepgae() {
-    Timer(
-        const Duration(seconds: 2),
-        () => Navigator.pushReplacement(
-              context,
-              MaterialPageRoute(builder: (context) => HomeScreen()),
-            )
-        //Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => LoginPage()),)
+    Timer(const Duration(seconds: 2),() => 
+         //Navigator.pushReplacement( context,MaterialPageRoute(builder: (context) => const HomeScreen()),)
+         Navigator.pushReplacement( context, MaterialPageRoute(builder: (context) => TransferPaymentPage()),)
         );
   }
 

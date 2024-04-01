@@ -44,6 +44,9 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
   }
 
   Future<void> signUpAPICall(BuildContext context) async {
+
+
+
     if (firstName.isEmpty) {
       showErrorTost(context, INVALID_FIRST_NAME_MSG);
     } else if (lastName.isEmpty) {
@@ -121,6 +124,7 @@ class _SignupPersonalDetailsState extends State<SignupPersonalDetails> {
         print('Exception occurred: $e');
       }
     }
+   
   }
 
   late List<NationalityList> nationalityList = [];
